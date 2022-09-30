@@ -1,0 +1,59 @@
+##permissions workaround sudo chmod -R 777 ./
+
+## Data import
+ethics_prefix: conc_ethics_
+
+## Directories
+workingdir: /home/jpmcgeown/fmri_wf
+
+## Scan info
+rep_time: 1.5
+
+#FREESURFER_HOME: /usr/local/freesurfer
+
+# TASK
+# will need to include something in first_level.py to account for different tasks
+
+## FMRIPREP settings
+nthreads: 8
+mem: 25
+fs_status: --fs-no-reconall
+                      # Leave blank to run freesurfer within fmriprep
+  # --fs-no-reconall    # Select this option to skip freesurfer or blank space to run freesurfer
+  # --fs-subjects     # Select this option if you have prerun Freesurfer
+
+fs_dir: /bids/derivatives/freesurfer # Directory where pre-run freesurfer results can be found
+
+## Filtering and smooth settings
+high_pass: 0.01
+low_pass: 0.1
+fwhm: 6
+
+## False detection rate alpha
+fdr_alpha: 0.01
+## Functional connectivity threshold
+func_conn_thresh: 0.25
+
+## Confounds to extract
+confound_info:
+  num_confounds: 9
+  confounds:
+  - csf
+  - white_matter
+  - trans_x
+  - trans_y
+  - trans_z
+  - rot_x
+  - rot_y
+  - rot_z
+  - framewise_displacement
+
+## Framewise displacement threshold for accepting
+fd_thresh: 0.5
+
+## List of one or more resting state networks for first level
+network_info:
+  num_networks: 2
+  networks:
+    - DMN
+    - Salience
