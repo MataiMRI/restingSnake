@@ -1,5 +1,4 @@
-scan_id
-conc_ethics_rugby_3_001
-conc_ethics_rugby_5_001
-conc_ethics_rugby_2_002
-conc_ethics_rugby_6_001
+original_id,scan_id,cohort,subject,session,valid_orig_ses_label
+Conc_20Ntb14_Ctrl_18_A,ctrl_18_a,ctrl,18,a,True
+Conc_20Ntb14_Control_19_A,control_19_a,control,19,a,True
+Conc_20Ntb14_Control_17,control_17,control,17,a,False

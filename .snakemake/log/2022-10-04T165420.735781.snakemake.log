@@ -1,0 +1,48 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job          count    min threads    max threads
+---------  -------  -------------  -------------
+all              1              1              1
+heudiconv        4              1              1
+total            5              1              1
+
+Select jobs to execute...
+
+[Tue Oct  4 16:54:21 2022]
+rule heudiconv:
+    output: bids/sub-rugby6/ses-B/anat/sub-rugby6_ses-B_run-001_T1w.nii.gz, bids/sub-rugby6/ses-B/anat/sub-rugby6_ses-B_run-001_T1w.json, bids/sub-rugby6/ses-B/func/sub-rugby6_ses-B_task-rest_run-001_bold.nii.gz, bids/sub-rugby6/ses-B/func/sub-rugby6_ses-B_task-rest_run-001_bold.json, bids/sub-rugby6/ses-B/func/sub-rugby6_ses-B_task-rest_run-001_events.tsv
+    jobid: 4
+    wildcards: cohort=rugby, subject=6, session=B
+    resources: tmpdir=/tmp
+
+
+[Tue Oct  4 16:54:21 2022]
+rule heudiconv:
+    output: bids/sub-Ctrl18/ses-A/anat/sub-Ctrl18_ses-A_run-001_T1w.nii.gz, bids/sub-Ctrl18/ses-A/anat/sub-Ctrl18_ses-A_run-001_T1w.json, bids/sub-Ctrl18/ses-A/func/sub-Ctrl18_ses-A_task-rest_run-001_bold.nii.gz, bids/sub-Ctrl18/ses-A/func/sub-Ctrl18_ses-A_task-rest_run-001_bold.json, bids/sub-Ctrl18/ses-A/func/sub-Ctrl18_ses-A_task-rest_run-001_events.tsv
+    jobid: 3
+    wildcards: cohort=Ctrl1, subject=8, session=A
+    resources: tmpdir=/tmp
+
+[Tue Oct  4 16:54:23 2022]
+Error in rule heudiconv:
+    jobid: 3
+    output: bids/sub-Ctrl18/ses-A/anat/sub-Ctrl18_ses-A_run-001_T1w.nii.gz, bids/sub-Ctrl18/ses-A/anat/sub-Ctrl18_ses-A_run-001_T1w.json, bids/sub-Ctrl18/ses-A/func/sub-Ctrl18_ses-A_task-rest_run-001_bold.nii.gz, bids/sub-Ctrl18/ses-A/func/sub-Ctrl18_ses-A_task-rest_run-001_bold.json, bids/sub-Ctrl18/ses-A/func/sub-Ctrl18_ses-A_task-rest_run-001_events.tsv
+    shell:
+        docker run --rm -it -v /home/data/fmri:/base             nipy/heudiconv:latest             -d /base//dicom/{{subject}}_{{session}}/*/*             -o /base/bids             -f //home/jpmcgeown/github/fmri_workflow/scripts/heuristic.py             -s Ctrl1_8             -ss A             -c dcm2niix             -b             --overwrite
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Tue Oct  4 16:54:23 2022]
+Error in rule heudiconv:
+    jobid: 4
+    output: bids/sub-rugby6/ses-B/anat/sub-rugby6_ses-B_run-001_T1w.nii.gz, bids/sub-rugby6/ses-B/anat/sub-rugby6_ses-B_run-001_T1w.json, bids/sub-rugby6/ses-B/func/sub-rugby6_ses-B_task-rest_run-001_bold.nii.gz, bids/sub-rugby6/ses-B/func/sub-rugby6_ses-B_task-rest_run-001_bold.json, bids/sub-rugby6/ses-B/func/sub-rugby6_ses-B_task-rest_run-001_events.tsv
+    shell:
+        docker run --rm -it -v /home/data/fmri:/base             nipy/heudiconv:latest             -d /base//dicom/{{subject}}_{{session}}/*/*             -o /base/bids             -f //home/jpmcgeown/github/fmri_workflow/scripts/heuristic.py             -s rugby_6             -ss B             -c dcm2niix             -b             --overwrite
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/jpmcgeown/github/fmri_workflow/.snakemake/log/2022-10-04T165420.735781.snakemake.log

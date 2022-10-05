@@ -1,0 +1,48 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job          count    min threads    max threads
+---------  -------  -------------  -------------
+all              1              1              1
+heudiconv        3              1              1
+total            4              1              1
+
+Select jobs to execute...
+
+[Tue Oct  4 17:07:07 2022]
+rule heudiconv:
+    output: bids/sub-ctrl18/ses-a/anat/sub-ctrl18_ses-a_run-001_T1w.nii.gz, bids/sub-ctrl18/ses-a/anat/sub-ctrl18_ses-a_run-001_T1w.json, bids/sub-ctrl18/ses-a/func/sub-ctrl18_ses-a_task-rest_run-001_bold.nii.gz, bids/sub-ctrl18/ses-a/func/sub-ctrl18_ses-a_task-rest_run-001_bold.json, bids/sub-ctrl18/ses-a/func/sub-ctrl18_ses-a_task-rest_run-001_events.tsv
+    jobid: 3
+    wildcards: cohort=ctrl1, subject=8, session=a
+    resources: tmpdir=/tmp
+
+
+[Tue Oct  4 17:07:07 2022]
+rule heudiconv:
+    output: bids/sub-control17/ses-tbd/anat/sub-control17_ses-tbd_run-001_T1w.nii.gz, bids/sub-control17/ses-tbd/anat/sub-control17_ses-tbd_run-001_T1w.json, bids/sub-control17/ses-tbd/func/sub-control17_ses-tbd_task-rest_run-001_bold.nii.gz, bids/sub-control17/ses-tbd/func/sub-control17_ses-tbd_task-rest_run-001_bold.json, bids/sub-control17/ses-tbd/func/sub-control17_ses-tbd_task-rest_run-001_events.tsv
+    jobid: 1
+    wildcards: cohort=control1, subject=7, session=tbd
+    resources: tmpdir=/tmp
+
+[Tue Oct  4 17:07:09 2022]
+Error in rule heudiconv:
+    jobid: 1
+    output: bids/sub-control17/ses-tbd/anat/sub-control17_ses-tbd_run-001_T1w.nii.gz, bids/sub-control17/ses-tbd/anat/sub-control17_ses-tbd_run-001_T1w.json, bids/sub-control17/ses-tbd/func/sub-control17_ses-tbd_task-rest_run-001_bold.nii.gz, bids/sub-control17/ses-tbd/func/sub-control17_ses-tbd_task-rest_run-001_bold.json, bids/sub-control17/ses-tbd/func/sub-control17_ses-tbd_task-rest_run-001_events.tsv
+    shell:
+        docker run --rm -it -v /home/data/fmri:/base             nipy/heudiconv:latest             -d /base/dicom/{subject}_{session}/*/*             -o /base/bids             -f /home/jpmcgeown/github/fmri_workflow/scripts/heuristic.py             -s control17             -ss tbd             -c dcm2niix             -b             --overwrite
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+[Tue Oct  4 17:07:09 2022]
+Error in rule heudiconv:
+    jobid: 3
+    output: bids/sub-ctrl18/ses-a/anat/sub-ctrl18_ses-a_run-001_T1w.nii.gz, bids/sub-ctrl18/ses-a/anat/sub-ctrl18_ses-a_run-001_T1w.json, bids/sub-ctrl18/ses-a/func/sub-ctrl18_ses-a_task-rest_run-001_bold.nii.gz, bids/sub-ctrl18/ses-a/func/sub-ctrl18_ses-a_task-rest_run-001_bold.json, bids/sub-ctrl18/ses-a/func/sub-ctrl18_ses-a_task-rest_run-001_events.tsv
+    shell:
+        docker run --rm -it -v /home/data/fmri:/base             nipy/heudiconv:latest             -d /base/dicom/{subject}_{session}/*/*             -o /base/bids             -f /home/jpmcgeown/github/fmri_workflow/scripts/heuristic.py             -s ctrl18             -ss a             -c dcm2niix             -b             --overwrite
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/jpmcgeown/github/fmri_workflow/.snakemake/log/2022-10-04T170707.090022.snakemake.log

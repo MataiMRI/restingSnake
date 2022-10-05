@@ -1,10 +1,14 @@
 ##permissions workaround sudo chmod -R 777 ./
 
 ## Data import
-ethics_prefix: conc_ethics_
+ethics_prefix: Conc_20Ntb14_
 
 ## Directories
-workingdir: /home/jpmcgeown/fmri_wf
+workingdir: /home/jpmcgeown/data/fmri
+projectdir: /home/jpmcgeown/github/fmri_workflow
+
+#Dicom directory structure can be flexible but MUST include {{subject}} and {{session}}
+dicom_dir_structure: /dicom/{{subject}}_{{session}}/*/*
 
 ## Scan info
 rep_time: 1.5
