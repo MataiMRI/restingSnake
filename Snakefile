@@ -52,6 +52,7 @@ print('\nSummary of data that is being processed:\n\n', df.iloc[:,1:], '\n')
 
 rule all:
     input:
+        # "scans.txt"
         # "scan_list.csv"
         expand("bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz", zip, subject = SUBJECTS, session = SESSIONS, cohort = COHORTS),
         # expand("bids/sub-{cohort}{subject}/ses-{session}/anat/sub-{cohort}{subject}_ses-{session}_run-001_T1w.json", zip, subject = SUBJECTS, session = SESSIONS, cohort = COHORTS),
@@ -63,10 +64,9 @@ rule all:
 
 rule tidy_and_compile:
     output:
-        "scan_list.csv"
+        temp("scans.txt")
     shell:
-        "bash ./scripts/unzip_and_tidy.sh {config[workingdir]} {config[projectdir]} ; \
-        python ./scripts/tidying.py {config[workingdir]} {config[ethics_prefix]} {config[projectdir]}"
+        "python ./scripts/prep_data.py {config[projectdir]} {config[workingdir]} {config[ethics_prefix]} {config[dicom_compression_ext]}; touch {output}"
 
 rule heudiconv:
     input:
@@ -83,7 +83,7 @@ rule heudiconv:
         # "bash ./scripts/heudiconv_convert.sh {config[workingdir]} {wildcards[cohort]} {wildcards[subject]} {wildcards[session]}"
         " docker run --rm -it -v {config[workingdir]}:/data -v {config[projectdir]}:/base \
             nipy/heudiconv:latest \
-            -d /data/dicom/{{subject}}/{{session}}/*/* \
+            -d /data/dicom/sub_{{subject}}/ses_{{session}}/*/* \
             -o /data/bids \
             -f /base/scripts/heuristic.py \
             -s {wildcards.cohort}_{wildcards.subject} \

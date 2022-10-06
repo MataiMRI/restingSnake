@@ -1,0 +1,31 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Singularity containers: ignored
+Job stats:
+job          count    min threads    max threads
+---------  -------  -------------  -------------
+all              1              1              1
+heudiconv        1              1              1
+total            2              1              1
+
+Select jobs to execute...
+
+[Thu Oct  6 17:59:22 2022]
+rule heudiconv:
+    input: scan_list.csv
+    output: bids/sub-control_19/ses-a/anat/sub-control_19_ses-a_run-001_T1w.nii.gz
+    jobid: 1
+    wildcards: cohort=control, subject=19, session=a
+    resources: tmpdir=/tmp
+
+Waiting at most 5 seconds for missing files.
+MissingOutputException in line 71 of /home/jpmcgeown/github/fmri_workflow/Snakefile:
+Job Missing files after 5 seconds:
+bids/sub-control_19/ses-a/anat/sub-control_19_ses-a_run-001_T1w.nii.gz
+This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait.
+Job id: 1 completed successfully, but some output files are missing. 1
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: /home/jpmcgeown/github/fmri_workflow/.snakemake/log/2022-10-06T175922.455906.snakemake.log

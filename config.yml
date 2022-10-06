@@ -8,7 +8,8 @@ workingdir: /home/jpmcgeown/data/fmri
 projectdir: /home/jpmcgeown/github/fmri_workflow
 
 #Dicom directory structure can be flexible but MUST include {{subject}} and {{session}}
-dicom_dir_structure: /dicom/{{subject}}_{{session}}/*/*
+dicom_dir_structure: /dicom/sub_{{subject}}/ses_{{session}}/*/* # GET THIS WORKING FOR HEUDICONV
+dicom_compression_ext: .zip
 
 ## Scan info
 rep_time: 1.5

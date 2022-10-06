@@ -1,4 +1,2 @@
-original_id,scan_id,cohort,subject,session,valid_orig_ses_label
-Conc_20Ntb14_Ctrl_18_A,ctrl_18_a,ctrl,18,a,True
-Conc_20Ntb14_Control_19_A,control_19_a,control,19,a,True
-Conc_20Ntb14_Control_17,control_17,control,17,a,False
+original_filename,scan_id,cohort,subject,session,subject_dir,valid_orig_ses_label
+Conc_20Ntb14_Control_19_A,control_19_a,control,19,a,sub_control_19,True
