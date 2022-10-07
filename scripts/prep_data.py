@@ -161,10 +161,10 @@ else:
             
         os.removedirs(os.path.join(dicomdir, available_scans[i]))
 
-#Convert all string columns to lowercase except the first column containing original name
-df.iloc[:, 1:] = df.iloc[:,1:].applymap(lambda s: s.lower() if type(s) == str else s)
-df.sort_values(by='scan_id', inplace = True)        
-df.to_csv(projectdir + '/scan_list.csv', index = False)
+    #Convert all string columns to lowercase except the first column containing original name
+    df.iloc[:, 1:] = df.iloc[:,1:].applymap(lambda s: s.lower() if type(s) == str else s)
+    df.sort_values(by='scan_id', inplace = True)        
+    df.to_csv(projectdir + '/scan_list.csv', index = False)
             
 
 

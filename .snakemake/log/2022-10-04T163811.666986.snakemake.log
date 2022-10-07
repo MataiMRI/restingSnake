@@ -1,3 +1,0 @@
-NameError in line 48 of /home/jpmcgeown/github/fmri_workflow/Snakefile:
-name 'PP_SUBJECTS' is not defined
-  File "/home/jpmcgeown/github/fmri_workflow/Snakefile", line 48, in <module>

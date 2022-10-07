@@ -1,3 +1,0 @@
-NameError in line 57 of /home/jpmcgeown/github/fmri_workflow/Snakefile:
-name 'SUBJECTS' is not defined
-  File "/home/jpmcgeown/github/fmri_workflow/Snakefile", line 57, in <module>
