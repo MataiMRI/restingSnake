@@ -7,32 +7,38 @@ import os
 ### READ CONFIG ###
 configfile: 'config.yml'
 
-df = pd.read_csv('scan_list.csv')
-COHORTS = df['cohort']
-SUBJECTS = df['subject']
-SESSIONS = df['session']
 NETWORKS = config['network_info']['networks']
-# print('\nSummary of data that is being processed:\n\n', df.iloc[:,1:], '\n')
+
+def available_scans(wildcards):
+    try:
+        files = pd.read_csv('scan_list.csv')
+    except FileNotFoundError:
+        return []
+
+    df = files.loc[files['bids_formatted'] == False]
+    print(df)
+    cohorts = df['cohort']
+    subjects = df['subject']
+    sessions = df['session']
+
+    res =  expand("bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz", zip, subject = subjects, session = sessions, cohort = cohorts)
+    print(res)
+    return res
 
 rule all:
     input:
-        # "scans.txt",
-        # "scan_list.csv"
-        expand("bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz", zip, subject = SUBJECTS, session = SESSIONS, cohort = COHORTS),
+        available_scans,
+        "scan_list.csv"
 
-rule tidy_and_compile:
+checkpoint tidy_and_compile:
     output:
-        temp("scans.txt")
+        "scan_list.csv"
     shell:
         "python ./scripts/prep_data.py {config[projectdir]} {config[workingdir]} {config[ethics_prefix]} {config[dicom_compression_ext]}; touch {output}"
 
 rule heudiconv:
-    input:
-        "scans.txt",
-        "scan_list.csv"
     output:
         "bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz",
-
     container:
         "docker://nipy/heudiconv:latest"
     shell:

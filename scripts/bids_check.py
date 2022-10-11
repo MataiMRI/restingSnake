@@ -14,8 +14,8 @@ import pandas as pd
 validator = BIDSValidator()
 
 df = pd.read_csv('./scan_list.csv')
-df['scan_id'] = df['scan_id'].str.replace('conc_ethics_' ,'')
-df[['cohort', 'subject','session']] = df['scan_id'].str.split('_', 2, expand=True)
+# df['scan_id'] = df['scan_id'].str.replace('conc_ethics_' ,'')
+# df[['cohort', 'subject','session']] = df['scan_id'].str.split('_', 2, expand=True)
 df['bids_valid'] = False
 
 root_dir = "./bids/"

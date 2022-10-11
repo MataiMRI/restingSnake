@@ -34,15 +34,15 @@ if os.path.exists(projectdir + '/scan_list.csv'):
     
     hist_df = pd.read_csv(projectdir + '/scan_list.csv')
     available_scans = os.listdir(dicomdir)
-    historic_scans = hist_df['subject_dir'].tolist()
-    new_scans = list(set(available_scans).difference(historic_scans))
     
     redundant = []
-    for i in range(len(new_scans)):
-        if hist_df['original_filename'].str.contains(new_scans[i]).any():
-            redundant.append(new_scans[i])
+    new_scans = []
+    for i in available_scans:
+        if prefix in i:
+            new_scans.append(i)
+        elif prefix not in i:
+            redundant.append(i)
 
-    new_scans = list(filter(lambda x: x not in redundant, new_scans))
     print('The following files have already been processed and will be skipped:\n', redundant)
     new_df = pd.DataFrame(new_scans, columns = ['original_filename'])
     
@@ -70,10 +70,18 @@ if os.path.exists(projectdir + '/scan_list.csv'):
         new_df['scan_id'] = new_df['original_filename']
         new_df['scan_id'] = new_df['scan_id'].str.replace(prefix,'')
         new_df['scan_id'] = new_df['scan_id'].str.replace(compression,'')
+        
+        for i in range(len(new_df)):
+            t = new_df['scan_id'][i].count('_')
+            if t == 1:
+                new_df['scan_id'][i] = new_df['scan_id'][i] + '_'
+        
         new_df[['cohort', 'subject','session']] = new_df['scan_id'].str.split('_', 2, expand=True)
-        new_df['subject_dir'] = 'sub_' + new_df['cohort'] + '_' + new_df['subject'].astype(str)
-        new_df['valid_orig_ses_label'] = np.where(new_df['session'].isna(), False, True)
-        new_df['session'].fillna('A', inplace=True)
+        new_df['valid_orig_ses_label'] = np.where(new_df['session'] == '', False, True)
+        new_df['session'].replace('', 'A', inplace=True)
+        new_df['scan_id'] = new_df['cohort'] + '_' + new_df['subject'] + '_' + new_df['session']
+        new_df['bids_formatted'] = False
+        new_df['scan_path'] = None
         new_df.iloc[:, 1:] = new_df.iloc[:,1:].applymap(lambda s: s.lower() if type(s) == str else s)   
         
         for i in range(len(new_df)):
@@ -88,6 +96,8 @@ if os.path.exists(projectdir + '/scan_list.csv'):
             
             subdirs = os.listdir(os.path.join(dicomdir, new_scans[i])) 
             dest = os.path.join(dicomdir, new_dir)
+            
+            new_df['scan_path'][i] = dest
             
             for subdir in subdirs:
                 dir_to_move = os.path.join(dicomdir, new_scans[i], subdir)
@@ -135,10 +145,18 @@ else:
     df['scan_id'] = df['original_filename']
     df['scan_id'] = df['scan_id'].str.replace(prefix,'')
     df['scan_id'] = df['scan_id'].str.replace(compression,'')
+    
+    for i in range(len(df)):
+        t = df['scan_id'][i].count('_')
+        if t == 1:
+            df['scan_id'][i] = df['scan_id'][i] + '_'
+                
     df[['cohort', 'subject','session']] = df['scan_id'].str.split('_', 2, expand=True)
-    df['subject_dir'] = 'sub_' + df['cohort'] + '_' + df['subject'].astype(str)
-    df['valid_orig_ses_label'] = np.where(df['session'].isna(), False, True)
-    df['session'].fillna('A', inplace=True)
+    df['valid_orig_ses_label'] = np.where(df['session'] == '', False, True)
+    df['session'].replace('', 'A', inplace=True)
+    df['scan_id'] = df['cohort'] + '_' + df['subject'] + '_' + df['session']
+    df['bids_formatted'] = False
+    df['scan_path'] = None
     df.iloc[:, 1:] = df.iloc[:,1:].applymap(lambda s: s.lower() if type(s) == str else s)   
     
     for i in range(len(df)):
@@ -154,6 +172,8 @@ else:
         subdirs = os.listdir(os.path.join(dicomdir, available_scans[i])) 
         dest = os.path.join(dicomdir, new_dir)
         
+        df['scan_path'][i] = dest
+        
         for subdir in subdirs:
             dir_to_move = os.path.join(dicomdir, available_scans[i], subdir)
             print('Moving ', subdir, ' to ' , dest)
@@ -165,6 +185,3 @@ else:
     df.iloc[:, 1:] = df.iloc[:,1:].applymap(lambda s: s.lower() if type(s) == str else s)
     df.sort_values(by='scan_id', inplace = True)        
     df.to_csv(projectdir + '/scan_list.csv', index = False)
-            
-
-
