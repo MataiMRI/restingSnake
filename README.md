@@ -28,7 +28,7 @@ Load the necessary environment modules:
 
 ```
 module purge
-module load snakemake/7.6.2-gimkl-2020a-Python-3.9.9 Miniconda3/4.12.0 Singularity/3.10.0
+module load Miniconda3/4.12.0 Singularity/3.10.0 snakemake/7.6.2-gimkl-2020a-Python-3.9.9
 export PYTHONNOUSERSITE=1
 ```
 
