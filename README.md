@@ -34,15 +34,13 @@ module load snakemake/7.6.2-gimkl-2020a-Python-3.9.9 Miniconda3/4.12.0 Singulari
 Then run the workflow using the `nesi` profile, first in dry-mode:
 
 ```
-snakemake --profile nesi --config account=PROJECT_ID -n
+snakemake --profile nesi -n
 ```
-
-where `PROJECT_ID` is you NeSI project ID.
 
 Finally, run the workflow:
 
 ```
-snakemake --profile nesi --config account=PROJECT_ID
+snakemake --profile nesi
 ```
 
 
