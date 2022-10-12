@@ -38,7 +38,7 @@ checkpoint tidy_and_compile:
 
 rule heudiconv:
     output:
-        "bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz",
+        "bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz"
     container:
         "docker://nipy/heudiconv:latest"
     shell:
