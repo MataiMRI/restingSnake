@@ -34,7 +34,8 @@ checkpoint tidy_and_compile:
     output:
         "scan_list.csv"
     shell:
-        "python ./scripts/prep_data.py {config[projectdir]} {config[workingdir]} {config[ethics_prefix]} {config[dicom_compression_ext]}; touch {output}"
+        "python ./scripts/prep_data.py {config[projectdir]} {config[workingdir]} "
+        "{config[ethics_prefix]} {config[dicom_compression_ext]}"
 
 rule heudiconv:
     output:

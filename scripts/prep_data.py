@@ -175,9 +175,11 @@ else:
         df['scan_path'][i] = dest
         
         for subdir in subdirs:
-            dir_to_move = os.path.join(dicomdir, available_scans[i], subdir)
-            print('Moving ', subdir, ' to ' , dest)
-            shutil.move(dir_to_move, dest)
+            subsubdirs = os.listdir(subdirs)
+            for subsubdir in subsubdirs:
+                dir_to_move = os.path.join(dicomdir, available_scans[i], subdir, subsubdir)
+                print('Moving ', subdir, ' to ' , dest)
+                shutil.move(dir_to_move, dest)
             
         os.removedirs(os.path.join(dicomdir, available_scans[i]))
 

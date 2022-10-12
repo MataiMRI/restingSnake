@@ -1,3 +1,0 @@
-original_filename,scan_id,cohort,subject,session,valid_orig_ses_label,bids_formatted,scan_path
-Conc_20Ntb14_Control_17,control_17_a,control,17,a,False,False,/home/jpmcgeown/data/fmri/dicom/sub_control_17/ses_a/
-Conc_20Ntb14_Ctrl_18_A,ctrl_18_a,ctrl,18,a,True,False,/home/jpmcgeown/data/fmri/dicom/sub_ctrl_18/ses_a/
