@@ -81,14 +81,12 @@ rule heudiconv:
     container:
         "docker://nipy/heudiconv:latest"
     shell:
-        " echo Creating {output}; touch {output}"
-        # " docker run --rm -it -v {config[workingdir]}:/data -v {config[projectdir]}:/base \
-        #     nipy/heudiconv:latest \
-        #     -d /data/dicom/sub_{{subject}}/ses_{{session}}/*/* \
-        #     -o /data/bids \
-        #     -f /base/scripts/heuristic.py \
-        #     -s {wildcards.cohort}_{wildcards.subject} \
-        #     -ss {wildcards.session} \
-        #     -c dcm2niix \
-        #     -b \
-        #     --overwrite"
+        "heudiconv "
+        "--dicom_dir_template {wildcards.resultsdir}/tidy/sub_{wildcards.cohort}_{wildcards.subject}/ses_{wildcards.session}/*/* "
+        "--outdir {wildcards.resultsdir}/bids "
+        "--heuristic scripts/heuristic.py "
+        "--subjects {wildcards.cohort}_{wildcards.subject} "
+        "--ses {wildcards.session} "
+        "--converter dcm2niix "
+        "--bids "
+        "--overwrite"
