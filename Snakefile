@@ -28,15 +28,25 @@ def list_scans(root_folder, prefix):
 
     return mapping
 
+def list_tidy_scans(root_folder):
+    infos = []
+    for path in Path(root_folder).glob("tidy/sub_*/ses_*"):
+        _, session = path.name.split("_")
+        _, cohort, subject = path.parent.name.split("_")
+        infos.append([cohort, subject, session])
+    return infos
+
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
-COHORTS, SUBJECTS, SESSIONS = zip(*MAPPING.keys())
+TIDY_SCANS = list_tidy_scans(config["resultsdir"])
+COHORTS, SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
+print(COHORTS, SUBJECTS, SESSIONS)
 
 rule all:
     input:
         expand(
-            "{results}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz",
+            "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz",
             zip,
-            results=[config["resultsdir"]] * len(SUBJECTS),
+            resultsdir=[config["resultsdir"]] * len(SUBJECTS),
             subject=SUBJECTS,
             session=SESSIONS,
             cohort=COHORTS
@@ -46,28 +56,29 @@ rule unzip:
     input:
         "{folder}.zip"
     output:
-        directory("{folder}")
+        temp(directory("{folder}"))
     shell:
-        "unzip -q -d {output} {input}"
+        "unzip -q -d {output} {input} && rm {input}"
 
 rule tidy_dicoms:
     input:
         lambda wildards: MAPPING[(wildards.cohort, wildards.subject, wildards.session)]
     output:
-        directory("{results}/sub_{cohort}_{subject}/ses_{session}")
+        directory("{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}")
     run:
         output_folder = Path(output[0])
         output_folder.mkdir(parents=True)
         for dicom_file in Path(input[0]).rglob("*.dcm"):
             target_path = output_folder / dicom_file.parent.name
             target_path.mkdir(parents=True, exist_ok=True)
-            shutil.copy(dicom_file, target_path)
+            shutil.move(dicom_file, target_path)
+        shutil.rmtree(input[0])
 
 rule heudiconv:
     input:
-        "{results}/sub_{cohort}_{subject}/ses_{session}"
+        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}"
     output:
-        "{results}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz"
+        "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz"
     container:
         "docker://nipy/heudiconv:latest"
     shell:
