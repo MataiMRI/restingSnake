@@ -39,7 +39,6 @@ def list_tidy_scans(root_folder):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 TIDY_SCANS = list_tidy_scans(config["resultsdir"])
 COHORTS, SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
-print(COHORTS, SUBJECTS, SESSIONS)
 
 rule all:
     input:
