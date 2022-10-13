@@ -55,7 +55,7 @@ rule unzip:
     input:
         "{folder}.zip"
     output:
-        temp(directory("{folder}"))
+        directory("{folder}")
     shell:
         "unzip -q -d {output} {input} && rm {input}"
 
@@ -63,19 +63,19 @@ rule tidy_dicoms:
     input:
         lambda wildards: MAPPING[(wildards.cohort, wildards.subject, wildards.session)]
     output:
-        directory("{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}")
+        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.canary"
     run:
-        output_folder = Path(output[0])
-        output_folder.mkdir(parents=True)
+        output_folder = Path(output[0]).parent
         for dicom_file in Path(input[0]).rglob("*.dcm"):
             target_path = output_folder / dicom_file.parent.name
             target_path.mkdir(parents=True, exist_ok=True)
             shutil.move(dicom_file, target_path)
         shutil.rmtree(input[0])
+        Path(output[0]).touch()
 
 rule heudiconv:
     input:
-        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}"
+        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.canary"
     output:
         "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz"
     container:
