@@ -63,7 +63,7 @@ rule tidy_dicoms:
     input:
         lambda wildards: MAPPING[(wildards.cohort, wildards.subject, wildards.session)]
     output:
-        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.canary"
+        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.completed"
     run:
         output_folder = Path(output[0]).parent
         for dicom_file in Path(input[0]).rglob("*.dcm"):
@@ -75,7 +75,7 @@ rule tidy_dicoms:
 
 rule heudiconv:
     input:
-        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.canary"
+        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.completed"
     output:
         "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz"
     container:
