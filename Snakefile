@@ -80,9 +80,13 @@ rule heudiconv:
         "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz"
     container:
         "docker://nipy/heudiconv:latest"
+    resources:
+        cpus=6,
+        mem_mn=4000,
+        time_min=120
     shell:
         "heudiconv "
-        "--dicom_dir_template {wildcards.resultsdir}/tidy/sub_{wildcards.cohort}_{wildcards.subject}/ses_{wildcards.session}/*/* "
+        "--dicom_dir_template '{wildcards.resultsdir}/tidy/sub_{{subject}}/ses_{{session}}/*/*' "
         "--outdir {wildcards.resultsdir}/bids "
         "--heuristic scripts/heuristic.py "
         "--subjects {wildcards.cohort}_{wildcards.subject} "
