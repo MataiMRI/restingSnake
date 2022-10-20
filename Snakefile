@@ -79,7 +79,7 @@ rule heudiconv:
     output:
         "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz"
     container:
-        "docker://nipy/heudiconv:latest"
+        "docker://nipy/heudiconv:v0.11.3"
     resources:
         cpus=6,
         mem_mn=4000,
