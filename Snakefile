@@ -82,7 +82,7 @@ rule heudiconv:
         "docker://nipy/heudiconv:v0.11.3"
     resources:
         cpus=6,
-        mem_mn=4000,
+        mem_mb=4000,
         time_min=120
     shell:
         "heudiconv "
