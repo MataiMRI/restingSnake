@@ -22,9 +22,9 @@ def list_scans(root_folder, prefix):
         cohort, subject, session = infos
 
         if path.is_dir():
-            mapping[(cohort, subject, session)] = path
+            mapping[(cohort + subject, session)] = path
         else:
-            mapping[(cohort, subject, session)] = path.with_suffix("")
+            mapping[(cohort + subject, session)] = path.with_suffix("")
 
     return mapping
 
@@ -32,23 +32,22 @@ def list_tidy_scans(root_folder):
     infos = []
     for path in Path(root_folder).glob("tidy/sub_*/ses_*"):
         _, session = path.name.split("_")
-        _, cohort, subject = path.parent.name.split("_")
-        infos.append([cohort, subject, session])
+        _, subject = path.parent.name.split("_")
+        infos.append([subject, session])
     return infos
 
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 TIDY_SCANS = list_tidy_scans(config["resultsdir"])
-COHORTS, SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
+SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz",
+            "{resultsdir}/bids/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_T1w.nii.gz",
             zip,
             resultsdir=[config["resultsdir"]] * len(SUBJECTS),
             subject=SUBJECTS,
-            session=SESSIONS,
-            cohort=COHORTS
+            session=SESSIONS
         )
 
 rule unzip:
@@ -61,9 +60,9 @@ rule unzip:
 
 rule tidy_dicoms:
     input:
-        lambda wildards: MAPPING[(wildards.cohort, wildards.subject, wildards.session)]
+        lambda wildards: MAPPING[(wildards.subject, wildards.session)]
     output:
-        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.completed"
+        "{resultsdir}/tidy/sub_{subject}/ses_{session}/.completed"
     run:
         output_folder = Path(output[0]).parent
         for dicom_file in Path(input[0]).rglob("*.dcm"):
@@ -75,21 +74,22 @@ rule tidy_dicoms:
 
 rule heudiconv:
     input:
-        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.completed"
+        "{resultsdir}/tidy/sub_{subject}/ses_{session}/.completed"
     output:
-        "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz"
+        "{resultsdir}/bids/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_T1w.nii.gz"
     container:
-        "docker://nipy/heudiconv:v0.11.3"
+        "heudiconv.sif"
+        #"docker://nipy/heudiconv:v0.11.3"
     resources:
         cpus=6,
-        mem_mb=4000,
-        time_min=120
+        mem_mb=1000,
+        time_min=30
     shell:
         "heudiconv "
         "--dicom_dir_template '{wildcards.resultsdir}/tidy/sub_{{subject}}/ses_{{session}}/*/*' "
         "--outdir {wildcards.resultsdir}/bids "
         "--heuristic scripts/heuristic.py "
-        "--subjects {wildcards.cohort}_{wildcards.subject} "
+        "--subjects {wildcards.subject} "
         "--ses {wildcards.session} "
         "--converter dcm2niix "
         "--bids "
