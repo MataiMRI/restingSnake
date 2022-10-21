@@ -43,7 +43,7 @@ SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_T1w.nii.gz",
+            "{resultsdir}/bids/sub-{subject}/ses-{session}",
             zip,
             resultsdir=[config["resultsdir"]] * len(SUBJECTS),
             subject=SUBJECTS,
@@ -76,13 +76,14 @@ rule heudiconv:
     input:
         "{resultsdir}/tidy/sub_{subject}/ses_{session}/.completed"
     output:
-        "{resultsdir}/bids/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_T1w.nii.gz"
+        directory("{resultsdir}/bids/sub-{subject}/ses-{session}"),
+        directory("{resultsdir}/bids/.heudiconv/{subject}/ses-{session}")
     container:
         "heudiconv.sif"
         #"docker://nipy/heudiconv:v0.11.3"
     resources:
-        cpus=6,
-        mem_mb=1000,
+        cpus=2,
+        mem_mb=4000,
         time_min=30
     shell:
         "heudiconv "
