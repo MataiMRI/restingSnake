@@ -79,12 +79,11 @@ rule heudiconv:
         directory("{resultsdir}/bids/sub-{subject}/ses-{session}"),
         directory("{resultsdir}/bids/.heudiconv/{subject}/ses-{session}")
     container:
-        "heudiconv.sif"
-        #"docker://nipy/heudiconv:v0.11.3"
+        "docker://ghcr.io/jennan/heudiconv:jpeg2000_ci"
     resources:
         cpus=2,
         mem_mb=4000,
-        time_min=30
+        time_min=60
     shell:
         "heudiconv "
         "--dicom_dir_template '{wildcards.resultsdir}/tidy/sub_{{subject}}/ses_{{session}}/*/*' "
