@@ -1,7 +1,6 @@
 import shutil
 from pathlib import Path
 
-## To bypass permission issues caused by docker on local machine use: sudo chmod -R 777 ./
 ## If DAG or Rulegraph throwing error workaround is to comment out print statements in SnakeFile
 
 ### READ CONFIG ###
@@ -94,3 +93,22 @@ rule heudiconv:
         "--converter dcm2niix "
         "--bids "
         "--overwrite"
+
+#TO DO
+#Make sure fmriprep has functionality to handle multiple runs within the same session
+#Also add flexibility for both resting-state and task
+
+rule fmriprep:
+    input:
+
+    output:
+        "{resultsdir}/bids/derivatives/sub-{cohort}{subject}/ses-{session}/func/sub-{cohort}{subject}_ses-{session}_task-rest_run-1_desc-confounds_timeseries.tsv",
+        "{resultsdir}/bids/derivatives/sub-{cohort}{subject}/ses-{session}/func/sub-{cohort}{subject}_ses-{session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz",
+        "{resultsdir}/bids/derivatives/sub-{cohort}{subject}/ses-{session}/anat/sub-{cohort}{subject}_ses-{session}_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_T1w.nii.gz",
+        "{resultsdir}/bids/derivatives/sub-{cohort}{subject}/ses-{session}/anat/sub-{cohort}{subject}_ses-{session}_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz"
+    container:
+        "docker://nipreps/fmriprep:21.0.0"
+    resources:
+        cpus = 
+        mem_mb = 25000
+    shell:
