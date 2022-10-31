@@ -1,5 +1,8 @@
 ##permissions workaround sudo chmod -R 777 ./
 
+## NeSI project account
+account: uoa03264
+
 ## Data import
 ethics_prefix: Conc_20Ntb14_
 

@@ -22,9 +22,9 @@ def list_scans(root_folder, prefix):
         cohort, subject, session = infos
 
         if path.is_dir():
-            mapping[(cohort, subject, session)] = path
+            mapping[(cohort + subject, session)] = path
         else:
-            mapping[(cohort, subject, session)] = path.with_suffix("")
+            mapping[(cohort + subject, session)] = path.with_suffix("")
 
     return mapping
 
@@ -32,23 +32,22 @@ def list_tidy_scans(root_folder):
     infos = []
     for path in Path(root_folder).glob("tidy/sub_*/ses_*"):
         _, session = path.name.split("_")
-        _, cohort, subject = path.parent.name.split("_")
-        infos.append([cohort, subject, session])
+        _, subject = path.parent.name.split("_")
+        infos.append([subject, session])
     return infos
 
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 TIDY_SCANS = list_tidy_scans(config["resultsdir"])
-COHORTS, SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
+SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz",
+            "{resultsdir}/bids/sub-{subject}/ses-{session}",
             zip,
             resultsdir=[config["resultsdir"]] * len(SUBJECTS),
             subject=SUBJECTS,
-            session=SESSIONS,
-            cohort=COHORTS
+            session=SESSIONS
         )
 
 rule unzip:
@@ -61,9 +60,9 @@ rule unzip:
 
 rule tidy_dicoms:
     input:
-        lambda wildards: MAPPING[(wildards.cohort, wildards.subject, wildards.session)]
+        lambda wildards: MAPPING[(wildards.subject, wildards.session)]
     output:
-        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.canary"
+        "{resultsdir}/tidy/sub_{subject}/ses_{session}/.completed"
     run:
         output_folder = Path(output[0]).parent
         for dicom_file in Path(input[0]).rglob("*.dcm"):
@@ -75,20 +74,23 @@ rule tidy_dicoms:
 
 rule heudiconv:
     input:
-        "{resultsdir}/tidy/sub_{cohort}_{subject}/ses_{session}/.canary"
+        "{resultsdir}/tidy/sub_{subject}/ses_{session}/.completed"
     output:
-        "{resultsdir}/bids/sub-{cohort}_{subject}/ses-{session}/anat/sub-{cohort}_{subject}_ses-{session}_run-001_T1w.nii.gz"
+        directory("{resultsdir}/bids/sub-{subject}/ses-{session}"),
+        directory("{resultsdir}/bids/.heudiconv/{subject}/ses-{session}")
     container:
-        "docker://nipy/heudiconv:latest"
+        "docker://ghcr.io/jennan/heudiconv:jpeg2000_ci"
+    resources:
+        cpus=2,
+        mem_mb=4000,
+        time_min=60
     shell:
-        " echo Creating {output}; touch {output}"
-        # " docker run --rm -it -v {config[workingdir]}:/data -v {config[projectdir]}:/base \
-        #     nipy/heudiconv:latest \
-        #     -d /data/dicom/sub_{{subject}}/ses_{{session}}/*/* \
-        #     -o /data/bids \
-        #     -f /base/scripts/heuristic.py \
-        #     -s {wildcards.cohort}_{wildcards.subject} \
-        #     -ss {wildcards.session} \
-        #     -c dcm2niix \
-        #     -b \
-        #     --overwrite"
+        "heudiconv "
+        "--dicom_dir_template '{wildcards.resultsdir}/tidy/sub_{{subject}}/ses_{{session}}/*/*' "
+        "--outdir {wildcards.resultsdir}/bids "
+        "--heuristic scripts/heuristic.py "
+        "--subjects {wildcards.subject} "
+        "--ses {wildcards.session} "
+        "--converter dcm2niix "
+        "--bids "
+        "--overwrite"
