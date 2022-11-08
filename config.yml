@@ -24,7 +24,7 @@ rep_time: 1.5
 
 ## FMRIPREP settings
 nthreads: 8
-mem: 25000
+mem: 20000
 fs_status: --fs-no-reconall
                       # Leave blank to run freesurfer within fmriprep
   # --fs-no-reconall    # Select this option to skip freesurfer or blank space to run freesurfer
