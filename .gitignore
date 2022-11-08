@@ -1,3 +1,5 @@
+.cache
+.afni.log
 __pycache__
 .snakemake
 .ipynb_checkpoints

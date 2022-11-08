@@ -42,7 +42,7 @@ SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/sub-{subject}/ses-{session}",
+            "{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}",
             zip,
             resultsdir=[config["resultsdir"]] * len(SUBJECTS),
             subject=SUBJECTS,
@@ -100,15 +100,30 @@ rule heudiconv:
 
 rule fmriprep:
     input:
-
+        "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
-        "{resultsdir}/bids/derivatives/sub-{cohort}{subject}/ses-{session}/func/sub-{cohort}{subject}_ses-{session}_task-rest_run-1_desc-confounds_timeseries.tsv",
-        "{resultsdir}/bids/derivatives/sub-{cohort}{subject}/ses-{session}/func/sub-{cohort}{subject}_ses-{session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz",
-        "{resultsdir}/bids/derivatives/sub-{cohort}{subject}/ses-{session}/anat/sub-{cohort}{subject}_ses-{session}_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_T1w.nii.gz",
-        "{resultsdir}/bids/derivatives/sub-{cohort}{subject}/ses-{session}/anat/sub-{cohort}{subject}_ses-{session}_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz"
+        directory("{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/fmriprep:21.0.0"
+    params:
+#        fs_status=lambda:"" if len(config["fs_status"]) == 0 else config["fs_status"],
+         fs_status = config["fs_status"]
     resources:
-        cpus = 
-        mem_mb = 25000
+        mem_mb=config["mem"],
+        cpus=16,
+        time_min=360
+    threads: 16
     shell:
+        "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives "
+        "participant "
+        "--participant-label {wildcards.subject} "
+        "--skip-bids-validation "
+        "--md-only-boilerplate "
+        "--fs-license-file license.txt "
+        "{params.fs_status} "
+        "--output-spaces MNI152NLin2009cAsym:res-2 "
+        "--nthreads {threads} "
+        "--stop-on-first-crash "
+        "--low-mem "
+        "--mem_mb {resources.mem_mb} "
+        "-w {wildcards.resultsdir}/work"
