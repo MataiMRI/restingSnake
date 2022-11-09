@@ -94,6 +94,30 @@ rule heudiconv:
         "--bids "
         "--overwrite"
 
+# RUN BIDS/FREESURFER
+# inspect image using singularity exec docker://bids/freesurfer recon-all --help
+
+rule freesurfer:
+    input:
+        "{resultsdir}/bids/sub-{subject}/ses-{session}"
+    output:
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}")
+    container:
+        "docker://bids/freesurfer"
+    resources:
+        mem_mb=config["mem"],
+        cpus=16,
+        time_min=360
+    threads: 16
+    shell:
+        "recon-all -sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
+        "-subjid sub-{wildcards.subject} "
+        "-all "
+        "-qcache "
+        "-3T "
+
+
 #TO DO
 #Make sure fmriprep has functionality to handle multiple runs within the same session
 #Also add flexibility for both resting-state and task
