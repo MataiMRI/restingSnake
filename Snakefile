@@ -97,6 +97,8 @@ rule heudiconv:
 # RUN BIDS/FREESURFER
 # inspect image using singularity exec docker://bids/freesurfer recon-all --help
 
+# TODO check if session appear in output dir
+# TODO add as output the folder that makes freesurfer not restart if crash?
 rule freesurfer:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
@@ -117,11 +119,12 @@ rule freesurfer:
         "-qcache "
         "-3T "
 
-
-#TO DO
-#Make sure fmriprep has functionality to handle multiple runs within the same session
-#Also add flexibility for both resting-state and task
-
+# TODO make sure fmriprep has functionality to handle multiple runs within the same session
+# TODO add flexibility for both resting-state and task
+# TODO make freesrufer a prerequisite of fmriprep
+# TODO force --fs-no-reconall as freesurfer is always skipped (so remove option)
+# TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
+# TODO add license as an option input (and remove from repo)
 rule fmriprep:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
