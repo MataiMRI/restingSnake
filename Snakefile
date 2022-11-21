@@ -97,6 +97,9 @@ rule heudiconv:
 # RUN BIDS/FREESURFER
 # inspect image using singularity exec docker://bids/freesurfer recon-all --help
 
+envvars:
+    "FS_LICENSE"
+
 # TODO check if session appear in output dir
 # TODO add as output the folder that makes freesurfer not restart if crash?
 rule freesurfer:
@@ -112,12 +115,13 @@ rule freesurfer:
         time_min=360
     threads: 16
     shell:
-        "recon-all -sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "recon-all "
+        "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
         "-subjid sub-{wildcards.subject}_ses-{wildcards.session} "
         "-all "
         "-qcache "
-        "-3T "
+        "-3T"
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
