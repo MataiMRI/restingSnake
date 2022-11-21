@@ -97,9 +97,6 @@ rule heudiconv:
 # RUN BIDS/FREESURFER
 # inspect image using singularity exec docker://bids/freesurfer recon-all --help
 
-envvars:
-    "FS_LICENSE"
-
 # TODO check if session appear in output dir
 # TODO add as output the folder that makes freesurfer not restart if crash?
 rule freesurfer:
@@ -109,12 +106,15 @@ rule freesurfer:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     container:
         "docker://bids/freesurfer"
+    params:
+        license_path=config["freesurfer"]["license_path"]
     resources:
-        mem_mb=config["mem"],
-        cpus=16,
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["freesurfer"]["mem_mb"],
         time_min=720
     threads: 16
     shell:
+        "export FS_LICENSE=$(realpath {params.license_path}) && "
         "recon-all "
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
@@ -141,8 +141,8 @@ rule fmriprep:
 #        fs_status=lambda:"" if len(config["fs_status"]) == 0 else config["fs_status"],
          fs_status = config["fs_status"]
     resources:
+        cpus=lambda wildcards, threads: threads,
         mem_mb=config["mem"],
-        cpus=16,
         time_min=360
     threads: 16
     shell:

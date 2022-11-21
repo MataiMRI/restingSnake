@@ -17,10 +17,12 @@ dicom_compression_ext: .zip
 ## Scan info
 rep_time: 1.5
 
-#FREESURFER_HOME: /usr/local/freesurfer
-
 # TASK
 # will need to include something in first_level.py to account for different tasks
+
+freesurfer:
+  license_path: ./license.txt
+  mem_mb: 20000
 
 ## FMRIPREP settings
 nthreads: 8
