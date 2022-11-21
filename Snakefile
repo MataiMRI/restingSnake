@@ -103,7 +103,7 @@ rule freesurfer:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}")
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     container:
         "docker://bids/freesurfer"
     resources:
@@ -114,7 +114,7 @@ rule freesurfer:
     shell:
         "recon-all -sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
-        "-subjid sub-{wildcards.subject} "
+        "-subjid sub-{wildcards.subject}_ses-{wildcards.session} "
         "-all "
         "-qcache "
         "-3T "
@@ -127,7 +127,8 @@ rule freesurfer:
 # TODO add license as an option input (and remove from repo)
 rule fmriprep:
     input:
-        "{resultsdir}/bids/sub-{subject}/ses-{session}"
+        "{resultsdir}/bids/sub-{subject}/ses-{session}",
+        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}"
     output:
         directory("{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}")
     container:
