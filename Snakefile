@@ -112,7 +112,7 @@ rule freesurfer:
     resources:
         mem_mb=config["mem"],
         cpus=16,
-        time_min=360
+        time_min=720
     threads: 16
     shell:
         "recon-all "
