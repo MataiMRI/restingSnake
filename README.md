@@ -38,6 +38,11 @@ Then run the workflow using the `nesi` profile, first in dry-mode:
 snakemake --profile nesi -n
 ```
 
+View steps within workflow using rulegraph:
+```
+snakemake --forceall --rulegraph | dot -Tpdf > rulegraph.pdf
+```
+
 Finally, run the workflow:
 
 ```
