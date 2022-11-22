@@ -100,6 +100,7 @@ rule heudiconv:
 
 # TODO check if session appear in output dir
 # TODO add as output the folder that makes freesurfer not restart if crash?
+
 rule freesurfer:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
@@ -112,7 +113,7 @@ rule freesurfer:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
-        time_min=720
+        time_min=config["freesurfer"]["time_mins"]
     threads: 8
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
@@ -131,6 +132,7 @@ rule freesurfer:
 # TODO force --fs-no-reconall as freesurfer is always skipped (so remove option)
 # TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
 # TODO add license as an option input (and remove from repo)
+
 rule fmriprep:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}",
@@ -140,21 +142,19 @@ rule fmriprep:
     container:
         "docker://nipreps/fmriprep:21.0.0"
     params:
-#        fs_status=lambda:"" if len(config["fs_status"]) == 0 else config["fs_status"],
          fs_status = config["fs_status"],
          fs_dir = config["fs_dir"]
     resources:
         cpus=lambda wildcards, threads: threads,
-        mem_mb=config["mem"],
-        time_min=360
-    threads: 16
+        mem_mb=config["fmriprep"]["mem_mb"],
+        time_min=config["fmriprep"]["time_mins"]
+    threads: 8
     shell:
         "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives "
         "participant "
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-license-file license.txt "
         "{params.fs_status} "
         "{params.fs_dir}  "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
@@ -164,9 +164,4 @@ rule fmriprep:
         "--mem_mb {resources.mem_mb} "
         "--nprocs {resources.cpus} "
         "-w {wildcards.resultsdir}/work"
-
-
-#TO DO
-#Make sure fmriprep has functionality to handle multiple runs within the same session
-#Also add flexibility for both resting-state and task
 

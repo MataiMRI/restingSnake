@@ -20,24 +20,17 @@ rep_time: 1.5
 # TASK
 # will need to include something in first_level.py to account for different tasks
 
-<<<<<<< HEAD
-## License
-fs_license: "/LICENSE.txt"
-=======
 freesurfer:
   license_path: ./license.txt
-  mem_mb: 20000
->>>>>>> 9a3ede86054be6f7a4c7088fc63e0d74e452315f
-
-## FMRIPREP settings
-nthreads: 8
-mem: 20000
-fs_status: --fs-subjects
-                      # Leave blank to run freesurfer within fmriprep
-  # --fs-no-reconall    # Select this option to skip freesurfer or blank space to run freesurfer
-  # --fs-subjects     # Select this option if you have prerun Freesurfer
-
-fs_dir: /bids/derivatives/freesurfer # Directory where pre-run freesurfer results can be found
+  mem_mb: 10000
+  time_mins: 600
+  
+fmriprep:
+    nthreads: 8
+    mem_mb: 20000
+    time_mins: 240
+    fs_status: --fs-subjects # This directs fMRIprep to prerun Freesurfer outputs
+    fs_dir: /bids/derivatives/freesurfer # Location of prerun Freesurfer outputs
 
 ## Filtering and smooth settings
 high_pass: 0.01
