@@ -100,6 +100,7 @@ rule heudiconv:
 
 # TODO check if session appear in output dir
 # TODO add as output the folder that makes freesurfer not restart if crash?
+# TODO remove license from repo
 rule freesurfer:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
@@ -127,10 +128,7 @@ rule freesurfer:
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
-# TODO make freesurfer a prerequisite of fmriprep
-# TODO force --fs-no-reconall as freesurfer is always skipped (so remove option)
 # TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
-# TODO add license as an option input (and remove from repo)
 rule fmriprep:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}",
@@ -139,8 +137,6 @@ rule fmriprep:
         directory("{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/fmriprep:21.0.0"
-    params:
-         fs_dir = config["fs_dir"]
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["mem"],
@@ -152,7 +148,6 @@ rule fmriprep:
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-license-file license.txt "
         "--fs-subjects {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--nthreads {threads} "
@@ -161,9 +156,3 @@ rule fmriprep:
         "--mem_mb {resources.mem_mb} "
         "--nprocs {resources.cpus} "
         "-w {wildcards.resultsdir}/work"
-
-
-#TO DO
-#Make sure fmriprep has functionality to handle multiple runs within the same session
-#Also add flexibility for both resting-state and task
-
