@@ -97,34 +97,43 @@ rule heudiconv:
 # RUN BIDS/FREESURFER
 # inspect image using singularity exec docker://bids/freesurfer recon-all --help
 
+# TODO check if session appear in output dir
+# TODO add as output the folder that makes freesurfer not restart if crash?
 rule freesurfer:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}")
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     container:
         "docker://bids/freesurfer"
+    params:
+        license_path=config["freesurfer"]["license_path"]
     resources:
-        mem_mb=config["mem"],
-        cpus=16,
-        time_min=360
-    threads: 16
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["freesurfer"]["mem_mb"],
+        time_min=720
+    threads: 8
     shell:
-        "recon-all -sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "export FS_LICENSE=$(realpath {params.license_path}) && "
+        "recon-all "
+        "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
-        "-subjid sub-{wildcards.subject} "
+        "-subjid sub-{wildcards.subject}_ses-{wildcards.session} "
         "-all "
         "-qcache "
         "-3T "
+        "-openmp {threads}"
 
-
-#TO DO
-#Make sure fmriprep has functionality to handle multiple runs within the same session
-#Also add flexibility for both resting-state and task
-
+# TODO make sure fmriprep has functionality to handle multiple runs within the same session
+# TODO add flexibility for both resting-state and task
+# TODO make freesurfer a prerequisite of fmriprep
+# TODO force --fs-no-reconall as freesurfer is always skipped (so remove option)
+# TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
+# TODO add license as an option input (and remove from repo)
 rule fmriprep:
     input:
-        "{resultsdir}/bids/sub-{subject}/ses-{session}"
+        "{resultsdir}/bids/sub-{subject}/ses-{session}",
+        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}"
     output:
         directory("{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}")
     container:
@@ -133,8 +142,8 @@ rule fmriprep:
 #        fs_status=lambda:"" if len(config["fs_status"]) == 0 else config["fs_status"],
          fs_status = config["fs_status"]
     resources:
+        cpus=lambda wildcards, threads: threads,
         mem_mb=config["mem"],
-        cpus=16,
         time_min=360
     threads: 16
     shell:
