@@ -112,7 +112,7 @@ rule freesurfer:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=720
-    threads: 16
+    threads: 8
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
         "recon-all "
@@ -121,11 +121,12 @@ rule freesurfer:
         "-subjid sub-{wildcards.subject}_ses-{wildcards.session} "
         "-all "
         "-qcache "
-        "-3T"
+        "-3T "
+        "-openmp {threads}"
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
-# TODO make freesrufer a prerequisite of fmriprep
+# TODO make freesurfer a prerequisite of fmriprep
 # TODO force --fs-no-reconall as freesurfer is always skipped (so remove option)
 # TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
 # TODO add license as an option input (and remove from repo)
