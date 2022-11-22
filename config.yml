@@ -27,12 +27,6 @@ freesurfer:
 ## FMRIPREP settings
 nthreads: 8
 mem: 20000
-fs_status: --fs-subjects
-                      # Leave blank to run freesurfer within fmriprep
-  # --fs-no-reconall    # Select this option to skip freesurfer or blank space to run freesurfer
-  # --fs-subjects     # Select this option if you have prerun Freesurfer
-
-fs_dir: /bids/derivatives/freesurfer # Directory where pre-run freesurfer results can be found
 
 ## Filtering and smooth settings
 high_pass: 0.01

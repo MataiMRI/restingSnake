@@ -140,8 +140,6 @@ rule fmriprep:
     container:
         "docker://nipreps/fmriprep:21.0.0"
     params:
-#        fs_status=lambda:"" if len(config["fs_status"]) == 0 else config["fs_status"],
-         fs_status = config["fs_status"],
          fs_dir = config["fs_dir"]
     resources:
         cpus=lambda wildcards, threads: threads,
@@ -155,8 +153,7 @@ rule fmriprep:
         "--skip-bids-validation "
         "--md-only-boilerplate "
         "--fs-license-file license.txt "
-        "{params.fs_status} "
-        "{params.fs_dir}  "
+        "--fs-subjects {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--nthreads {threads} "
         "--stop-on-first-crash "
