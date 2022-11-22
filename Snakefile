@@ -43,6 +43,7 @@ rule all:
     input:
         expand(
             "{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}",
+#            "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}-{session}",
             zip,
             resultsdir=[config["resultsdir"]] * len(SUBJECTS),
             subject=SUBJECTS,
@@ -101,37 +102,27 @@ rule freesurfer:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}")
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}-{session}")
     container:
         "docker://bids/freesurfer"
     resources:
         mem_mb=config["mem"],
-        cpus=16,
-        time_min=360
-    threads: 16
+        cpus=8,
+        time_min=1200
     shell:
-        "recon-all -sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
-        "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
-        "-subjid sub-{wildcards.subject} "
-        "-all "
-        "-qcache "
-        "-3T "
-
-
-#TO DO
-#Make sure fmriprep has functionality to handle multiple runs within the same session
-#Also add flexibility for both resting-state and task
-
+        "export FS_LICENSE=\"/nesi/project/uoa03264/fmri_workflow/license.txt\" ; recon-all -sd {wildcards.resultsdir}/bids/derivatives/freesurfer -i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz -subjid sub-{wildcards.subject} -all -qcache -3T"
+        
 rule fmriprep:
     input:
-        "{resultsdir}/bids/sub-{subject}/ses-{session}"
+        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}-{session}"
     output:
         directory("{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/fmriprep:21.0.0"
     params:
 #        fs_status=lambda:"" if len(config["fs_status"]) == 0 else config["fs_status"],
-         fs_status = config["fs_status"]
+         fs_status = config["fs_status"],
+         fs_dir = config["fs_dir"]
     resources:
         mem_mb=config["mem"],
         cpus=16,
@@ -145,9 +136,17 @@ rule fmriprep:
         "--md-only-boilerplate "
         "--fs-license-file license.txt "
         "{params.fs_status} "
+        "{params.fs_dir}  "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--nthreads {threads} "
         "--stop-on-first-crash "
         "--low-mem "
         "--mem_mb {resources.mem_mb} "
+        "--nprocs {resources.cpus} "
         "-w {wildcards.resultsdir}/work"
+
+
+#TO DO
+#Make sure fmriprep has functionality to handle multiple runs within the same session
+#Also add flexibility for both resting-state and task
+

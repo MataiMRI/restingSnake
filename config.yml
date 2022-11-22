@@ -22,10 +22,13 @@ rep_time: 1.5
 # TASK
 # will need to include something in first_level.py to account for different tasks
 
+## License
+fs_license: "/LICENSE.txt"
+
 ## FMRIPREP settings
 nthreads: 8
 mem: 20000
-fs_status: --fs-no-reconall
+fs_status: --fs-subjects
                       # Leave blank to run freesurfer within fmriprep
   # --fs-no-reconall    # Select this option to skip freesurfer or blank space to run freesurfer
   # --fs-subjects     # Select this option if you have prerun Freesurfer
