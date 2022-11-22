@@ -2,6 +2,7 @@ cluster:
     mkdir -p logs &&
     sbatch
         --parsable
+        --partition milan
         --account {config[account]}
         --time {resources.time_min}
         --mem {resources.mem_mb}
