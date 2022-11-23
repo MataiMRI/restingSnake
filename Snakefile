@@ -104,7 +104,7 @@ rule freesurfer:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}/ses-{session}")
     container:
         "docker://bids/freesurfer"
     params:
@@ -123,15 +123,16 @@ rule freesurfer:
         "-all "
         "-qcache "
         "-3T "
-        "-openmp {threads}"
+        "-openmp {threads} && "
+        "mv {wildcards.resultsdir}/bids/derivatives/freesurfer/sub-{wildcards.subject}_ses-{wildcards.session} {output}"
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
 # TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
 rule fmriprep:
     input:
-        heudiconv="{resultsdir}/bids/sub-{subject}/ses-{session}",
-        freesurfer="{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}"
+        "{resultsdir}/bids/sub-{subject}/ses-{session}",
+        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}/ses-{session}"
     output:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}")
     container:
@@ -147,7 +148,7 @@ rule fmriprep:
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-subjects {input.freesurfer} "
+        "--fs-subjects {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--nthreads {threads} "
         "--stop-on-first-crash "
