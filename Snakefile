@@ -42,12 +42,12 @@ SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
-            zip,
-            resultsdir=[config["resultsdir"]] * len(SUBJECTS),
+            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+            resultsdir=config["resultsdir"],
             subject=SUBJECTS,
-            session=SESSIONS
         )
+
+ruleorder: fmriprep > freesurfer > unzip
 
 rule unzip:
     input:
@@ -97,14 +97,22 @@ rule heudiconv:
 # RUN BIDS/FREESURFER
 # inspect image using singularity exec docker://bids/freesurfer recon-all --help
 
-# TODO check if session appear in output dir
+def list_subject_sessions(wildcards):
+    inputs = []
+    for subject, session in zip(SUBJECTS, SESSIONS):
+        if subject != wildcards.subject:
+            continue
+        inputs.append(f"{wildcards.resultsdir}/bids/sub-{subject}/ses-{session}")
+    return inputs
+
 # TODO add as output the folder that makes freesurfer not restart if crash?
 # TODO remove license from repo
+# TODO skip bids validator or not?
 rule freesurfer:
     input:
-        "{resultsdir}/bids/sub-{subject}/ses-{session}"
+        list_subject_sessions
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}/ses-{session}")
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}")
     container:
         "docker://bids/freesurfer"
     params:
@@ -115,26 +123,22 @@ rule freesurfer:
         time_min=720
     threads: 8
     shell:
-        "export FS_LICENSE=$(realpath {params.license_path}) && "
-        "recon-all "
-        "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
-        "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
-        "-subjid sub-{wildcards.subject}_ses-{wildcards.session} "
-        "-all "
-        "-qcache "
-        "-3T "
-        "-openmp {threads} && "
-        "mv {wildcards.resultsdir}/bids/derivatives/freesurfer/sub-{wildcards.subject}_ses-{wildcards.session} {output}"
+        "/run.py {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "participant "
+        "--participant_label {wildcards.subject} "
+        "--license_file {params.license_path} "
+        "--skip_bids_validator "
+        "--n_cpus {threads}"
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
 # TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
 rule fmriprep:
     input:
-        "{resultsdir}/bids/sub-{subject}/ses-{session}",
-        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}/ses-{session}"
+        list_subject_sessions,
+        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}"
     output:
-        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}")
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}")
     container:
         "docker://nipreps/fmriprep:21.0.0"
     resources:
@@ -150,9 +154,8 @@ rule fmriprep:
         "--md-only-boilerplate "
         "--fs-subjects {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
-        "--nthreads {threads} "
         "--stop-on-first-crash "
         "--low-mem "
-        "--mem_mb {resources.mem_mb} "
-        "--nprocs {resources.cpus} "
+        "--mem-mb {resources.mem_mb} "
+        "--nprocs {threads} "
         "-w {wildcards.resultsdir}/work"
