@@ -42,8 +42,7 @@ SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}",
-#            "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}-{session}",
+            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
             zip,
             resultsdir=[config["resultsdir"]] * len(SUBJECTS),
             subject=SUBJECTS,
@@ -131,10 +130,10 @@ rule freesurfer:
 # TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
 rule fmriprep:
     input:
-        "{resultsdir}/bids/sub-{subject}/ses-{session}",
-        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}"
+        heudiconv="{resultsdir}/bids/sub-{subject}/ses-{session}",
+        freesurfer="{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}")
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/fmriprep:21.0.0"
     resources:
@@ -143,12 +142,12 @@ rule fmriprep:
         time_min=360
     threads: 16
     shell:
-        "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives "
+        "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/fmriprep "
         "participant "
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-subjects {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "--fs-subjects {input.freesurfer} "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--nthreads {threads} "
         "--stop-on-first-crash "
