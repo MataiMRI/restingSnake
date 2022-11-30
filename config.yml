@@ -1,5 +1,3 @@
-##permissions workaround sudo chmod -R 777 ./
-
 ## NeSI project account
 account: uoa03264
 
@@ -17,9 +15,6 @@ dicom_compression_ext: .zip
 ## Scan info
 rep_time: 1.5
 
-# TASK
-# will need to include something in first_level.py to account for different tasks
-
 freesurfer:
   license_path: ./license.txt
   mem_mb: 10000
@@ -29,21 +24,11 @@ fmriprep:
     nthreads: 8
     mem_mb: 20000
     time_mins: 240
-    fs_status: --fs-subjects # This directs fMRIprep to prerun Freesurfer outputs
-    fs_dir: /bids/derivatives/freesurfer # Location of prerun Freesurfer outputs
+    fs_status: --fs-subjects-dir # Directs fMRIprep to use prerun Freesurfer outputs
+    fs_dir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer # Location of prerun Freesurfer outputs
 
-## Filtering and smooth settings
-high_pass: 0.01
-low_pass: 0.1
-fwhm: 6
-
-## False detection rate alpha
-fdr_alpha: 0.01
-## Functional connectivity threshold
-func_conn_thresh: 0.25
-
-## Confounds to extract
-confound_info:
+## Confounding (nuisance) variables to be regressed out of signal to improve SNR
+confound_var:
   num_confounds: 9
   confounds:
   - csf
@@ -56,8 +41,15 @@ confound_info:
   - rot_z
   - framewise_displacement
 
-## Framewise displacement threshold for accepting
-fd_thresh: 0.5
+preprocessing:
+    fd_thresh: 0.5 ## Framewise displacement threshold for accepting
+    high_pass: 0.01 ## Set high and low range of bandpass filter
+    low_pass: 0.1
+    fwhm: 6 #size of smoothing kernel in mm
+
+resting_first_level:
+    fdr_alpha: 0.01 ## False detection rate alpha
+    func_conn_thresh: 0.25 ## Functional connectivity threshold
 
 ## List of one or more resting state networks for first level
 network_info:
@@ -65,3 +57,8 @@ network_info:
   networks:
     - DMN
     - Salience
+    
+# TASK
+# will need to include something in first_level.py to account for different tasks
+#task_first_level:
+#    fdr_alpha:

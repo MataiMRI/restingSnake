@@ -105,7 +105,8 @@ rule freesurfer:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
+        fs_results=directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}"),
+        fs_temp=temp("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.tmp")
     container:
         "docker://bids/freesurfer"
     params:
@@ -120,11 +121,12 @@ rule freesurfer:
         "recon-all "
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
-        "-subjid sub-{wildcards.subject}_ses-{wildcards.session} "
+        "-subjid sub-{wildcards.subject} "
         "-all "
         "-qcache "
         "-3T "
-        "-openmp {threads}"
+        "-openmp {threads} && "
+        "touch {output.fs_temp} "
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
@@ -132,18 +134,20 @@ rule freesurfer:
 # TODO force --fs-no-reconall as freesurfer is always skipped (so remove option)
 # TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
 # TODO add license as an option input (and remove from repo)
+# TODO add field strength (Tesla) to freesurfer config options
 
 rule fmriprep:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}",
-        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}"
+        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}",
+        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.tmp"
     output:
         directory("{resultsdir}/bids/derivatives/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/fmriprep:21.0.0"
     params:
-         fs_status = config["fs_status"],
-         fs_dir = config["fs_dir"]
+         fs_status = config["fmriprep"]["fs_status"],
+         fs_dir = config["fmriprep"]["fs_dir"]
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
@@ -155,6 +159,7 @@ rule fmriprep:
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
+        "--fs-license-file license.txt "
         "{params.fs_status} "
         "{params.fs_dir}  "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
