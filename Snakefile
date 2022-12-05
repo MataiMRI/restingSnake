@@ -136,7 +136,7 @@ rule freesurfer_aggregate:
     input:
         list_freesurfer_sessions
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}")
+        directory("{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
     params:
@@ -162,7 +162,7 @@ def list_bids_sessions(wildcards):
 rule fmriprep:
     input:
         list_bids_sessions,
-        "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}"
+        "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
     output:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}")
     container:
@@ -178,7 +178,7 @@ rule fmriprep:
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-subjects {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "--fs-subjects {wildcards.resultsdir}/bids/derivatives/freesurfer_agg "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "
         "--low-mem "
