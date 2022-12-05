@@ -23,10 +23,11 @@ rep_time: 1.5
 freesurfer:
   license_path: ./license.txt
   mem_mb: 20000
+  time_min: 1440
 
-## FMRIPREP settings
-nthreads: 8
-mem: 20000
+fmriprep:
+  mem_mb: 20000
+  time_min: 1440
 
 ## Filtering and smooth settings
 high_pass: 0.01

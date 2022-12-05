@@ -47,7 +47,7 @@ rule all:
             subject=SUBJECTS,
         )
 
-ruleorder: fmriprep > freesurfer > unzip
+ruleorder: fmriprep > freesurfer > freesurfer_aggregate > unzip
 
 rule unzip:
     input:
@@ -97,7 +97,59 @@ rule heudiconv:
 # RUN BIDS/FREESURFER
 # inspect image using singularity exec docker://bids/freesurfer recon-all --help
 
-def list_subject_sessions(wildcards):
+# TODO remove fs license from repo
+rule freesurfer:
+    input:
+        "{resultsdir}/bids/sub-{subject}/ses-{session}"
+    output:
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
+    container:
+        "docker://bids/freesurfer:v6.0.1-6.1"
+    params:
+        license_path=config["freesurfer"]["license_path"]
+    resources:
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["freesurfer"]["mem_mb"],
+        time_min=config["freesurfer"]["time_min"]
+    threads: 8
+    shell:
+        "export FS_LICENSE=$(realpath {params.license_path}) && "
+        "recon-all "
+        "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
+        "-subjid sub-{wildcards.subject}_ses-{wildcards.session} "
+        "-all "
+        "-qcache "
+        "-3T "
+        "-openmp {threads} "
+
+def list_freesurfer_sessions(wildcards):
+    inputs = []
+    for subject, session in zip(SUBJECTS, SESSIONS):
+        if subject != wildcards.subject:
+            continue
+        inputs.append(f"{wildcards.resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
+    return inputs
+
+# TODO decide how to properly aggregate multi-session data
+rule freesurfer_aggregate:
+    input:
+        list_freesurfer_sessions
+    output:
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}")
+    container:
+        "docker://bids/freesurfer:v6.0.1-6.1"
+    params:
+        license_path=config["freesurfer"]["license_path"]
+    resources:
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["freesurfer"]["mem_mb"],
+        time_min=config["freesurfer"]["time_min"]
+    threads: 8
+    shell:
+        "cp -r {input[0]} {output}"
+
+def list_bids_sessions(wildcards):
     inputs = []
     for subject, session in zip(SUBJECTS, SESSIONS):
         if subject != wildcards.subject:
@@ -105,46 +157,20 @@ def list_subject_sessions(wildcards):
         inputs.append(f"{wildcards.resultsdir}/bids/sub-{subject}/ses-{session}")
     return inputs
 
-# TODO add as output the folder that makes freesurfer not restart if crash?
-# TODO remove license from repo
-# TODO skip bids validator or not?
-rule freesurfer:
-    input:
-        list_subject_sessions
-    output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}")
-    container:
-        "docker://bids/freesurfer"
-    params:
-        license_path=config["freesurfer"]["license_path"]
-    resources:
-        cpus=lambda wildcards, threads: threads,
-        mem_mb=config["freesurfer"]["mem_mb"],
-        time_min=720
-    threads: 8
-    shell:
-        "/run.py {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/freesurfer "
-        "participant "
-        "--participant_label {wildcards.subject} "
-        "--license_file {params.license_path} "
-        "--skip_bids_validator "
-        "--n_cpus {threads}"
-
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
-# TODO split fmriprep/freesurfer compute options (e.g. memory and cores)
 rule fmriprep:
     input:
-        list_subject_sessions,
+        list_bids_sessions,
         "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}"
     output:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}")
     container:
-        "docker://nipreps/fmriprep:21.0.0"
+        "docker://nipreps/fmriprep:22.0.2"
     resources:
         cpus=lambda wildcards, threads: threads,
-        mem_mb=config["mem"],
-        time_min=360
+        mem_mb=config["fmriprep"]["mem_mb"],
+        time_min=config["fmriprep"]["time_min"]
     threads: 16
     shell:
         "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/fmriprep "
