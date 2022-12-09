@@ -178,7 +178,7 @@ rule fmriprep:
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-subjects {wildcards.resultsdir}/bids/derivatives/freesurfer_agg "
+        "--fs-subjects-dir {wildcards.resultsdir}/bids/derivatives/freesurfer_agg "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "
         "--low-mem "
