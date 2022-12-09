@@ -15,17 +15,17 @@ dicom_compression_ext: .zip
 ## Scan info
 rep_time: 1.5
 
+# TASK
+# will need to include something in first_level.py to account for different tasks
+
 freesurfer:
   license_path: ./license.txt
-  mem_mb: 10000
-  time_mins: 600
-  
+  mem_mb: 20000
+  time_min: 1440
+
 fmriprep:
-    nthreads: 8
-    mem_mb: 20000
-    time_mins: 240
-    fs_status: --fs-subjects-dir # Directs fMRIprep to use prerun Freesurfer outputs
-    fs_dir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer # Location of prerun Freesurfer outputs
+  mem_mb: 20000
+  time_min: 1440
 
 ## Confounding (nuisance) variables to be regressed out of signal to improve SNR
 confound_var:
