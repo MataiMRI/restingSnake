@@ -159,6 +159,8 @@ def list_bids_sessions(wildcards):
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
+# TODO Experiment with --longitudinal in fMRIPREP
+
 rule fmriprep:
     input:
         list_bids_sessions,
@@ -178,6 +180,7 @@ rule fmriprep:
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
+        "--fs-license-file license.txt "
         "--fs-subjects-dir {wildcards.resultsdir}/bids/derivatives/freesurfer_agg "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "

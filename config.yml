@@ -5,8 +5,8 @@ account: uoa03264
 ethics_prefix: Conc_20Ntb14_
 
 ## Directories
-datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test
-resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test
+datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test_josh
+resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh
 
 #Dicom directory structure can be flexible but MUST include {{subject}} and {{session}}
 dicom_dir_structure: /dicom/sub_{{subject}}/ses_{{session}}/*/* # GET THIS WORKING FOR HEUDICONV
@@ -20,12 +20,14 @@ rep_time: 1.5
 
 freesurfer:
   license_path: ./license.txt
-  mem_mb: 20000
-  time_min: 1440
+  mem_mb: 4000
+  time_min: 540
+  threads: 8
 
 fmriprep:
-  mem_mb: 20000
-  time_min: 1440
+  mem_mb: 25000
+  time_min: 180
+  threads: 8
 
 ## Confounding (nuisance) variables to be regressed out of signal to improve SNR
 confound_var:
@@ -42,10 +44,10 @@ confound_var:
   - framewise_displacement
 
 preprocessing:
-    fd_thresh: 0.5 ## Framewise displacement threshold for accepting
+    frame_disp_thresh: 0.5 ## Framewise displacement threshold for accepting
     high_pass: 0.01 ## Set high and low range of bandpass filter
     low_pass: 0.1
-    fwhm: 6 #size of smoothing kernel in mm
+    smooth_fwhm: 6 #size of smoothing kernel in mm
 
 resting_first_level:
     fdr_alpha: 0.01 ## False detection rate alpha

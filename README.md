@@ -14,6 +14,7 @@ git clone https://github.com/jpmcgeown/fmri_workflow.git
 
 ## Usage (NeSI)
 
+
 Make sure to be in the folder of the repository:
 
 ```
@@ -85,3 +86,13 @@ conda config --add pkgs_dirs /nesi/nobackup/<project_code>/$USER/conda_pkgs
 ```
 
 - integrate snakemake singularity cache in the configuration? same for conda environment?
+
+- add a note about the user having to run HeudiConv separately to determine populate heuristic.py prior to any run on NeSI
+
+- add a note about keep_this_folder file in dicom directory
+Create dicom folder in high memory storage.
+Then create a file to prevent Snakemake from deleting this folder:
+```
+mkdir NOBACKUP_FOLDER/dicom
+touch NOBACKUP_FOLDER/dicom/keep_this_folder
+```
