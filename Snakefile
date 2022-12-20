@@ -166,7 +166,8 @@ rule fmriprep:
         list_bids_sessions,
         "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
     output:
-        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}")
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"),
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
     container:
         "docker://nipreps/fmriprep:22.0.2"
     params:
