@@ -169,6 +169,8 @@ rule fmriprep:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}")
     container:
         "docker://nipreps/fmriprep:22.0.2"
+    params:
+        fs_license_path=config["freesurfer"]["license_path"]
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
@@ -187,4 +189,5 @@ rule fmriprep:
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {wildcards.resultsdir}/work"
+        "-w {wildcards.resultsdir}/work "
+        "--fs-license-file {params.fs_license_path}"
