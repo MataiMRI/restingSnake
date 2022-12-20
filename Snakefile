@@ -145,7 +145,7 @@ rule freesurfer_aggregate:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=config["freesurfer"]["time_min"]
-    threads: 8
+    threads: config["freesurfer"]["threads"]
     shell:
         "cp -r {input[0]} {output}"
 
@@ -176,7 +176,7 @@ rule fmriprep:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
         time_min=config["fmriprep"]["time_min"]
-    threads: 16
+    threads: config["fmriprep"]["threads"]
     shell:
         "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/fmriprep "
         "participant "
