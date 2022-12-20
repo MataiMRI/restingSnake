@@ -105,15 +105,13 @@ rule freesurfer:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
-    params:
-        license_path=config["freesurfer"]["license_path"]
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=config["freesurfer"]["time_min"]
     threads: 8
     shell:
-        "export FS_LICENSE=$(realpath {params.license_path}) && "
+        "export FS_LICENSE=$(realpath {config[freesurfer][license_path]}) && "
         "recon-all "
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
@@ -139,8 +137,6 @@ rule freesurfer_aggregate:
         directory("{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
-    params:
-        license_path=config["freesurfer"]["license_path"]
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
@@ -170,8 +166,6 @@ rule fmriprep:
         "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
     container:
         "docker://nipreps/fmriprep:22.0.2"
-    params:
-        fs_license_path=config["freesurfer"]["license_path"]
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
@@ -191,4 +185,4 @@ rule fmriprep:
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
         "-w {wildcards.resultsdir}/work "
-        "--fs-license-file {params.fs_license_path}"
+        "--fs-license-file {config[freesurfer][license_path]}"
