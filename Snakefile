@@ -39,6 +39,8 @@ MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 TIDY_SCANS = list_tidy_scans(config["resultsdir"])
 SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 
+localrules: all, workdir
+
 rule all:
     input:
         expand(
@@ -157,8 +159,15 @@ def list_bids_sessions(wildcards):
 # TODO add flexibility for both resting-state and task
 # TODO Experiment with --longitudinal in fMRIPREP
 
+rule workdir:
+    output:
+        temp(directory("{resultsdir}/work"))
+    shell:
+        "mkdir {output}"
+
 rule fmriprep:
     input:
+        "{resultsdir}/work",
         list_bids_sessions,
         "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
     output:
