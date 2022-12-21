@@ -39,10 +39,11 @@ MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 TIDY_SCANS = list_tidy_scans(config["resultsdir"])
 SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 
-localrules: all, workdir
+localrules: all, fmriprep_cleanup
 
 rule all:
     input:
+        expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]),
         expand(
             "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
             resultsdir=config["resultsdir"],
@@ -159,17 +160,10 @@ def list_bids_sessions(wildcards):
 # TODO add flexibility for both resting-state and task
 # TODO Experiment with --longitudinal in fMRIPREP
 
-rule workdir:
-    output:
-        temp(directory("{resultsdir}/work"))
-    shell:
-        "mkdir {output}"
-
 rule fmriprep:
     input:
-        workdir="{resultsdir}/work",
-        bids_sessions=list_bids_sessions,
-        fs_folder="{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
+        list_bids_sessions,
+        "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
     output:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"),
         "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
@@ -193,5 +187,17 @@ rule fmriprep:
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {input.workdir} "
+        "-w {wildcards.resultsdir}/work "
         "--fs-license-file {config[freesurfer][license_path]}"
+
+rule fmriprep_cleanup:
+    input:
+        expand(
+            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+            resultsdir=config["resultsdir"],
+            subject=SUBJECTS,
+        )
+    output:
+        touch(expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]))
+    shell:
+        "rm -rf {config[resultsdir]}/work"
