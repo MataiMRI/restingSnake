@@ -42,12 +42,13 @@ SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+            #"{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+            "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.sst",
             resultsdir=config["resultsdir"],
             subject=SUBJECTS,
         )
 
-ruleorder: fmriprep > freesurfer > freesurfer_aggregate > unzip
+ruleorder: fmriprep > freesurfer_long_template > freesurfer_cross_sectional > unzip
 
 rule unzip:
     input:
@@ -98,7 +99,7 @@ rule heudiconv:
 # inspect image using singularity exec docker://bids/freesurfer recon-all --help
 
 # TODO remove fs license from repo
-rule freesurfer:
+rule freesurfer_cross_sectional:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
@@ -131,23 +132,40 @@ def list_freesurfer_sessions(wildcards):
         inputs.append(f"{wildcards.resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     return inputs
 
+def sessions_for_template(wildcards):
+    tps = ""
+    for subject, session in zip(SUBJECTS, SESSIONS):
+        if subject != wildcards.subject:
+            continue
+        tps = tps + f"-tp sub-{subject}_ses-{session} "
+    return tps
+
 # TODO decide how to properly aggregate multi-session data
-rule freesurfer_aggregate:
+rule freesurfer_long_template:
     input:
         list_freesurfer_sessions
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}")
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.sst")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
     params:
-        license_path=config["freesurfer"]["license_path"]
+        license_path=config["freesurfer"]["license_path"],
+        timepoints=sessions_for_template
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=config["freesurfer"]["time_min"]
     threads: 8
     shell:
-        "cp -r {input[0]} {output}"
+        "export FS_LICENSE=$(realpath {params.license_path}) && "
+        "recon-all "
+        "-base sub-{wildcards.subject}.sst "
+        "{params.timepoints} "
+        "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "-all "
+        "-qcache "
+        "-3T "
+        "-openmp {threads} "      
 
 def list_bids_sessions(wildcards):
     inputs = []
