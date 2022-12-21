@@ -167,9 +167,9 @@ rule workdir:
 
 rule fmriprep:
     input:
-        "{resultsdir}/work",
-        list_bids_sessions,
-        "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
+        workdir="{resultsdir}/work",
+        bids_sessions=list_bids_sessions,
+        fs_folder="{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
     output:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"),
         "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
@@ -193,5 +193,5 @@ rule fmriprep:
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {wildcards.resultsdir}/work "
+        "-w {input.workdir} "
         "--fs-license-file {config[freesurfer][license_path]}"
