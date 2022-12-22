@@ -29,8 +29,8 @@ Load the necessary environment modules:
 
 ```
 module purge
-module load Miniconda3/4.12.0 Singularity/3.10.0 snakemake/7.6.2-gimkl-2020a-Python-3.9.9
-module unload XALT
+module load Miniconda3/4.12.0 Singularity/3.10.0 snakemake/7.19.1-gimkl-2022a-Python-3.10.5
+module unload XALT AlwaysIntelMKL/1.0
 export PYTHONNOUSERSITE=1
 ```
 
@@ -40,16 +40,101 @@ Then run the workflow using the `nesi` profile, first in dry-mode:
 snakemake --profile nesi -n
 ```
 
-View steps within workflow using rulegraph:
-```
-snakemake --forceall --rulegraph | dot -Tpdf > rulegraph.pdf
-```
-
 Finally, run the workflow:
 
 ```
 snakemake --profile nesi
 ```
+
+
+### Useful Snakemake options
+
+View steps within workflow using rulegraph:
+```
+snakemake --forceall --rulegraph | dot -Tpdf > rulegraph.pdf
+```
+
+Prevent Snakemake from stopping as soon as one job fails, but finish independent jobs:
+
+```
+snakemake --keep-going
+```
+
+Keep incomplete files (useful for debugging) from fail jobs, instead of wiping them:
+
+```
+snakemake --keep-incomplete
+```
+
+If you kept some incomplete files, Snakemake will refuse to run unless you tell it what to do with the identified files.
+The easiest (and safest) option it to tell it to re-run the jobs, i.e. remove the incomplete files and run the jobs to create them:
+
+```
+snakemake --rerun-incomplete
+```
+
+Run the pipeline until a certain file or rule, e.g. the `freesurfer` rule:
+
+```
+snakemake --until freesurfer
+```
+
+All these options can be combined and used with a profile, for example:
+
+```
+snakemake --profile nesi --keep-going --keep-incomplete --until freesurfer
+```
+
+
+### Protect input DICOM folder
+
+Make sure to create a dummy file in your input DICOM folder, `datadir` in the configuration file [config.yml](config.yml):
+
+```
+mkdir DATADIR
+touch DATADIR/keep_this_folder
+```
+
+where `DATADIR` is your input DICOM folder.
+
+Without the dummy file `keep_this_folder`, snakemake will remove the folder once every input DICOM in it has been processed.
+
+
+### Accessing JupyterLab via SSH (NeSI)
+
+JupyterLab is a convenient way to explore the results of the workflow (e.g. fmriprep html reports).
+
+We recommend to use it via an SSH tunnel to thw Mahuika login node.
+If you are using a terminal, add the `-L` option to your ssh command, for example:
+
+```
+ssh mahuika -L PORT:localhost:PORT
+```
+
+where `PORT` is an arbitrary number between 1024 and 49151.
+
+Then, on the login node, load the JupyterLab module and start a JupyterLab session as follows:
+
+```
+cd RESULTS_FOLDER
+module purge && module load JupyterLab
+jupyter-lab --port PORT --no-browser
+```
+
+where
+
+- `RESULTS_FOLDER` is the folder (on NeSI) where the results you want to inspect are,
+- `PORT` is the same number that you choose for your SSH tunnel.
+
+JupyterLab will print on the command line a url looking like:
+
+```
+http://localhost:PORT/lab?token=XXXXXXXXXXXXXXXXX
+```
+
+Copy and paste it (including the long token string) in your web-browser of choice to access the JupyterLab interface.
+
+*Note: Closing your SSH session or pressing CTRL-C twice in the terminal of your SSH session will terminate the JupyterLab session.*
 
 
 ## Formats
@@ -88,11 +173,3 @@ conda config --add pkgs_dirs /nesi/nobackup/<project_code>/$USER/conda_pkgs
 - integrate snakemake singularity cache in the configuration? same for conda environment?
 
 - add a note about the user having to run HeudiConv separately to determine populate heuristic.py prior to any run on NeSI
-
-- add a note about keep_this_folder file in dicom directory
-Create dicom folder in high memory storage.
-Then create a file to prevent Snakemake from deleting this folder:
-```
-mkdir NOBACKUP_FOLDER/dicom
-touch NOBACKUP_FOLDER/dicom/keep_this_folder
-```
