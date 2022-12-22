@@ -30,7 +30,6 @@ Load the necessary environment modules:
 ```
 module purge
 module load Miniconda3/4.12.0 Singularity/3.10.0 snakemake/7.19.1-gimkl-2022a-Python-3.10.5
-module unload XALT AlwaysIntelMKL/1.0
 export PYTHONNOUSERSITE=1
 ```
 

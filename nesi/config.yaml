@@ -27,6 +27,6 @@ latency-wait: 20
 restart-times: 0
 printshellcmds: True
 use-singularity: True
-singularity-args: "--bind $HOME,/nesi/project,/nesi/nobackup,/scale_wlg_persistent,/scale_wlg_nobackup"
+singularity-args: "--cleanenv --bind $HOME,/nesi/project,/nesi/nobackup,/scale_wlg_persistent,/scale_wlg_nobackup"
 use-conda: True
 conda-frontend: "conda"
