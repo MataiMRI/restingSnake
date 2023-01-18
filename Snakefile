@@ -39,8 +39,11 @@ MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 TIDY_SCANS = list_tidy_scans(config["resultsdir"])
 SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 
+localrules: all, fmriprep_cleanup
+
 rule all:
     input:
+        expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]),
         expand(
             "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
             resultsdir=config["resultsdir"],
@@ -105,15 +108,13 @@ rule freesurfer:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
-    params:
-        license_path=config["freesurfer"]["license_path"]
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=config["freesurfer"]["time_min"]
     threads: 8
     shell:
-        "export FS_LICENSE=$(realpath {params.license_path}) && "
+        "export FS_LICENSE=$(realpath {config[freesurfer][license_path]}) && "
         "recon-all "
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
@@ -139,13 +140,11 @@ rule freesurfer_aggregate:
         directory("{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
-    params:
-        license_path=config["freesurfer"]["license_path"]
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=config["freesurfer"]["time_min"]
-    threads: 8
+    threads: config["freesurfer"]["threads"]
     shell:
         "cp -r {input[0]} {output}"
 
@@ -166,25 +165,38 @@ rule fmriprep:
         list_bids_sessions,
         "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
     output:
-        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}")
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"),
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
     container:
         "docker://nipreps/fmriprep:22.0.2"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
         time_min=config["fmriprep"]["time_min"]
-    threads: 16
+    threads: config["fmriprep"]["threads"]
     shell:
         "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/fmriprep "
         "participant "
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-license-file license.txt "
         "--fs-subjects-dir {wildcards.resultsdir}/bids/derivatives/freesurfer_agg "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {wildcards.resultsdir}/work"
+        "-w {wildcards.resultsdir}/work "
+        "--fs-license-file {config[freesurfer][license_path]}"
+
+rule fmriprep_cleanup:
+    input:
+        expand(
+            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+            resultsdir=config["resultsdir"],
+            subject=SUBJECTS,
+        )
+    output:
+        touch(expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]))
+    shell:
+        "rm -rf {config[resultsdir]}/work"
