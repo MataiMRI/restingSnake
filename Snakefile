@@ -133,11 +133,13 @@ def list_freesurfer_sessions(wildcards):
     return inputs
 
 def sessions_for_template(wildcards):
-    tps = ""
+    inputs = []
     for subject, session in zip(SUBJECTS, SESSIONS):
         if subject != wildcards.subject:
             continue
-        tps = tps + f"-tp sub-{subject}_ses-{session} "
+        inputs.append(f"sub-{subject}_ses-{session}")
+    inputs = sorted(inputs)
+    tps = " ".join(f"-tp {session}" for session in inputs)
     return tps
 
 # TODO decide how to properly aggregate multi-session data
