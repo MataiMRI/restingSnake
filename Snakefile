@@ -200,3 +200,27 @@ rule fmriprep_cleanup:
         touch(expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]))
     shell:
         "rm -rf {config[resultsdir]}/work"
+        
+rule first_level:
+    input:
+        mask = ,
+        func = ,
+        confounds = 
+    output:
+        "results/{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
+        "results/{subject}_ses-{session}_{network}_figure.png"
+    conda:
+        "envs/mri.yaml"
+    shell:
+        "python ./scripts/first_level_prob_atlas_hcp.py "
+        "{config[resultsdir]} "
+        "-s {wildcards.subject} "
+        "-ss {wildcards.session} "
+        "-tr {config[rep_time]} "
+        "-ntwk {wildcards.network} "
+        "-hp {config[preprocessing][high_pass]}"
+        "-lp {config[preprocessing][low_pass]}"
+        "-fwhm {config[preprocessing][fwhm_pass]}"
+        "-fdr {config[resting_first_level][fdr_alpha]}"
+        "-fc {config[resting_first_level][func_conn_thresh]} "
+        

@@ -22,77 +22,86 @@ from nilearn.input_data import NiftiMapsMasker
 import nibabel as nib
 
 ## create logger
-
+logger = logging.getLogger()
 logging.basicConfig(format="%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s")
 
-
-parser = argparse.ArgumentParser()
+## create parser
+## *** Should standardize, detrend, fdr method have optional arguments?
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument(
-    'data', metavar='data directory',
+    'data_dir',
     help='High memory directory where data will be read + written',
-    type=str, required = True, dest='data_dir'
+    type=str
 )
 
-parser.add_argument(
-    '-c', '--cohort',
-    help='Specify cohort wildcard',
-    type=str, required = True, dest='cohort'
-)
 
 parser.add_argument(
-    '-s', '--subject',
+    '-s',
     help='Specify subject wildcard',
-    type=int, required = True, dest='subject'
+    type=int, 
+    dest='subject'
 )
 
 # Session type could be int or str depending on how researchers have coded?
 parser.add_argument(
-    '-ss', '--session',
+    '-ss',
     help='Specify session wildcard',
-    required = True, dest='session'
+    type=str,
+    dest='session'
 )
 
 parser.add_argument(
-    '-ntwk', '--network',
+    '-ntwk',
     help='Specify resting-state fMRI network wildcard',
-    required = True, dest='network'
+    type=str,
+    dest='functional_network'
 )
 
 parser.add_argument(
-    '-tr', '--rep_time',
-    help='Specify scan repetition time from config file', 
-    dest='tr'
+    '-tr',
+    help='Specify scan repetition time from config file',
+    type=float,
+    dest='repetition_time'
 )
 
 parser.add_argument(
-    '-hp', '--highpass',
+    '-hp',
     help='Specify high pass boundary of band pass filter from config file',
-    required = True, dest='hp'
+    dest='highpass',
+    type = float,
+    default = 0.01
 )
 
 parser.add_argument(
-    '-lp', '--lowpass',
+    '-lp',
     help='Specify low pass boundary of band pass filter from config file',
-    required = True, dest='lp'
+    dest='lowpass',
+    type = float,
+    default = 0.1
 )
 
 parser.add_argument(
     '-fwhm',
     help='Specify full width half maximum smoothing kernel from config file',
-    required = True, dest='fwhm'
+    type = int,
+    default = 6
 )
 
 parser.add_argument(
-    '-fdr', '--fdr_thresh',
+    '-fdr',
     help='Specify False Detection Rate threshold to correct for multiple comparisons from config file',
-    required = True, dest='fdr'
+    dest='fdr_threshold',
+    type=float,
+    default= 0.05
 )
 
 parser.add_argument(
-    '-fc', '--fc_thresh',
+    '-fc',
     help='Specify functional connectivity threshold from config file',
-    dest='fc_thresh'
+    dest='connectivity_threshold',
+    type=float,
+    default = 0.25
 )
 
 parser.add_argument(
@@ -109,21 +118,22 @@ parser.add_argument(
     default=logging.WARNING,
 )
 
-args = parser.parse_(args)
-logging.basicConfig(level=args.loglevel)
+args = parser.parse_args()
+
+### FIND SOLUTION FOR THIS
+logger.setLevel(logging.INFO)
+#logging.basicConfig(level=args.loglevel)
 
 
 mask_file = glob.glob(args.data_dir + 
-                      '/bids/derivatives/sub-{cohort}{subject}/ses-{session}/func/sub-{cohort}{subject}_ses-{session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz'.format(
-                          cohort = args.cohort,
+                      '/bids/derivatives/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz'.format(
                           subject = args.subject,
                           session = args.session))[0]
 
 mask = nib.load(mask_file)
 
 confound_file = glob.glob(args.data_dir + 
-                          '/bids/derivatives/sub-{cohort}{subject}/ses-{session}/func/regressors.txt'.format(
-                              cohort = args.cohort, 
+                          '/bids/derivatives/sub-{subject}/ses-{session}/func/regressors.txt'.format(
                               subject = args.subject, 
                               session = args.session))[0]
 
@@ -131,15 +141,14 @@ confounds = pd.read_csv(confound_file, sep = '\t')
 confounds = confounds.iloc[:, :-1]
 confounds_matrix = confounds.values
 
-logging.info(confounds)
+logging.info(f'{confounds}')
 
 func_file = glob.glob(args.data_dir + 
-                      '/bids/derivatives/sub-{cohort}{subject}/ses-{session}/func/sub-{cohort}{subject}_ses-{session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz'.format(
-                          cohort = args.cohort, 
+                      '/bids/derivatives/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz'.format(
                           subject = args.subject, 
                           session = args.session))[0]
 
-print(mask_file, func_file, confound_file, rep_time, args.hp, args.lp, args.fwhm, args.fc_thresh)
+print(mask_file, func_file, confound_file, args.repetition_time, args.highpass, args.lowpass, args.fwhm, args.fc_thresh)
 #Load and plot raw fmri image
 epi_img = nib.load(func_file)
 # mean_epi = image.mean_img(epi_img)
@@ -193,9 +202,9 @@ atlas_masker = NiftiMapsMasker(
     smoothing_fwhm = args.fwhm,
     standardize=True, 
     detrend = True,
-    low_pass= args.lp, 
-    high_pass= args.hp, 
-    t_r=rep_time, 
+    low_pass= args.lowpass, 
+    high_pass= args.highpass, 
+    t_r=args.repetition_time, 
     memory='nilearn_cache', 
     verbose = 0, 
     mask_img = mask)
@@ -207,9 +216,9 @@ brain_masker = input_data.NiftiMasker(
     smoothing_fwhm= args.fwhm,
     detrend=True, 
     standardize=True,
-    low_pass= args.lp, 
-    high_pass= args.hp, 
-    t_r=rep_time,
+    low_pass= args.lowpass, 
+    high_pass= args.highpass, 
+    t_r=args.repetition_time,
     memory='nilearn_cache', 
     memory_level=1, 
     verbose= nifti_verbose, 
@@ -235,7 +244,7 @@ t_vals = (network_to_voxel_correlations * np.sqrt((epi_img.shape[3]-2))) / np.sq
 p_vals = stats.t.sf(np.abs(t_vals), df = (epi_img.shape[3]-2)) * 2
 
 #implement mne library fdr_correction 
-reject_fdr, pval_fdr = fdr_correction(p_vals, alpha=args.fdr, method='indep')
+reject_fdr, pval_fdr = fdr_correction(p_vals, alpha=args.fdr_threshold, method='indep')
 reject_fdr = reject_fdr * 1 # convert boolean series to binary
 
 network_to_voxel_correlations_corrected = network_to_voxel_correlations * reject_fdr
@@ -245,11 +254,10 @@ network_to_voxel_correlations_corrected_img = brain_masker.inverse_transform(net
 
 nib.save(
     network_to_voxel_correlations_corrected_img, 
-    './results/{cohort}{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz'.format(
-        cohort = args.cohort, 
+    './results/{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz'.format(
         subject = args.subject, 
         session = args.session, 
-        network = args.network))
+        network = args.functional_network))
 
 #apply threshold and save
 
@@ -260,14 +268,14 @@ nib.save(
 
 #Plot first node of network
 display = plotting.plot_stat_map(image.index_img(network_to_voxel_correlations_corrected_img, 0),
-                                      threshold= args.fc_thresh,
+                                      threshold= args.connectivity_threshold,
                                       cut_coords=[-16,0,16,30,44,58],                                     
                                       display_mode='z',
                                       vmax = 1,
                                       cmap = 'cold_hot',
                                       axes = ax[1],
-                                 title="Network-to-voxel correlation - {ntwk} Matai test {subject}".format(subject=args.subject, ntwk=args.network),
-                                 output_file = './results/{cohort}{subject}_ses-{session}_{network}.png'.format(cohort = args.cohort,subject = args.subject, session = args.session, network = args.network))
+                                 title="Network-to-voxel correlation for {ntwk} for {subject} session {session}".format(subject=args.subject, session=args.session, ntwk=args.functional_network),
+                                 output_file = './results/{subject}_ses-{session}_{network}.png'.format(subject = args.subject, session = args.session, network = args.functional_network))
 
 #Add overlays for additional nodes if network has >1 node
 # for i in range (1, network_time_series.shape[1]):
