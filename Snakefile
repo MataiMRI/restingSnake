@@ -200,15 +200,19 @@ rule fmriprep_cleanup:
         touch(expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]))
     shell:
         "rm -rf {config[resultsdir]}/work"
-        
+
+#Query with Mangor:
+### handling multiple runs within a session???
+#whether mask should be from anat or func folder?
+
 rule first_level:
     input:
-        mask = ,
-        func = ,
-        confounds = 
+        mask = "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_desc-brain_mask.nii.gz",
+        func = "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_boldref.nii.gz",
+        confounds = "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-001_desc-confounds_timeseries.tsv"
     output:
-        "results/{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
-        "results/{subject}_ses-{session}_{network}_figure.png"
+        "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
+        "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png"
     conda:
         "envs/mri.yaml"
     shell:

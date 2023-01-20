@@ -30,7 +30,7 @@ logging.basicConfig(format="%(asctime)s :: %(name)s :: %(levelname)s :: %(messag
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument(
-    'data_dir',
+    'results_dir',
     help='High memory directory where data will be read + written',
     type=str
 )
@@ -125,14 +125,14 @@ logger.setLevel(logging.INFO)
 #logging.basicConfig(level=args.loglevel)
 
 
-mask_file = glob.glob(args.data_dir + 
+mask_file = glob.glob(args.results_dir + 
                       '/bids/derivatives/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz'.format(
                           subject = args.subject,
                           session = args.session))[0]
 
 mask = nib.load(mask_file)
 
-confound_file = glob.glob(args.data_dir + 
+confound_file = glob.glob(args.results_dir + 
                           '/bids/derivatives/sub-{subject}/ses-{session}/func/regressors.txt'.format(
                               subject = args.subject, 
                               session = args.session))[0]
