@@ -21,34 +21,39 @@ from nilearn import image
 from nilearn.input_data import NiftiMapsMasker
 import nibabel as nib
 
-## create logger
-logger = logging.getLogger()
-logging.basicConfig(format="%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s")
-
 ## create parser
 ## *** Should standardize, detrend, fdr method have optional arguments?
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 parser.add_argument(
-    'results_dir',
-    help='High memory directory where data will be read + written',
+    'mask',
+    help='Subject mask nifti file output from fmriprep',
+    type=str
+)
+
+parser.add_argument(
+    'func',
+    help='Subject rsfMRI bold nifti file output from fmriprep',
     type=str
 )
 
 
 parser.add_argument(
-    '-s',
-    help='Specify subject wildcard',
-    type=int, 
-    dest='subject'
+    'confounds',
+    help='Subject confound timeseries file output from fmriprep',
+    type=str
 )
 
-# Session type could be int or str depending on how researchers have coded?
 parser.add_argument(
-    '-ss',
-    help='Specify session wildcard',
-    type=str,
-    dest='session'
+    'nifti_output',
+    help='Subject confound timeseries file output from fmriprep',
+    type=str
+)
+
+parser.add_argument(
+    'plotting_output',
+    help='Subject confound timeseries file output from fmriprep',
+    type=str
 )
 
 parser.add_argument(
@@ -120,41 +125,26 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-### FIND SOLUTION FOR THIS
-logger.setLevel(logging.INFO)
-#logging.basicConfig(level=args.loglevel)
+## create logger
+logging.basicConfig(format="%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s", level=args.loglevel)
+logger = logging.getLogger()
 
 
-mask_file = glob.glob(args.results_dir + 
-                      '/bids/derivatives/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz'.format(
-                          subject = args.subject,
-                          session = args.session))[0]
+mask = nib.load(args.mask)
 
-mask = nib.load(mask_file)
-
-confound_file = glob.glob(args.results_dir + 
-                          '/bids/derivatives/sub-{subject}/ses-{session}/func/regressors.txt'.format(
-                              subject = args.subject, 
-                              session = args.session))[0]
-
-confounds = pd.read_csv(confound_file, sep = '\t')
+confounds = pd.read_csv(args.confounds, sep = '\t')
 confounds = confounds.iloc[:, :-1]
 confounds_matrix = confounds.values
 
 logging.info(f'{confounds}')
 
-func_file = glob.glob(args.data_dir + 
-                      '/bids/derivatives/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz'.format(
-                          subject = args.subject, 
-                          session = args.session))[0]
-
 print(mask_file, func_file, confound_file, args.repetition_time, args.highpass, args.lowpass, args.fwhm, args.fc_thresh)
 #Load and plot raw fmri image
-epi_img = nib.load(func_file)
+epi_img = nib.load(args.func)
 # mean_epi = image.mean_img(epi_img)
 # plotting.plot_epi(mean_epi)
 
-logging.info(f'{mask_file} \n {func_file} \n {confound_file}')
+#logging.info(f'{mask_file} \n {func_file} \n {confound_file}')
 
 #Load MSDL atlas to provide functional network options below
 atlas = datasets.fetch_atlas_msdl()
@@ -162,7 +152,7 @@ atlas_filename = atlas['maps']
 
 # print basic information on the dataset
 print('First subject functional nifti image (4D) is at: %s' %
-      func_file)  # 4D data
+      args.func)  # 4D data
 
 #Generate blank dictionary of 16 unique msdl_networks
 keys = list(set(atlas['networks']))
@@ -209,7 +199,7 @@ atlas_masker = NiftiMapsMasker(
     verbose = 0, 
     mask_img = mask)
 
-network_time_series = atlas_masker.fit_transform(func_file, confounds= confounds_matrix) # time series for network of interest
+network_time_series = atlas_masker.fit_transform(args.func, confounds= confounds_matrix) # time series for network of interest
 
 #Create brain-wide mask
 brain_masker = input_data.NiftiMasker(
@@ -224,7 +214,7 @@ brain_masker = input_data.NiftiMasker(
     verbose= nifti_verbose, 
     mask_img=mask)
 
-brain_time_series = brain_masker.fit_transform(func_file, confounds = confounds_matrix)
+brain_time_series = brain_masker.fit_transform(args.func, confounds = confounds_matrix)
 
 print("Seed time series shape: (%s, %s)" % network_time_series.shape)
 print("Brain time series shape: (%s, %s)" % brain_time_series.shape)
@@ -252,19 +242,13 @@ network_to_voxel_correlations_corrected = network_to_voxel_correlations * reject
 
 network_to_voxel_correlations_corrected_img = brain_masker.inverse_transform(network_to_voxel_correlations_corrected.T)
 
-nib.save(
-    network_to_voxel_correlations_corrected_img, 
-    './results/{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz'.format(
-        subject = args.subject, 
-        session = args.session, 
-        network = args.functional_network))
+nib.save(network_to_voxel_correlations_corrected_img, args.nifti_output)
 
 #apply threshold and save
 
 #Generate correlation nifti
 # network_to_voxel_correlations_img = brain_masker.inverse_transform(
 #     network_to_voxel_correlations.T)
-
 
 #Plot first node of network
 display = plotting.plot_stat_map(image.index_img(network_to_voxel_correlations_corrected_img, 0),
@@ -273,9 +257,7 @@ display = plotting.plot_stat_map(image.index_img(network_to_voxel_correlations_c
                                       display_mode='z',
                                       vmax = 1,
                                       cmap = 'cold_hot',
-                                      axes = ax[1],
-                                 title="Network-to-voxel correlation for {ntwk} for {subject} session {session}".format(subject=args.subject, session=args.session, ntwk=args.functional_network),
-                                 output_file = './results/{subject}_ses-{session}_{network}.png'.format(subject = args.subject, session = args.session, network = args.functional_network))
+                                      axes = ax[1], output_file = args.plotting_output)
 
 #Add overlays for additional nodes if network has >1 node
 # for i in range (1, network_time_series.shape[1]):

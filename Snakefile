@@ -207,24 +207,25 @@ rule fmriprep_cleanup:
 
 rule first_level:
     input:
-        mask = "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_desc-brain_mask.nii.gz",
-        func = "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_boldref.nii.gz",
-        confounds = "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-001_desc-confounds_timeseries.tsv"
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"
     output:
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png"
     conda:
         "envs/mri.yaml"
+    log:
+        
     shell:
         "python ./scripts/first_level_prob_atlas_hcp.py "
-        "{config[resultsdir]} "
-        "-s {wildcards.subject} "
-        "-ss {wildcards.session} "
+        "{input}/ses-{wildcards.session}/anat/sub-{subject}_ses-{session}_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
+        "{input}/ses-{wildcards.session}/func/sub-{subject}_ses-{session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
+        "{input}/ses-{wildcards.session}/func/sub-{subject}_ses-{session}_task-rest_run-001_desc-confounds_timeseries.tsv "
+        "{output} "
         "-tr {config[rep_time]} "
         "-ntwk {wildcards.network} "
-        "-hp {config[preprocessing][high_pass]}"
-        "-lp {config[preprocessing][low_pass]}"
-        "-fwhm {config[preprocessing][fwhm_pass]}"
-        "-fdr {config[resting_first_level][fdr_alpha]}"
+        "-hp {config[preprocessing][high_pass]} "
+        "-lp {config[preprocessing][low_pass]} "
+        "-fwhm {config[preprocessing][fwhm_pass]} "
+        "-fdr {config[resting_first_level][fdr_alpha]} "
         "-fc {config[resting_first_level][func_conn_thresh]} "
         
