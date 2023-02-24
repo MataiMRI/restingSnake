@@ -42,7 +42,7 @@ SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/derivatives/freesurfer/{subject}.template",
+            "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.template",
             resultsdir=config["resultsdir"],
             subject=SUBJECTS,
         )
@@ -146,12 +146,12 @@ rule freesurfer_long_template:
     input:
         list_freesurfer_sessions
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/{subject}.template")
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.template")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
     log:
-        "{resultsdir}/bids/derivatives/freesurfer/{subject}.template/scripts/recon-all.log",
-        "{resultsdir}/bids/derivatives/freesurfer/{subject}.template/scripts/recon-all-status.log"
+        #"{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.template/scripts/recon-all.log",
+        #"{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.template/scripts/recon-all-status.log"
     params:
         license_path=config["freesurfer"]["license_path"],
         timepoints=sessions_for_template
@@ -163,7 +163,7 @@ rule freesurfer_long_template:
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
         "recon-all "
-        "-base {wildcards.subject}.template "
+        "-base sub-{wildcards.subject}.template "
         "{params.timepoints} "
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-all "
