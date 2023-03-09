@@ -138,7 +138,7 @@ confounds_matrix = confounds.values
 
 logging.info(f'{confounds}')
 
-print(mask_file, func_file, confound_file, args.repetition_time, args.highpass, args.lowpass, args.fwhm, args.fc_thresh)
+#print(mask_file, func_file, confound_file, args.repetition_time, args.highpass, args.lowpass, args.fwhm, args.fc_thresh)
 #Load and plot raw fmri image
 epi_img = nib.load(args.func)
 # mean_epi = image.mean_img(epi_img)

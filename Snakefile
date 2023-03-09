@@ -229,7 +229,7 @@ rule first_level:
         
     shell:
         "python ./scripts/first_level_prob_atlas_hcp.py "
-        "{input}/ses-{wildcards.session}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
+        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
         "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
         "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_desc-confounds_timeseries.tsv "
         "{output} "
