@@ -15,9 +15,6 @@ dicom_compression_ext: .zip
 ## Scan info
 rep_time: 1.5
 
-# TASK
-# will need to include something in first_level.py to account for different tasks
-
 freesurfer:
   license_path: ./license.txt
   mem_mb: 4000
@@ -30,18 +27,15 @@ fmriprep:
   threads: 8
 
 ## Confounding (nuisance) variables to be regressed out of signal to improve SNR
-confound_var:
-  num_confounds: 9
-  confounds:
-  - csf
-  - white_matter
-  - trans_x
-  - trans_y
-  - trans_z
-  - rot_x
-  - rot_y
-  - rot_z
-  - framewise_displacement
+confounds:
+    - csf
+    - white_matter
+    - trans_x
+    - trans_y
+    - trans_z
+    - rot_x
+    - rot_y
+    - rot_z
 
 preprocessing:
     frame_disp_thresh: 0.5 ## Framewise displacement threshold for accepting
@@ -49,18 +43,16 @@ preprocessing:
     low_pass: 0.1
     smooth_fwhm: 6 #size of smoothing kernel in mm
 
+## Atlas and list of one or more resting state networks for first level analysis
+atlas_info:
+  atlas_image: ./atlas/MSDL_rois/msdl_rois.nii
+  atlas_labels: ./atlas/MSDL_rois/msdl_rois_labels.csv
+  networks:
+    - DMN
+    - Salience
+
 resting_first_level:
     fdr_alpha: 0.01 ## False detection rate alpha
     func_conn_thresh: 0.25 ## Functional connectivity threshold
 
-## List of one or more resting state networks for first level
-network_info:
-  num_networks: 2
-  networks:
-    - DMN
-    - Salience
-    
-# TASK
-# will need to include something in first_level.py to account for different tasks
-#task_first_level:
-#    fdr_alpha:
+
