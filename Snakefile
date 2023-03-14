@@ -42,7 +42,7 @@ SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.template",
+            "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.{subject}_template",
             resultsdir=config["resultsdir"],
             subject=SUBJECTS,
             session=SESSIONS
@@ -147,12 +147,9 @@ rule freesurfer_long_template:
     input:
         list_freesurfer_sessions
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.template")
+        directory("{resultsdir}/bids/derivatives/freesurfer/{subject}_template")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
-    log:
-        #"{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.template/scripts/recon-all.log",
-        #"{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.template/scripts/recon-all-status.log"
     params:
         license_path=config["freesurfer"]["license_path"],
         timepoints=sessions_for_template
@@ -164,7 +161,7 @@ rule freesurfer_long_template:
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
         "recon-all "
-        "-base sub-{wildcards.subject}.template "
+        "-base {wildcards.subject}_template "
         "{params.timepoints} "
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-all "
@@ -173,9 +170,10 @@ rule freesurfer_long_template:
 
 rule freesurfer_longitudinal:
     input:
-        list_freesurfer_sessions
+        list_freesurfer_sessions,
+        "{resultsdir}/bids/derivatives/freesurfer/{subject}_template"
     output:
-        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.template")
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.{subject}_template")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
     params:
@@ -189,9 +187,10 @@ rule freesurfer_longitudinal:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
         "recon-all "
         "-long sub-{wildcards.subject}_ses-{wildcards.session} "
-        "sub-{wildcards.subject}.template "
+        "{wildcards.subject}_template "
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-all "
+        "-qcache "
         "-3T "
         "-openmp {threads} " 
 
