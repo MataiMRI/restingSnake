@@ -42,12 +42,13 @@ SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}.template",
+            "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.template",
             resultsdir=config["resultsdir"],
             subject=SUBJECTS,
+            session=SESSIONS
         )
 
-ruleorder: fmriprep > freesurfer_long_template > freesurfer_cross_sectional > unzip
+ruleorder: fmriprep > freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional > unzip
 
 rule unzip:
     input:
@@ -168,7 +169,31 @@ rule freesurfer_long_template:
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-all "
         "-3T "
-        "-openmp {threads} "      
+        "-openmp {threads} "
+
+rule freesurfer_longitudinal:
+    input:
+        list_freesurfer_sessions
+    output:
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.template")
+    container:
+        "docker://bids/freesurfer:v6.0.1-6.1"
+    params:
+        license_path=config["freesurfer"]["license_path"],
+    resources:
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["freesurfer"]["mem_mb"],
+        time_min=config["freesurfer"]["time_min"]
+    threads: 8
+    shell:
+        "export FS_LICENSE=$(realpath {params.license_path}) && "
+        "recon-all "
+        "-long sub-{wildcards.subject}_ses-{wildcards.session} "
+        "sub-{wildcards.subject}.template "
+        "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "-all "
+        "-3T "
+        "-openmp {threads} " 
 
 def list_bids_sessions(wildcards):
     inputs = []
