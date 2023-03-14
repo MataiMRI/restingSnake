@@ -167,7 +167,6 @@ rule freesurfer_long_template:
         "{params.timepoints} "
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-all "
-        "-qcache "
         "-3T "
         "-openmp {threads} "      
 
