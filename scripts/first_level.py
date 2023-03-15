@@ -135,7 +135,8 @@ def create_mask(
 
     brain_time_series = brain_masker.fit_transform(func, confounds=confounds_matrix)
     logger.info(
-        f"Converted whole brain data to timeseries with shape: {brain_time_series.shape}"
+        "Converted whole brain data to timeseries with shape: "
+        f"{brain_time_series.shape}"
     )
 
     # Correlate network nodes of interest against brain mask time series
@@ -178,147 +179,153 @@ def create_mask(
     return network_to_voxel_correlations_corrected_img
 
 
-# Parse command line inputs
-parser = make_parser()
-args = parser.parse_args()
+if __name__ == "__main__":
+    # Parse command line inputs
+    parser = make_parser()
+    args = parser.parse_args()
 
-# Create logger
-logging.basicConfig(
-    format="%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s",
-    level=args.loglevel,
-)
-logger = logging.getLogger()
+    # Create logger
+    logging.basicConfig(
+        format="%(asctime)s :: %(name)s :: %(levelname)s :: %(message)s",
+        level=args.loglevel,
+    )
+    logger = logging.getLogger(__name__)
 
-# Load required files
-logger.info(f"Loading mask image (3D): {args.mask}")
-mask = nib.load(args.mask)
+    # Load required files
+    logger.info(f"Loading mask image (3D): {args.mask}")
+    mask = nib.load(args.mask)
 
-logger.info(f"Loading resting-state fMRI image (4D): {args.func}")
-logger.info(f"This image was collected with a TR of: {args.repetition_time}")
-epi_img = nib.load(args.func)
+    logger.info(f"Loading resting-state fMRI image (4D): {args.func}")
+    logger.info(f"This image was collected with a TR of: {args.repetition_time}")
+    epi_img = nib.load(args.func)
 
-logger.info(f"Loading timeseries for confounding variables from: {args.confounds}")
-confounds = pd.read_csv(args.confounds, sep="\t")
-confounds = confounds[args.regressors]
-confounds_matrix = confounds.values
-logger.info(f"Confound regressors that will be cleaned from signal:\n\n{confounds}")
+    logger.info(f"Loading timeseries for confounding variables from: {args.confounds}")
+    confounds = pd.read_csv(args.confounds, sep="\t")
+    confounds = confounds[args.regressors]
+    confounds_matrix = confounds.values
+    logger.info(f"Confound regressors that will be cleaned from signal:\n\n{confounds}")
 
-# Load atlas to provide resting-state networks available for analysis
-logger.info("Loading regions-of-interest from atlas provided")
-atlas_filename = args.atlas_image
-roi_labels = pd.read_csv(args.atlas_labels)
+    # Load atlas to provide resting-state networks available for analysis
+    logger.info("Loading regions-of-interest from atlas provided")
+    atlas_filename = args.atlas_image
+    roi_labels = pd.read_csv(args.atlas_labels)
 
-# Generate blank dictionary of n unique networks provided in atlas
-logger.info("Functional networks available in atlas:")
-keys = list(set(roi_labels["net_name"]))
-for net in keys:
-    logger.info(net)
+    # Generate blank dictionary of n unique networks provided in atlas
+    logger.info("Functional networks available in atlas:")
+    keys = list(set(roi_labels["net_name"]))
+    for net in keys:
+        logger.info(net)
 
-msdl_networks = dict.fromkeys(keys)
-for key in msdl_networks.keys():
-    msdl_networks[key] = []
+    msdl_networks = dict.fromkeys(keys)
+    for key in msdl_networks.keys():
+        msdl_networks[key] = []
 
-# Populate dictionary with indexes of anatomical seeds that correspond to functional networks
-for i in range(0, len(roi_labels["net_name"])):
-    temp = roi_labels["net_name"][i]
-    if temp in msdl_networks.keys():
-        msdl_networks[temp].append(i)
-    else:
-        msdl_networks[temp] = None
+    # Populate dictionary with indexes of anatomical seeds that correspond to
+    # functional networks
+    for i in range(0, len(roi_labels["net_name"])):
+        temp = roi_labels["net_name"][i]
+        if temp in msdl_networks.keys():
+            msdl_networks[temp].append(i)
+        else:
+            msdl_networks[temp] = None
 
-logger.info("\nDetails about seed(s) within selected network")
-# for coord in msdl_networks[args.functional_network]:
-#    logger.info('\n', roi_labels.iloc[coord])
+    logger.info("\nDetails about seed(s) within selected network")
+    # for coord in msdl_networks[args.functional_network]:
+    #    logger.info('\n', roi_labels.iloc[coord])
 
-# Define single network and plot probabilistic map from atlas
+    # Define single network and plot probabilistic map from atlas
 
-# figure to plot atlas and subject bold signal together
-fig, ax = plt.subplots(nrows=2)
+    # figure to plot atlas and subject bold signal together
+    fig, ax = plt.subplots(nrows=2)
 
-# define nodes
-network_nodes = image.index_img(atlas_filename, msdl_networks[args.functional_network])
-logger.info(f"Shape of network nodes from atlas image {network_nodes.shape}")
+    # define nodes
+    network_nodes = image.index_img(
+        atlas_filename, msdl_networks[args.functional_network]
+    )
+    logger.info(f"Shape of network nodes from atlas image {network_nodes.shape}")
 
-atlas_plot = plotting.plot_prob_atlas(
-    network_nodes,
-    cut_coords=6,
-    display_mode="z",
-    title=f"{args.functional_network} nodes according to atlas labels",
-    axes=ax[0],
-)
+    atlas_plot = plotting.plot_prob_atlas(
+        network_nodes,
+        cut_coords=6,
+        display_mode="z",
+        title=f"{args.functional_network} nodes according to atlas labels",
+        axes=ax[0],
+    )
 
-logger.info(
-    "BOLD signal will be standardized, detrended, and cleaned based with a Bandpass "
-    f"filter set to {args.lowpass}-{args.highpass} Hz and a {args.fwhm} mm "
-    "full-width-half-maximum smoothing kernel \n"
-)
+    logger.info(
+        "BOLD signal will be standardized, detrended, and cleaned based with a "
+        f"Bandpass filter set to {args.lowpass}-{args.highpass} Hz and a {args.fwhm} "
+        "mm full-width-half-maximum smoothing kernel \n"
+    )
 
-# Create mask using user-specified network nodes from atlas
-logger.info(
-    "Generating mask for network of interest based on seed coordinates in atlas"
-)
-atlas_masker = NiftiMapsMasker(
-    maps_img=network_nodes,
-    smoothing_fwhm=args.fwhm,
-    standardize=True,
-    detrend=True,
-    low_pass=args.lowpass,
-    high_pass=args.highpass,
-    t_r=args.repetition_time,
-    verbose=0,
-    mask_img=mask,
-)
+    # Create mask using user-specified network nodes from atlas
+    logger.info(
+        "Generating mask for network of interest based on seed coordinates in atlas"
+    )
+    atlas_masker = NiftiMapsMasker(
+        maps_img=network_nodes,
+        smoothing_fwhm=args.fwhm,
+        standardize=True,
+        detrend=True,
+        low_pass=args.lowpass,
+        high_pass=args.highpass,
+        t_r=args.repetition_time,
+        verbose=0,
+        mask_img=mask,
+    )
 
-# time series for network of interest
-network_time_series = atlas_masker.fit_transform(args.func, confounds=confounds_matrix)
-logger.info(
-    "Converting functional network data to timeseries with shape: "
-    f"{network_time_series.shape}"
-)
+    # time series for network of interest
+    network_time_series = atlas_masker.fit_transform(
+        args.func, confounds=confounds_matrix
+    )
+    logger.info(
+        "Converting functional network data to timeseries with shape: "
+        f"{network_time_series.shape}"
+    )
 
-# Create brain-wide mask
-logger.info("Generating mask for whole brain")
+    # Create brain-wide mask
+    logger.info("Generating mask for whole brain")
 
-nifti_verbose = 0
-if args.loglevel <= logging.DEBUG:
-    nifti_verbose = 2
-elif args.loglevel <= logging.INFO:
-    nifti_verbose = 1
+    nifti_verbose = 0
+    if args.loglevel <= logging.DEBUG:
+        nifti_verbose = 2
+    elif args.loglevel <= logging.INFO:
+        nifti_verbose = 1
 
-network_to_voxel_correlations_corrected_img = create_mask(
-    network_time_series,
-    args.func,
-    fwhm=args.fwhm,
-    lowpass=args.lowpass,
-    highpass=args.highpass,
-    repetition_time=args.repetition_time,
-    verbose=nifti_verbose,
-)
+    network_to_voxel_correlations_corrected_img = create_mask(
+        network_time_series,
+        args.func,
+        fwhm=args.fwhm,
+        lowpass=args.lowpass,
+        highpass=args.highpass,
+        repetition_time=args.repetition_time,
+        verbose=nifti_verbose,
+    )
 
-logger.info(f"Saving UNTHRESHOLDED image to {args.nifti_output}")
-nib.save(network_to_voxel_correlations_corrected_img, args.nifti_output)
+    logger.info(f"Saving UNTHRESHOLDED image to {args.nifti_output}")
+    nib.save(network_to_voxel_correlations_corrected_img, args.nifti_output)
 
-logger.info(
-    f"Saving plot of {args.functional_network} connectivity THRESHOLDED at "
-    f"{args.connectivity_threshold} to {args.plotting_output}"
-)
+    logger.info(
+        f"Saving plot of {args.functional_network} connectivity THRESHOLDED at "
+        f"{args.connectivity_threshold} to {args.plotting_output}"
+    )
 
-display = plotting.plot_stat_map(
-    image.index_img(network_to_voxel_correlations_corrected_img, 0),
-    threshold=args.connectivity_threshold,
-    cut_coords=[-16, 0, 16, 30, 44, 58],
-    title=(
-        f"{args.functional_network} functional connectivity thresholded at "
-        f"{args.connectivity_threshold}"
-    ),
-    display_mode="z",
-    vmax=1,
-    cmap="cold_hot",
-    axes=ax[1],
-    output_file=args.plotting_output,
-)
+    display = plotting.plot_stat_map(
+        image.index_img(network_to_voxel_correlations_corrected_img, 0),
+        threshold=args.connectivity_threshold,
+        cut_coords=[-16, 0, 16, 30, 44, 58],
+        title=(
+            f"{args.functional_network} functional connectivity thresholded at "
+            f"{args.connectivity_threshold}"
+        ),
+        display_mode="z",
+        vmax=1,
+        cmap="cold_hot",
+        axes=ax[1],
+        output_file=args.plotting_output,
+    )
 
-# Add overlays for additional nodes if network has >1 node
-# for i in range (1, network_time_series.shape[1]):
-#     display.add_overlay(image.index_img(network_to_voxel_correlations_corrected_img, i),
-#                     threshold=args.fc_thresh, cmap = 'cold_hot' )
+    # Add overlays for additional nodes if network has >1 node
+    # for i in range (1, network_time_series.shape[1]):
+    #     display.add_overlay(image.index_img(network_to_voxel_correlations_corrected_img, i),
+    #                     threshold=args.fc_thresh, cmap = 'cold_hot' )
