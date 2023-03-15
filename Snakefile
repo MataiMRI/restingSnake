@@ -6,7 +6,7 @@ from pathlib import Path
 ### READ CONFIG ###
 configfile: 'config.yml'
 
-NETWORKS = config['network_info']['networks']
+NETWORKS = config['atlas_info']['networks']
 
 def list_scans(root_folder, prefix):
     mapping = {}
@@ -43,12 +43,18 @@ localrules: all, fmriprep_cleanup
 
 rule all:
     input:
-        expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]),
-        expand(
-            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+        expand("{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
             resultsdir=config["resultsdir"],
             subject=SUBJECTS,
-        )
+            session=SESSIONS,
+            network=config["atlas_info"]["networks"]),
+            
+        expand("{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png",
+            resultsdir=config["resultsdir"],
+            subject=SUBJECTS,
+            session=SESSIONS,
+            network=config["atlas_info"]["networks"]
+            )
 
 ruleorder: fmriprep > freesurfer > freesurfer_aggregate > unzip
 
@@ -101,6 +107,8 @@ rule heudiconv:
 # inspect image using singularity exec docker://bids/freesurfer recon-all --help
 
 # TODO remove fs license from repo
+# Snakemake locks after freesurfer execution?
+
 rule freesurfer:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
@@ -200,3 +208,40 @@ rule fmriprep_cleanup:
         touch(expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]))
     shell:
         "rm -rf {config[resultsdir]}/work"
+
+#Query with Mangor:
+### handling multiple runs within a session???
+#whether mask should be from anat or func folder?
+
+### MAKE SURE CONFOUND REGRESSION IS DONE ON SHORTLIST FROM CONFIG file
+
+rule first_level:
+    input:
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"
+    output:
+        "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
+        "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png"
+    conda:
+        "envs/mri.yaml"
+    resources:
+        mem_mb=6000,
+        cpus=2,
+        time_min=10        
+    shell:
+        "python ./scripts/first_level.py "
+        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
+        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
+        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_desc-confounds_timeseries.tsv "
+        "{output} "
+        "-a_img {config[atlas_info][atlas_image]} "
+        "-a_lab {config[atlas_info][atlas_labels]} "
+        "-tr {config[rep_time]} "
+        "-rg {config[confounds]} "
+        "-ntwk {wildcards.network} "
+        "-hp {config[preprocessing][high_pass]} "
+        "-lp {config[preprocessing][low_pass]} "
+        "-fwhm {config[preprocessing][smooth_fwhm]} "
+        "-fdr {config[resting_first_level][fdr_alpha]} "
+        "-fc {config[resting_first_level][func_conn_thresh]} "
+        "-v"
+        

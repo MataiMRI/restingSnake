@@ -1,0 +1,14 @@
+name: mri_env
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - numpy
+    - scipy
+    - pandas
+    - matplotlib
+    - mne
+    - nilearn
+    - nibabel
