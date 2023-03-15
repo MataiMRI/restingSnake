@@ -21,91 +21,104 @@ from nilearn.maskers import NiftiMapsMasker, NiftiMasker
 
 # from nilearn import datasets
 
-parser = argparse.ArgumentParser(
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    description="TODO some description, mention selected resting-state network",
-)
 
-parser.add_argument("mask", help="subject mask nifti file output from fmriprep")
-parser.add_argument("func", help="subject rsfMRI bold nifti file output from fmriprep")
-parser.add_argument(
-    "confounds", help="subject confound timeseries file output from fmriprep"
-)
-parser.add_argument("nifti_output", help="first Level analysis output as a .nii file")
-parser.add_argument("plotting_output", help="output figure as a .png file")
-parser.add_argument("-a_img", help="specify Atlas .nii image file", dest="atlas_image")
-parser.add_argument(
-    "-a_lab",
-    help="atlas .csv file containing ROI coordinates for resting-state networks",
-    dest="atlas_labels",
-)
-parser.add_argument(
-    "-ntwk",
-    help="resting-state fMRI network wildcard",
-    dest="functional_network",
-)
-parser.add_argument(
-    "-tr", help="scan repetition time", type=float, dest="repetition_time"
-)
-parser.add_argument(
-    "-rg",
-    help="list of regressors from confounds.tsv to perform signal cleaning",
-    dest="regressors",
-    nargs="+",
-)
-parser.add_argument(
-    "-hp",
-    help="high pass boundary of band pass filter",
-    dest="highpass",
-    type=float,
-    default=0.01,
-)
-parser.add_argument(
-    "-lp",
-    help="low pass boundary of band pass filter",
-    dest="lowpass",
-    type=float,
-    default=0.1,
-)
-parser.add_argument(
-    "-fwhm",
-    help="full width half maximum smoothing kernel",
-    type=int,
-    default=6,
-)
-parser.add_argument(
-    "-fdr",
-    help="False Detection Rate threshold to correct for multiple comparisons",
-    dest="fdr_threshold",
-    type=float,
-    default=0.05,
-)
-parser.add_argument(
-    "-fc",
-    help="functional connectivity threshold",
-    dest="connectivity_threshold",
-    type=float,
-    default=0.25,
-)
-parser.add_argument(
-    "-d",
-    "--debug",
-    help="logging level for developers to debug issues with code",
-    action="store_const",
-    dest="loglevel",
-    const=logging.DEBUG,
-    default=logging.WARNING,
-)
-parser.add_argument(
-    "-v",
-    "--verbose",
-    help="logging level to display all steps running in code",
-    action="store_const",
-    dest="loglevel",
-    const=logging.INFO,
-    default=logging.WARNING,
-)
+def make_parser():
+    """create the parser for a command line interface tool"""
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        description="TODO some description, mention selected resting-state network",
+    )
 
+    parser.add_argument("mask", help="subject mask nifti file output from fmriprep")
+    parser.add_argument(
+        "func", help="subject rsfMRI bold nifti file output from fmriprep"
+    )
+    parser.add_argument(
+        "confounds", help="subject confound timeseries file output from fmriprep"
+    )
+    parser.add_argument(
+        "nifti_output", help="first Level analysis output as a .nii file"
+    )
+    parser.add_argument("plotting_output", help="output figure as a .png file")
+    parser.add_argument(
+        "-a_img", help="specify Atlas .nii image file", dest="atlas_image"
+    )
+    parser.add_argument(
+        "-a_lab",
+        help="atlas .csv file containing ROI coordinates for resting-state networks",
+        dest="atlas_labels",
+    )
+    parser.add_argument(
+        "-ntwk",
+        help="resting-state fMRI network wildcard",
+        dest="functional_network",
+    )
+    parser.add_argument(
+        "-tr", help="scan repetition time", type=float, dest="repetition_time"
+    )
+    parser.add_argument(
+        "-rg",
+        help="list of regressors from confounds.tsv to perform signal cleaning",
+        dest="regressors",
+        nargs="+",
+    )
+    parser.add_argument(
+        "-hp",
+        help="high pass boundary of band pass filter",
+        dest="highpass",
+        type=float,
+        default=0.01,
+    )
+    parser.add_argument(
+        "-lp",
+        help="low pass boundary of band pass filter",
+        dest="lowpass",
+        type=float,
+        default=0.1,
+    )
+    parser.add_argument(
+        "-fwhm",
+        help="full width half maximum smoothing kernel",
+        type=int,
+        default=6,
+    )
+    parser.add_argument(
+        "-fdr",
+        help="False Detection Rate threshold to correct for multiple comparisons",
+        dest="fdr_threshold",
+        type=float,
+        default=0.05,
+    )
+    parser.add_argument(
+        "-fc",
+        help="functional connectivity threshold",
+        dest="connectivity_threshold",
+        type=float,
+        default=0.25,
+    )
+    parser.add_argument(
+        "-d",
+        "--debug",
+        help="logging level for developers to debug issues with code",
+        action="store_const",
+        dest="loglevel",
+        const=logging.DEBUG,
+        default=logging.WARNING,
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        help="logging level to display all steps running in code",
+        action="store_const",
+        dest="loglevel",
+        const=logging.INFO,
+        default=logging.WARNING,
+    )
+    return parser
+
+
+# Parse command line inputs
+parser = make_parser()
 args = parser.parse_args()
 
 # Create logger
