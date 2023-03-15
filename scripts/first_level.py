@@ -173,12 +173,6 @@ atlas_plot = plotting.plot_prob_atlas(
     axes=ax[0],
 )
 
-nifti_verbose = 0
-if args.loglevel <= logging.DEBUG:
-    nifti_verbose = 2
-elif args.loglevel <= logging.INFO:
-    nifti_verbose = 1
-
 logging.info(
     "BOLD signal will be standardized, detrended, and cleaned based with a Bandpass "
     f"filter set to {args.lowpass}-{args.highpass} Hz and a {args.fwhm} mm "
@@ -210,6 +204,13 @@ logging.info(
 
 # Create brain-wide mask
 logging.info("Generating mask for whole brain")
+
+nifti_verbose = 0
+if args.loglevel <= logging.DEBUG:
+    nifti_verbose = 2
+elif args.loglevel <= logging.INFO:
+    nifti_verbose = 1
+
 brain_masker = NiftiMasker(
     smoothing_fwhm=args.fwhm,
     detrend=True,
