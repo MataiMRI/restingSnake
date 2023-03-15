@@ -297,9 +297,9 @@ if __name__ == "__main__":
         f"{args.connectivity_threshold} to {args.plotting_output}"
     )
 
-    fig, axes = plt.subplots(nrows=2)
+    fig, axes = plt.subplots(2, 1, figsize=(10, 7.2))
 
-    atlas_plot = plotting.plot_prob_atlas(
+    plotting.plot_prob_atlas(
         network_nodes,
         cut_coords=6,
         display_mode="z",
@@ -307,7 +307,7 @@ if __name__ == "__main__":
         axes=axes[0],
     )
 
-    display = plotting.plot_stat_map(
+    plotting.plot_stat_map(
         image.index_img(network_to_voxel_correlations_corrected_img, 0),
         threshold=args.connectivity_threshold,
         cut_coords=[-16, 0, 16, 30, 44, 58],
@@ -319,8 +319,9 @@ if __name__ == "__main__":
         vmax=1,
         cmap="cold_hot",
         axes=axes[1],
-        output_file=args.plotting_output,
     )
+
+    fig.savefig(args.plotting_output, bbox_inches="tight")
 
     # Add overlays for additional nodes if network has >1 node
     # for i in range (1, network_time_series.shape[1]):
