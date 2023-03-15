@@ -8,6 +8,7 @@ Created on Fri Jan 21 14:29:23 2022
 
 import argparse
 import logging
+from collections import defaultdict
 
 import numpy as np
 import pandas as pd
@@ -217,22 +218,15 @@ if __name__ == "__main__":
         networks = roi_labels["net_name"]
 
     # Generate blank dictionary of n unique networks provided in atlas
-    keys = list(set(networks))
+    keys = set(networks)
     keys_txt = "\n".join(keys)
     logger.info(f"Functional networks available in atlas:\n{keys_txt}")
 
-    msdl_networks = dict.fromkeys(keys)
-    for key in msdl_networks.keys():
-        msdl_networks[key] = []
-
     # Populate dictionary with indexes of anatomical seeds that correspond to
     # functional networks
-    for i in range(0, len(networks)):
-        temp = networks[i]
-        if temp in msdl_networks.keys():
-            msdl_networks[temp].append(i)
-        else:
-            msdl_networks[temp] = None
+    msdl_networks = defaultdict(list)
+    for i, network in enumerate(networks):
+        msdl_networks[network].append(i)
 
     # logger.info("\nDetails about seed(s) within selected network")
     # for coord in msdl_networks[args.functional_network]:
