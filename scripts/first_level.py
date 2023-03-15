@@ -211,10 +211,9 @@ if __name__ == "__main__":
     roi_labels = pd.read_csv(args.atlas_labels)
 
     # Generate blank dictionary of n unique networks provided in atlas
-    logger.info("Functional networks available in atlas:")
     keys = list(set(roi_labels["net_name"]))
-    for net in keys:
-        logger.info(net)
+    keys_txt = "\n".join(keys)
+    logger.info(f"Functional networks available in atlas:\n{keys_txt}")
 
     msdl_networks = dict.fromkeys(keys)
     for key in msdl_networks.keys():
@@ -229,7 +228,7 @@ if __name__ == "__main__":
         else:
             msdl_networks[temp] = None
 
-    logger.info("\nDetails about seed(s) within selected network")
+    # logger.info("\nDetails about seed(s) within selected network")
     # for coord in msdl_networks[args.functional_network]:
     #    logger.info('\n', roi_labels.iloc[coord])
 
@@ -242,7 +241,7 @@ if __name__ == "__main__":
     logger.info(
         "BOLD signal will be standardized, detrended, and cleaned based with a "
         f"Bandpass filter set to {args.lowpass}-{args.highpass} Hz and a {args.fwhm} "
-        "mm full-width-half-maximum smoothing kernel \n"
+        "mm full-width-half-maximum smoothing kernel"
     )
 
     # Create mask using user-specified network nodes from atlas
