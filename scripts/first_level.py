@@ -117,6 +117,67 @@ def make_parser():
     return parser
 
 
+def create_mask(
+    network_time_series, func, *, fwhm, lowpass, highpass, repetition_time, verbose
+):
+    logger = logging.getLogger(__name__)
+
+    brain_masker = NiftiMasker(
+        smoothing_fwhm=fwhm,
+        detrend=True,
+        standardize=True,
+        low_pass=lowpass,
+        high_pass=highpass,
+        t_r=repetition_time,
+        verbose=verbose,
+        mask_img=mask,
+    )
+
+    brain_time_series = brain_masker.fit_transform(func, confounds=confounds_matrix)
+    logger.info(
+        f"Converted whole brain data to timeseries with shape: {brain_time_series.shape}"
+    )
+
+    # Correlate network nodes of interest against brain mask time series
+    logger.info("Performing network to voxel correlation analysis")
+    network_to_voxel_correlations = (
+        np.dot(brain_time_series.T, network_time_series) / network_time_series.shape[0]
+    )
+
+    logger.info(
+        "Network-to-voxel correlation shape: (%s, %s)"
+        % network_to_voxel_correlations.shape
+    )
+    logger.info(
+        "Network-to-voxel correlation: min = %.3f; max = %.3f"
+        % (network_to_voxel_correlations.min(), network_to_voxel_correlations.max())
+    )
+
+    # calculate t statistics from network_to_voxel_correlations
+    t_vals = (
+        network_to_voxel_correlations * np.sqrt((epi_img.shape[3] - 2))
+    ) / np.sqrt((1 - network_to_voxel_correlations**2))
+
+    # convert t statistics to p values
+    p_vals = stats.t.sf(np.abs(t_vals), df=(epi_img.shape[3] - 2)) * 2
+
+    logger.info("Performing False Discovery Rate correction")
+    # implement mne library fdr_correction
+    reject_fdr, pval_fdr = fdr_correction(
+        p_vals, alpha=args.fdr_threshold, method="indep"
+    )
+    reject_fdr = reject_fdr * 1  # convert boolean series to binary
+
+    network_to_voxel_correlations_corrected = network_to_voxel_correlations * reject_fdr
+    # network_to_voxel_correlations_corrected = p_vals * reject_fdr
+
+    network_to_voxel_correlations_corrected_img = brain_masker.inverse_transform(
+        network_to_voxel_correlations_corrected.T
+    )
+
+    return network_to_voxel_correlations_corrected_img
+
+
 # Parse command line inputs
 parser = make_parser()
 args = parser.parse_args()
@@ -224,54 +285,14 @@ if args.loglevel <= logging.DEBUG:
 elif args.loglevel <= logging.INFO:
     nifti_verbose = 1
 
-brain_masker = NiftiMasker(
-    smoothing_fwhm=args.fwhm,
-    detrend=True,
-    standardize=True,
-    low_pass=args.lowpass,
-    high_pass=args.highpass,
-    t_r=args.repetition_time,
+network_to_voxel_correlations_corrected_img = create_mask(
+    network_time_series,
+    args.func,
+    fwhm=args.fwhm,
+    lowpass=args.lowpass,
+    highpass=args.highpass,
+    repetition_time=args.repetition_time,
     verbose=nifti_verbose,
-    mask_img=mask,
-)
-
-brain_time_series = brain_masker.fit_transform(args.func, confounds=confounds_matrix)
-logger.info(
-    f"Converting whole brain data to timeseries with shape: {brain_time_series.shape}"
-)
-
-# Correlate network nodes of interest against brain mask time series
-logger.info("Performing network to voxel correlation analysis")
-network_to_voxel_correlations = (
-    np.dot(brain_time_series.T, network_time_series) / network_time_series.shape[0]
-)
-
-logger.info(
-    "Network-to-voxel correlation shape: (%s, %s)" % network_to_voxel_correlations.shape
-)
-logger.info(
-    "Network-to-voxel correlation: min = %.3f; max = %.3f"
-    % (network_to_voxel_correlations.min(), network_to_voxel_correlations.max())
-)
-
-# calculate t statistics from network_to_voxel_correlations
-t_vals = (network_to_voxel_correlations * np.sqrt((epi_img.shape[3] - 2))) / np.sqrt(
-    (1 - network_to_voxel_correlations**2)
-)
-
-# convert t statistics to p values
-p_vals = stats.t.sf(np.abs(t_vals), df=(epi_img.shape[3] - 2)) * 2
-
-logger.info("Performing False Discovery Rate correction")
-# implement mne library fdr_correction
-reject_fdr, pval_fdr = fdr_correction(p_vals, alpha=args.fdr_threshold, method="indep")
-reject_fdr = reject_fdr * 1  # convert boolean series to binary
-
-network_to_voxel_correlations_corrected = network_to_voxel_correlations * reject_fdr
-# network_to_voxel_correlations_corrected = p_vals * reject_fdr
-
-network_to_voxel_correlations_corrected_img = brain_masker.inverse_transform(
-    network_to_voxel_correlations_corrected.T
 )
 
 logger.info(f"Saving UNTHRESHOLDED image to {args.nifti_output}")
