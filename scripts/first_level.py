@@ -17,9 +17,8 @@ from scipy import stats
 from mne.stats import fdr_correction
 from nilearn import plotting
 from nilearn import image
+from nilearn import datasets
 from nilearn.maskers import NiftiMapsMasker, NiftiMasker
-
-# from nilearn import datasets
 
 
 def make_parser():
@@ -206,12 +205,19 @@ if __name__ == "__main__":
     logger.info(f"Confound regressors that will be cleaned from signal:\n\n{confounds}")
 
     # Load atlas to provide resting-state networks available for analysis
-    logger.info("Loading regions-of-interest from atlas provided")
-    atlas_filename = args.atlas_image
-    roi_labels = pd.read_csv(args.atlas_labels)
+    if args.atlas_image is None or args.atlas_labels is None:
+        logger.info("Loading regions-of-interest from default MSDL atlas")
+        atlas = datasets.fetch_atlas_msdl()
+        atlas_filename = atlas["maps"]
+        networks = atlas["networks"]
+    else:
+        logger.info("Loading regions-of-interest from atlas provided")
+        atlas_filename = args.atlas_image
+        roi_labels = pd.read_csv(args.atlas_labels)
+        networks = roi_labels["net_name"]
 
     # Generate blank dictionary of n unique networks provided in atlas
-    keys = list(set(roi_labels["net_name"]))
+    keys = list(set(networks))
     keys_txt = "\n".join(keys)
     logger.info(f"Functional networks available in atlas:\n{keys_txt}")
 
@@ -221,8 +227,8 @@ if __name__ == "__main__":
 
     # Populate dictionary with indexes of anatomical seeds that correspond to
     # functional networks
-    for i in range(0, len(roi_labels["net_name"])):
-        temp = roi_labels["net_name"][i]
+    for i in range(0, len(networks)):
+        temp = networks[i]
         if temp in msdl_networks.keys():
             msdl_networks[temp].append(i)
         else:
