@@ -116,29 +116,29 @@ logging.basicConfig(
 logger = logging.getLogger()
 
 # Load required files
-logging.info(f"Loading mask image (3D): {args.mask}")
+logger.info(f"Loading mask image (3D): {args.mask}")
 mask = nib.load(args.mask)
 
-logging.info(f"Loading resting-state fMRI image (4D): {args.func}")
-logging.info(f"This image was collected with a TR of: {args.repetition_time}")
+logger.info(f"Loading resting-state fMRI image (4D): {args.func}")
+logger.info(f"This image was collected with a TR of: {args.repetition_time}")
 epi_img = nib.load(args.func)
 
-logging.info(f"Loading timeseries for confounding variables from: {args.confounds}")
+logger.info(f"Loading timeseries for confounding variables from: {args.confounds}")
 confounds = pd.read_csv(args.confounds, sep="\t")
 confounds = confounds[args.regressors]
 confounds_matrix = confounds.values
-logging.info(f"Confound regressors that will be cleaned from signal:\n\n{confounds}")
+logger.info(f"Confound regressors that will be cleaned from signal:\n\n{confounds}")
 
 # Load atlas to provide resting-state networks available for analysis
-logging.info("Loading regions-of-interest from atlas provided")
+logger.info("Loading regions-of-interest from atlas provided")
 atlas_filename = args.atlas_image
 roi_labels = pd.read_csv(args.atlas_labels)
 
 # Generate blank dictionary of n unique networks provided in atlas
-logging.info("Functional networks available in atlas:")
+logger.info("Functional networks available in atlas:")
 keys = list(set(roi_labels["net_name"]))
 for net in keys:
-    logging.info(net)
+    logger.info(net)
 
 msdl_networks = dict.fromkeys(keys)
 for key in msdl_networks.keys():
@@ -152,9 +152,9 @@ for i in range(0, len(roi_labels["net_name"])):
     else:
         msdl_networks[temp] = None
 
-logging.info("\nDetails about seed(s) within selected network")
+logger.info("\nDetails about seed(s) within selected network")
 # for coord in msdl_networks[args.functional_network]:
-#    logging.info('\n', roi_labels.iloc[coord])
+#    logger.info('\n', roi_labels.iloc[coord])
 
 # Define single network and plot probabilistic map from atlas
 
@@ -163,7 +163,7 @@ fig, ax = plt.subplots(nrows=2)
 
 # define nodes
 network_nodes = image.index_img(atlas_filename, msdl_networks[args.functional_network])
-logging.info(f"Shape of network nodes from atlas image {network_nodes.shape}")
+logger.info(f"Shape of network nodes from atlas image {network_nodes.shape}")
 
 atlas_plot = plotting.plot_prob_atlas(
     network_nodes,
@@ -173,14 +173,14 @@ atlas_plot = plotting.plot_prob_atlas(
     axes=ax[0],
 )
 
-logging.info(
+logger.info(
     "BOLD signal will be standardized, detrended, and cleaned based with a Bandpass "
     f"filter set to {args.lowpass}-{args.highpass} Hz and a {args.fwhm} mm "
     "full-width-half-maximum smoothing kernel \n"
 )
 
 # Create mask using user-specified network nodes from atlas
-logging.info(
+logger.info(
     "Generating mask for network of interest based on seed coordinates in atlas"
 )
 atlas_masker = NiftiMapsMasker(
@@ -197,13 +197,13 @@ atlas_masker = NiftiMapsMasker(
 
 # time series for network of interest
 network_time_series = atlas_masker.fit_transform(args.func, confounds=confounds_matrix)
-logging.info(
+logger.info(
     "Converting functional network data to timeseries with shape: "
     f"{network_time_series.shape}"
 )
 
 # Create brain-wide mask
-logging.info("Generating mask for whole brain")
+logger.info("Generating mask for whole brain")
 
 nifti_verbose = 0
 if args.loglevel <= logging.DEBUG:
@@ -223,20 +223,20 @@ brain_masker = NiftiMasker(
 )
 
 brain_time_series = brain_masker.fit_transform(args.func, confounds=confounds_matrix)
-logging.info(
+logger.info(
     f"Converting whole brain data to timeseries with shape: {brain_time_series.shape}"
 )
 
 # Correlate network nodes of interest against brain mask time series
-logging.info("Performing network to voxel correlation analysis")
+logger.info("Performing network to voxel correlation analysis")
 network_to_voxel_correlations = (
     np.dot(brain_time_series.T, network_time_series) / network_time_series.shape[0]
 )
 
-logging.info(
+logger.info(
     "Network-to-voxel correlation shape: (%s, %s)" % network_to_voxel_correlations.shape
 )
-logging.info(
+logger.info(
     "Network-to-voxel correlation: min = %.3f; max = %.3f"
     % (network_to_voxel_correlations.min(), network_to_voxel_correlations.max())
 )
@@ -249,7 +249,7 @@ t_vals = (network_to_voxel_correlations * np.sqrt((epi_img.shape[3] - 2))) / np.
 # convert t statistics to p values
 p_vals = stats.t.sf(np.abs(t_vals), df=(epi_img.shape[3] - 2)) * 2
 
-logging.info("Performing False Discovery Rate correction")
+logger.info("Performing False Discovery Rate correction")
 # implement mne library fdr_correction
 reject_fdr, pval_fdr = fdr_correction(p_vals, alpha=args.fdr_threshold, method="indep")
 reject_fdr = reject_fdr * 1  # convert boolean series to binary
@@ -261,10 +261,10 @@ network_to_voxel_correlations_corrected_img = brain_masker.inverse_transform(
     network_to_voxel_correlations_corrected.T
 )
 
-logging.info(f"Saving UNTHRESHOLDED image to {args.nifti_output}")
+logger.info(f"Saving UNTHRESHOLDED image to {args.nifti_output}")
 nib.save(network_to_voxel_correlations_corrected_img, args.nifti_output)
 
-logging.info(
+logger.info(
     f"Saving plot of {args.functional_network} connectivity THRESHOLDED at "
     f"{args.connectivity_threshold} to {args.plotting_output}"
 )
