@@ -46,6 +46,10 @@ rule all:
             resultsdir=config["resultsdir"],
             subject=SUBJECTS,
             session=SESSIONS
+        ),
+        expand("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+            resultsdir=config["resultsdir"],
+            subject=SUBJECTS
         )
 
 ruleorder: fmriprep > freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional > unzip
@@ -202,6 +206,14 @@ def list_bids_sessions(wildcards):
         inputs.append(f"{wildcards.resultsdir}/bids/sub-{subject}/ses-{session}")
     return inputs
 
+def list_long_sessions(wildcards):
+    inputs = []
+    for subject, session in zip(SUBJECTS, SESSIONS):
+        if subject != wildcards.subject:
+            continue
+        inputs.append(f"{wildcards.resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.{subject}_template")
+    return inputs
+
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
 # TODO Experiment with --longitudinal in fMRIPREP
@@ -209,7 +221,8 @@ def list_bids_sessions(wildcards):
 rule fmriprep:
     input:
         list_bids_sessions,
-        "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
+        list_long_sessions
+#        "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
     output:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}")
     container:
