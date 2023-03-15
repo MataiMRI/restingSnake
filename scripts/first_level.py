@@ -23,66 +23,45 @@ from nilearn.maskers import NiftiMapsMasker, NiftiMasker
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
+parser.add_argument("mask", help="Subject mask nifti file output from fmriprep")
+parser.add_argument("func", help="Subject rsfMRI bold nifti file output from fmriprep")
 parser.add_argument(
-    "mask", help="Subject mask nifti file output from fmriprep", type=str
+    "confounds", help="Subject confound timeseries file output from fmriprep"
 )
-
-parser.add_argument(
-    "func", help="Subject rsfMRI bold nifti file output from fmriprep", type=str
-)
-
-parser.add_argument(
-    "confounds", help="Subject confound timeseries file output from fmriprep", type=str
-)
-
 parser.add_argument(
     "nifti_output",
     help=(
         "Name and location of .nii output of First Level analysis for selected "
         "resting-state network"
     ),
-    type=str,
 )
-
 parser.add_argument(
     "plotting_output",
     help="Name and location of .png output for selected resting-state network",
-    type=str,
 )
-
-parser.add_argument(
-    "-a_img", help="Specify Atlas .nii image file", type=str, dest="atlas_image"
-)
-
+parser.add_argument("-a_img", help="Specify Atlas .nii image file", dest="atlas_image")
 parser.add_argument(
     "-a_lab",
     help="Specify Atlas .csv file containing ROI coordinates for resting-state networks",
-    type=str,
     dest="atlas_labels",
 )
-
 parser.add_argument(
     "-ntwk",
     help="Specify resting-state fMRI network wildcard",
-    type=str,
     dest="functional_network",
 )
-
 parser.add_argument(
     "-tr",
     help="Specify scan repetition time from config file",
     type=float,
     dest="repetition_time",
 )
-
 parser.add_argument(
     "-rg",
     help="Specify list of regressors from confounds.tsv to perform signal cleaning",
     dest="regressors",
-    type=str,
     nargs="+",
 )
-
 parser.add_argument(
     "-hp",
     help="Specify high pass boundary of band pass filter from config file",
@@ -90,7 +69,6 @@ parser.add_argument(
     type=float,
     default=0.01,
 )
-
 parser.add_argument(
     "-lp",
     help="Specify low pass boundary of band pass filter from config file",
@@ -98,14 +76,12 @@ parser.add_argument(
     type=float,
     default=0.1,
 )
-
 parser.add_argument(
     "-fwhm",
     help="Specify full width half maximum smoothing kernel from config file",
     type=int,
     default=6,
 )
-
 parser.add_argument(
     "-fdr",
     help=(
@@ -116,7 +92,6 @@ parser.add_argument(
     type=float,
     default=0.05,
 )
-
 parser.add_argument(
     "-fc",
     help="Specify functional connectivity threshold from config file",
@@ -124,7 +99,6 @@ parser.add_argument(
     type=float,
     default=0.25,
 )
-
 parser.add_argument(
     "-d",
     "--debug",
@@ -134,7 +108,6 @@ parser.add_argument(
     const=logging.DEBUG,
     default=logging.WARNING,
 )
-
 parser.add_argument(
     "-v",
     "--verbose",
@@ -196,12 +169,12 @@ logging.info("\nDetails about seed(s) within selected network")
 #    logging.info('\n', roi_labels.iloc[coord])
 
 # Define single network and plot probabilistic map from atlas
-fig, ax = plt.subplots(
-    nrows=2
-)  # Create fig object to plot atlas and subject bold signal together
-network_nodes = image.index_img(
-    atlas_filename, msdl_networks[args.functional_network]
-)  # define nodes
+
+# figure to plot atlas and subject bold signal together
+fig, ax = plt.subplots(nrows=2)
+
+# define nodes
+network_nodes = image.index_img(atlas_filename, msdl_networks[args.functional_network])
 logging.info(f"Shape of network nodes from atlas image {network_nodes.shape}")
 
 atlas_plot = plotting.plot_prob_atlas(
