@@ -233,24 +233,11 @@ if __name__ == "__main__":
     # for coord in msdl_networks[args.functional_network]:
     #    logger.info('\n', roi_labels.iloc[coord])
 
-    # Define single network and plot probabilistic map from atlas
-
-    # figure to plot atlas and subject bold signal together
-    fig, ax = plt.subplots(nrows=2)
-
-    # define nodes
+    # Define single network
     network_nodes = image.index_img(
         atlas_filename, msdl_networks[args.functional_network]
     )
     logger.info(f"Shape of network nodes from atlas image {network_nodes.shape}")
-
-    atlas_plot = plotting.plot_prob_atlas(
-        network_nodes,
-        cut_coords=6,
-        display_mode="z",
-        title=f"{args.functional_network} nodes according to atlas labels",
-        axes=ax[0],
-    )
 
     logger.info(
         "BOLD signal will be standardized, detrended, and cleaned based with a "
@@ -305,9 +292,20 @@ if __name__ == "__main__":
     logger.info(f"Saving UNTHRESHOLDED image to {args.nifti_output}")
     nib.save(network_to_voxel_correlations_corrected_img, args.nifti_output)
 
+    # Plot probabilistic map from atlas and subject bold signal together
     logger.info(
         f"Saving plot of {args.functional_network} connectivity THRESHOLDED at "
         f"{args.connectivity_threshold} to {args.plotting_output}"
+    )
+
+    fig, axes = plt.subplots(nrows=2)
+
+    atlas_plot = plotting.plot_prob_atlas(
+        network_nodes,
+        cut_coords=6,
+        display_mode="z",
+        title=f"{args.functional_network} nodes according to atlas labels",
+        axes=axes[0],
     )
 
     display = plotting.plot_stat_map(
@@ -321,7 +319,7 @@ if __name__ == "__main__":
         display_mode="z",
         vmax=1,
         cmap="cold_hot",
-        axes=ax[1],
+        axes=axes[1],
         output_file=args.plotting_output,
     )
 
