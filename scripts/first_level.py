@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+
 """
 Created on Fri Jan 21 14:29:23 2022
 
@@ -9,6 +9,7 @@ Created on Fri Jan 21 14:29:23 2022
 import glob
 import argparse
 import logging
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
