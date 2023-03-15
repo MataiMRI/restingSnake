@@ -6,7 +6,6 @@ Created on Fri Jan 21 14:29:23 2022
 @author: jpmcgeown
 """
 
-import glob
 import argparse
 import logging
 
@@ -16,10 +15,9 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from mne.stats import fdr_correction
 #from nilearn import datasets
-from nilearn import input_data
 from nilearn import plotting
 from nilearn import image
-from nilearn.input_data import NiftiMapsMasker
+from nilearn.maskers import NiftiMapsMasker
 import nibabel as nib
 
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -228,7 +226,7 @@ logging.info(f'Converting functional network data to timeseries with shape: {net
 
 #Create brain-wide mask
 logging.info('Generating mask for whole brain')
-brain_masker = input_data.NiftiMasker(
+brain_masker = NiftiMasker(
     smoothing_fwhm= args.fwhm,
     detrend=True, 
     standardize=True,
