@@ -186,3 +186,14 @@ conda config --set channel_priority strict
 - integrate snakemake singularity cache in the configuration? same for conda environment?
 
 - add a note about the user having to run HeudiConv separately to determine populate heuristic.py prior to any run on NeSI
+
+- how to generate a minimal reproducible conda environment
+
+```
+module purge
+module load Miniconda3/4.12.0
+export PYTHONNOUSERSITE=1
+conda env create -f envs/mri_base.yaml -p ./mri_env
+conda env export -p ./mri_env --no-builds | grep -v '^prefix:' > envs/mri.yaml
+conda env remove -p ./mri_env
+```
