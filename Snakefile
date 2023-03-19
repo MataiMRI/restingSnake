@@ -27,17 +27,8 @@ def list_scans(root_folder, prefix):
 
     return mapping
 
-def list_tidy_scans(root_folder):
-    infos = []
-    for path in Path(root_folder).glob("tidy/sub_*/ses_*"):
-        _, session = path.name.split("_")
-        _, subject = path.parent.name.split("_")
-        infos.append([subject, session])
-    return infos
-
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
-TIDY_SCANS = list_tidy_scans(config["resultsdir"])
-SUBJECTS, SESSIONS = zip(*list(MAPPING.keys()) + TIDY_SCANS)
+SUBJECTS, SESSIONS = zip(*MAPPING)
 
 rule all:
     input:
@@ -52,33 +43,31 @@ rule all:
             subject=SUBJECTS
         )
 
-ruleorder: fmriprep > freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional > unzip
+ruleorder: freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional
 
 rule unzip:
     input:
-        "{folder}.zip"
+        expand("{datadir}/{{folder}}.zip", datadir=config['datadir'])
     output:
-        directory("{folder}")
+        directory(expand("{datadir}/{{folder}}", datadir=config['datadir']))
     shell:
-        "unzip -q -d {output} {input} && rm {input}"
+        "unzip -q -d {output} {input}"
 
 rule tidy_dicoms:
     input:
         lambda wildards: MAPPING[(wildards.subject, wildards.session)]
     output:
-        "{resultsdir}/tidy/sub_{subject}/ses_{session}/.completed"
+        directory("{resultsdir}/tidy/sub_{subject}/ses_{session}")
     run:
-        output_folder = Path(output[0]).parent
+        output_folder = Path(output[0])
         for dicom_file in Path(input[0]).rglob("*.dcm"):
-            target_path = output_folder / dicom_file.parent.name
-            target_path.mkdir(parents=True, exist_ok=True)
-            shutil.move(dicom_file, target_path)
-        shutil.rmtree(input[0])
-        Path(output[0]).touch()
+            target_folder = output_folder / dicom_file.parent.name
+            target_folder.mkdir(parents=True, exist_ok=True)
+            (target_folder / dicom_file.name).symlink_to(dicom_file)
 
 rule heudiconv:
     input:
-        "{resultsdir}/tidy/sub_{subject}/ses_{session}/.completed"
+        "{resultsdir}/tidy/sub_{subject}/ses_{session}"
     output:
         directory("{resultsdir}/bids/sub-{subject}/ses-{session}"),
         directory("{resultsdir}/bids/.heudiconv/{subject}/ses-{session}")
