@@ -6,7 +6,7 @@ ethics_prefix: Conc_20Ntb14_
 
 ## Directories
 datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_josh
-resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long
+resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long
 
 #Dicom directory structure can be flexible but MUST include {{subject}} and {{session}}
 dicom_dir_structure: /dicom/sub_{{subject}}/ses_{{session}}/*/* # GET THIS WORKING FOR HEUDICONV

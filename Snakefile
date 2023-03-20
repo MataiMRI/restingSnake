@@ -30,15 +30,13 @@ def list_scans(root_folder, prefix):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
+print(MAPPING)
+print(SUBJECTS, SESSIONS)
+
 rule all:
     input:
         expand(
-            "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.{subject}_template",
-            resultsdir=config["resultsdir"],
-            subject=SUBJECTS,
-            session=SESSIONS
-        ),
-        expand("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
             resultsdir=config["resultsdir"],
             subject=SUBJECTS
         )
@@ -163,7 +161,7 @@ rule freesurfer_long_template:
 
 rule freesurfer_longitudinal:
     input:
-        list_freesurfer_sessions,
+        "{resultsdir}/bids/sub-{subject}/ses-{session}",
         "{resultsdir}/bids/derivatives/freesurfer/{subject}_template"
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.{subject}_template")
