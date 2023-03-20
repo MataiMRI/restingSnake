@@ -1,6 +1,8 @@
 ## NeSI project account
 account: uoa03264
 
+use_longitudinal: True
+
 ## Data import
 ethics_prefix: Conc_20Ntb14_
 

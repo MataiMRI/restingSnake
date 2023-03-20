@@ -198,10 +198,15 @@ def list_bids_sessions(wildcards):
 
 def list_long_sessions(wildcards):
     inputs = []
+    freesurferdir = f"{wildcards.resultsdir}/bids/derivatives/freesurfer"
     for subject, session in zip(SUBJECTS, SESSIONS):
         if subject != wildcards.subject:
             continue
-        inputs.append(f"{wildcards.resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.{subject}_template")
+        if config["use_longitudinal"]:
+            input_path = f"{freesurferdir}/sub-{subject}_ses-{session}.long.{subject}_template"
+        else:
+            input_path = f"{freesurferdir}/sub-{subject}_ses-{session}"
+        inputs.append(input_path)
     return inputs
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
