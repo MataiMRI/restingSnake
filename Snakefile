@@ -6,7 +6,7 @@ from pathlib import Path
 ### READ CONFIG ###
 configfile: 'config.yml'
 
-NETWORKS = config['network_info']['networks']
+NETWORKS = config['atlas_info']['networks']
 
 def list_scans(root_folder, prefix):
     mapping = {}
@@ -30,16 +30,21 @@ def list_scans(root_folder, prefix):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
-print(MAPPING)
-print(SUBJECTS, SESSIONS)
+localrules: all, fmriprep_cleanup
 
 rule all:
     input:
-        expand(
-        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+        expand("{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
             resultsdir=config["resultsdir"],
-            subject=SUBJECTS
-        )
+            subject=SUBJECTS,
+            session=SESSIONS,
+            network=config["atlas_info"]["networks"]),
+        expand("{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png",
+            resultsdir=config["resultsdir"],
+            subject=SUBJECTS,
+            session=SESSIONS,
+            network=config["atlas_info"]["networks"]
+            )
 
 ruleorder: freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional
 
@@ -97,15 +102,13 @@ rule freesurfer_cross_sectional:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     container:
         "docker://bids/freesurfer:v6.0.1-6.1"
-    params:
-        license_path=config["freesurfer"]["license_path"]
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=config["freesurfer"]["time_min"]
     threads: 8
     shell:
-        "export FS_LICENSE=$(realpath {params.license_path}) && "
+        "export FS_LICENSE=$(realpath {config[freesurfer][license_path]}) && "
         "recon-all "
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
@@ -173,7 +176,7 @@ rule freesurfer_longitudinal:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=config["freesurfer"]["time_min"]
-    threads: 8
+    threads: config["freesurfer"]["threads"]
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
         "recon-all "
@@ -211,25 +214,75 @@ rule fmriprep:
         list_long_sessions
 #        "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
     output:
-        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}")
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"),
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
     container:
         "docker://nipreps/fmriprep:22.0.2"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
         time_min=config["fmriprep"]["time_min"]
-    threads: 16
+    threads: config["fmriprep"]["threads"]
     shell:
         "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/fmriprep "
         "participant "
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-license-file license.txt "
         "--fs-subjects-dir {wildcards.resultsdir}/bids/derivatives/freesurfer_agg "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {wildcards.resultsdir}/work"
+        "-w {wildcards.resultsdir}/work "
+        "--fs-license-file {config[freesurfer][license_path]}"
+
+rule fmriprep_cleanup:
+    input:
+        expand(
+            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
+            resultsdir=config["resultsdir"],
+            subject=SUBJECTS,
+        )
+    output:
+        touch(expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]))
+    shell:
+        "rm -rf {config[resultsdir]}/work"
+
+#Query with Mangor:
+### handling multiple runs within a session???
+#whether mask should be from anat or func folder?
+
+### MAKE SURE CONFOUND REGRESSION IS DONE ON SHORTLIST FROM CONFIG file
+
+rule first_level:
+    input:
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"
+    output:
+        "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
+        "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png"
+    conda:
+        "envs/mri.yaml"
+    resources:
+        mem_mb=6000,
+        cpus=2,
+        time_min=10        
+    shell:
+        "python ./scripts/first_level.py "
+        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
+        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
+        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_desc-confounds_timeseries.tsv "
+        "{output} "
+        "-a_img {config[atlas_info][atlas_image]} "
+        "-a_lab {config[atlas_info][atlas_labels]} "
+        "-tr {config[rep_time]} "
+        "-rg {config[confounds]} "
+        "-ntwk {wildcards.network} "
+        "-hp {config[preprocessing][high_pass]} "
+        "-lp {config[preprocessing][low_pass]} "
+        "-fwhm {config[preprocessing][smooth_fwhm]} "
+        "-fdr {config[resting_first_level][fdr_alpha]} "
+        "-fc {config[resting_first_level][func_conn_thresh]} "
+        "-v"
+        
