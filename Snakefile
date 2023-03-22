@@ -294,7 +294,9 @@ rule first_level:
     resources:
         mem_mb=6000,
         cpus=2,
-        time_min=10        
+        time_min=10
+    log:
+        "{resultsdir}/first_level_results/sub-{subject}_ses-{session}_{network}.log"
     shell:
         "python ./scripts/first_level.py "
         "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
@@ -311,5 +313,6 @@ rule first_level:
         "-fwhm {config[preprocessing][smooth_fwhm]} "
         "-fdr {config[resting_first_level][fdr_alpha]} "
         "-fc {config[resting_first_level][func_conn_thresh]} "
-        "-v"
+        "-v "
+        "2> {log}"
         
