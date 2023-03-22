@@ -266,6 +266,20 @@ rule fmriprep_cleanup:
 
 ### MAKE SURE CONFOUND REGRESSION IS DONE ON SHORTLIST FROM CONFIG file
 
+def atlas_image(wildcards):
+    a_img = config["atlas_info"].get("atlas_image")
+    if (a_img is not None) and (len(a_img.strip()) > 0):
+        return f"-a_img {a_img}"
+    else:
+        return ""
+        
+def atlas_labels(wildcards):
+    a_lab = config["atlas_info"].get("atlas_labels")
+    if (a_lab is not None) and (len(a_lab.strip()) > 0):
+        return f"-a_lab {a_lab}"
+    else:
+        return ""
+
 rule first_level:
     input:
         "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"
@@ -274,6 +288,9 @@ rule first_level:
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png"
     conda:
         "envs/mri.yaml"
+    params:
+        a_img=atlas_image,
+        a_lab=atlas_labels
     resources:
         mem_mb=6000,
         cpus=2,
@@ -284,8 +301,8 @@ rule first_level:
         "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
         "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_desc-confounds_timeseries.tsv "
         "{output} "
-        "-a_img {config[atlas_info][atlas_image]} "
-        "-a_lab {config[atlas_info][atlas_labels]} "
+        "{params.a_img} "
+        "{params.a_lab} "
         "-tr {config[rep_time]} "
         "-rg {config[confounds]} "
         "-ntwk {wildcards.network} "
