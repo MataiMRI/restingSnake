@@ -41,19 +41,17 @@ def list_freesurfer_sessions(wildcards):
 
 rule all:
     input:
-        expand("{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
-            zip,
-            resultsdir=[config["resultsdir"]]*len(SUBJECTS),
-            subject=SUBJECTS,
-            session=SESSIONS,
-            network=config["atlas_info"]["networks"]),
-        expand("{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png",
-            zip,
-            resultsdir=[config["resultsdir"]]*len(SUBJECTS),
-            subject=SUBJECTS,
-            session=SESSIONS,
-            network=config["atlas_info"]["networks"]
-            )
+        expand(
+            expand(
+                "{{resultsdir}}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{{network}}_{{figname}}",
+                zip,
+                subject=SUBJECTS,
+                session=SESSIONS,
+            ),
+            resultsdir=config["resultsdir"],
+            network=config["atlas_info"]["networks"],
+            figname=["unthresholded_fc.nii.gz", "figure.png"],
+        )
 
 ruleorder: freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional
 
