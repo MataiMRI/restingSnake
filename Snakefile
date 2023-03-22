@@ -1,8 +1,6 @@
 import shutil
 from pathlib import Path
 
-## If DAG or Rulegraph throwing error workaround is to comment out print statements in SnakeFile
-
 ### READ CONFIG ###
 configfile: 'config.yml'
 
@@ -32,15 +30,26 @@ SUBJECTS, SESSIONS = zip(*MAPPING)
 
 localrules: all, fmriprep_cleanup
 
+
+def list_freesurfer_sessions(wildcards):
+    inputs = []
+    for subject, session in zip(SUBJECTS, SESSIONS):
+        if subject != wildcards.subject:
+            continue
+        inputs.append(f"{wildcards.resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
+    return inputs
+
 rule all:
     input:
         expand("{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
-            resultsdir=config["resultsdir"],
+            zip,
+            resultsdir=[config["resultsdir"]]*len(SUBJECTS),
             subject=SUBJECTS,
             session=SESSIONS,
             network=config["atlas_info"]["networks"]),
         expand("{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png",
-            resultsdir=config["resultsdir"],
+            zip,
+            resultsdir=[config["resultsdir"]]*len(SUBJECTS),
             subject=SUBJECTS,
             session=SESSIONS,
             network=config["atlas_info"]["networks"]
@@ -91,8 +100,6 @@ rule heudiconv:
         "--bids "
         "--overwrite"
 
-# RUN BIDS/FREESURFER
-# inspect image using singularity exec docker://bids/freesurfer recon-all --help
 
 # TODO remove fs license from repo
 rule freesurfer_cross_sectional:
@@ -234,7 +241,7 @@ rule fmriprep:
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-subjects-dir {wildcards.resultsdir}/bids/derivatives/freesurfer_agg "
+        "--fs-subjects-dir {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "
         "--low-mem "

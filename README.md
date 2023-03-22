@@ -187,6 +187,9 @@ conda config --set channel_priority strict
 
 - add a note about the user having to run HeudiConv separately to determine populate heuristic.py prior to any run on NeSI
 
+- add a note about interacting with containers for learning/changing settings
+# inspect image using singularity exec docker://bids/freesurfer recon-all --help
+
 - how to generate a minimal reproducible conda environment
 
 ```
