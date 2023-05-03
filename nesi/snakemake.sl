@@ -12,8 +12,11 @@
 set -euo pipefail
 
 # load environment modules
+# TODO update modules and check that everything still works
 module purge
 module load Miniconda3/4.12.0 Singularity/3.10.0 snakemake/7.19.1-gimkl-2022a-Python-3.10.5
+
+# ensure user's local Python packages are not overriding Python module packages
 export PYTHONNOUSERSITE=1
 
 # parent folder for cache directories
@@ -23,9 +26,12 @@ NOBACKUPDIR="/nesi/nobackup/$SLURM_JOB_ACCOUNT/$USER"
 conda config --add pkgs_dirs "$NOBACKUPDIR/conda_pkgs"
 
 # ensure conda channel priority is strict (otherwise environment may no be built)
-conda config --set channel_priority strict
+# TODO check is needed (with more recent miniconda), or can use flexible?
+# conda config --set channel_priority strict
 
 # deactivate any conda environment already activate (e.g. base environment)
+# TODO check if this can also solve "conda init" issues
+source $(conda info --base)/etc/profile.d/conda.sh
 conda deactivate
 
 # configure singularity build anc cache directories
@@ -35,4 +41,4 @@ mkdir -p "$SINGULARITY_CACHEDIR" "$SINGULARITY_TMPDIR"
 setfacl -b "$SINGULARITY_TMPDIR"  # avoid Singularity issues due to ACLs set on this folder
 
 # run snakemake using the NeSI profile
-snakemake --profile nesi --config account="$SLURM_JOB_ACCOUNT"
+snakemake --profile nesi --config account="$SLURM_JOB_ACCOUNT" $@
