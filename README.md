@@ -155,35 +155,7 @@ We strongly advise you to **keep a copy of our data** elsewhere.
 
 ## TODO
 
-- add a note about singularity cache and build directories
-
-```
-export SINGULARITY_CACHEDIR=/nesi/nobackup/<project_code>/singularity_cachedir
-export SINGULARITY_TMPDIR=/nesi/nobackup/<project_code>/singularity_tmpdir
-setfacl -b "$SINGULARITY_TMPDIR"  # avoid Singularity issues due to ACLs set on this folder
-```
-
-- add a note about conda package cache
-
-```
-conda config --add pkgs_dirs /nesi/nobackup/<project_code>/$USER/conda_pkgs
-```
-
-- add a note about conda channel priority setting
-
-```
-conda config --set channel_priority strict
-```
-
-- (idea) add a script to run once to do all the steps above
-  - set singularity cache/buildir
-  - add the variables in bashrc
-  - add export PYTHONNOUSERSITE=1 in bashrc
-  - unset conda init
-  - configure conda (no auto activate base, conda cache, channel order)
-  - use `/nesi/nobackup/<project_code>/$USER` for cache/build folders
-
-- integrate snakemake singularity cache in the configuration? same for conda environment?
+- how to unset `conda init` or avoid it to be an issue?
 
 - add a note about the user having to run HeudiConv separately to determine populate heuristic.py prior to any run on NeSI
 
