@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH --job-name=fmri_workflow
-#SBATCH --account=uoo03699
+#SBATCH --account=uoa03264
 #SBATCH --time=02-00:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
