@@ -43,11 +43,13 @@ snakemake --until freesurfer
 All these options can be combined and used with a profile, for example:
 
 ```
-snakemake --profile nesi --keep-going --keep-incomplete --until freesurfer
+snakemake --keep-going --keep-incomplete --until freesurfer
 ```
 
 
-### Protect input DICOM folder
+## Protect input DICOM folder
+
+**TODO remove this section as now the data is copied?**
 
 Make sure to create a dummy file in your input DICOM folder, `datadir` in the configuration file [config.yml](config.yml):
 

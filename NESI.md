@@ -10,18 +10,18 @@ First, make sure to be logged on Mahuika, either via SSH or using [Jupyter on Ne
 In a terminal, clone this repository within your project folder:
 
 ```
-cd PROJECT_FOLDER
+cd /nesi/project/PROJECTID/$USER
 git clone https://github.com/jpmcgeown/fmri_workflow.git
 ```
 
-where `PROJECT_FOLDER` is your project folder (.e.g `/nesi/project/uoa03264/$USER`).
+where `PROJECTID` is your project number (e.g. `uoa03264`).
 
 *Note: you only need to do the cloning step once.*
 
 Then change directory to be in the folder of the repository:
 
 ```
-cd fmri_workflow
+cd /nesi/project/PROJECTID/$USER/fmri_workflow
 ```
 
 and edit the `config.yml` file to set your input dataset and result folder paths, for example using `nano` editor:
@@ -43,18 +43,45 @@ srun nesi/snakemake.sl -n
 If everything looks good, it is then time to submit the workflow as a Slurm batch job using the `sbatch` command:
 
 ```
-sbatch nesi/snakemake.sl
+sbatch --account=PROJECTID nesi/snakemake.sl
 ```
 
 This puts the workflow in the Slurm queue, where is should be scheduled to start as soon as resources are available.
 This command print a number, the **job ID**, that will be useful to keep track of the execution of the workflow.
 Note that you don't need to stay logged in once the job as been submitted.
 
-TODO note on singleton
+### Job time limit
 
-TODO note on timelimit
+By default, the workflow time limit is 2 days.
+You can increase it up to 3 weeks by using the `--time` option of `sbatch`.
 
-TODO note on project number
+For example, to increase it to 4 days, use:
+
+```
+sbatch --account=PROJECTID --time=04-00:00 nesi/snakemake.sl
+```
+
+If you notice that your current job will run out of time, do not hesitate to send an email to support@nesi.org.nz to ask for an extension, providing the job ID of the workflow.
+
+
+### Running multiple workflows
+
+You can only run one Snakemake workflow at a time (per project and user).
+
+If you use `sbatch` multiple times, the next execution of the workflow will only start once the current one has finished.
+
+
+### Snakemake options
+
+You can use all the usual snakemake command line options with `nesi/snakemake.sl`, by adding then at the end of your `srun` or `sbatch` command.
+
+For example, to run the workflow until the `freesurfer` rule, use:
+
+```
+sbatch --account=PROJECTID nesi/snakemake.sl --until freesurfer
+```
+
+See the [README](README.md#Useful-Snakemake-options) document for useful Snakemake options.
 
 
 ## Job management
@@ -90,7 +117,7 @@ scancel -j JOBID
 
 ## Workflow monitoring
 
-To have a look at the output printed by snakemake, TODO
+TODO how to access log files and check them live
 
 
 ## Accessing JupyterLab via SSH
