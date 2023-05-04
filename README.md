@@ -1,49 +1,97 @@
 # FMRI workflow
 
 
-## Installation (NeSI)
+## Getting started
 
-First, make sure to be logged on Mahuika.
+TODO explain local machine deployment
 
-Then, in your project folder, clone this repository:
+
+## Getting started - NeSI
+
+First, make sure to be logged on Mahuika, either via SSH or using [Jupyter on NeSI](https//jupyter.nesi.org.nz).
+
+In a terminal, clone this repository in your project folder:
 
 ```
+cd PROJECT_FOLDER
 git clone https://github.com/jpmcgeown/fmri_workflow.git
-```
-
-
-## Usage (NeSI)
-
-
-Make sure to be in the folder of the repository:
-
-```
-cd PROJECT_FOLDER/fmri_workflow
 ```
 
 where `PROJECT_FOLDER` is your project folder.
 
-There, edit the `config.yml` file to set your input dataset and result folder paths.
-
-Load the necessary environment modules:
+Then change directory to be in the folder of the repository:
 
 ```
-module purge
-module load Miniconda3/4.12.0 Singularity/3.10.0 snakemake/7.19.1-gimkl-2022a-Python-3.10.5
-export PYTHONNOUSERSITE=1
+cd fmri_workflow
 ```
 
-Then run the workflow using the `nesi` profile, first in dry-mode:
+and edit the `config.yml` file to set your input dataset and result folder paths, for example using `nano` editor:
 
 ```
-snakemake --profile nesi -n
+nano config.yml
 ```
 
-Finally, run the workflow:
+or the JupyterLab editor if you logged in via Jupyter.
+
+Then, instead of using `snakemake` command directly, we will use the `nesi/snakemake.sl` script, which takes care of setting up the environment to run Snakemake on NeSI.
+
+First, always do a dry-run and see which files will be (re-)created using:
 
 ```
-snakemake --profile nesi
+srun nesi/snakemake.sl -n
 ```
+
+If everything looks good, it is then time to submit the workflow as a Slurm batch job using the `sbatch` command:
+
+```
+sbatch nesi/snakemake.sl
+```
+
+This puts the workflow in the Slurm queue, where is should be scheduled to start as soon as resources are available.
+This command print a number, the **job ID**, that will be useful to keep track of the execution of the workflow.
+Note that you don't need to stay logged in once the job as been submitted.
+
+TODO note on singleton
+
+TODO note on timelimit
+
+TODO note on project number
+
+
+### Job management
+
+To check the status of your Slurm job, use:
+
+- either the **Job ID** directly
+
+  ```
+  squeue -j JOBID
+  ```
+
+- or filtering your job list to find the job by its name
+
+  ```
+  squeue --me -n fmri_workflow
+  ```
+
+If the job does not appear in the list, it means that it has completed.
+
+Use the `sacct` command to check if this has been successful or if it ran into issues:
+
+```
+sacct -j JOBID
+```
+
+If you need to cancel the workflow, use the `scancel` command as follows:
+
+```
+scancel -j JOBID
+```
+
+
+### Workflow monitoring
+
+To have a look at the output printed by snakemake, TODO
 
 
 ### Useful Snakemake options
@@ -155,12 +203,17 @@ We strongly advise you to **keep a copy of our data** elsewhere.
 
 ## TODO
 
+- document `nesi/snakemake.sl` changing `~/.condarc` (in particular channel priority)
+
 - how to unset `conda init` or avoid it to be an issue?
 
 - add a note about the user having to run HeudiConv separately to determine populate heuristic.py prior to any run on NeSI
 
 - add a note about interacting with containers for learning/changing settings
-# inspect image using singularity exec docker://bids/freesurfer recon-all --help
+
+```
+singularity exec docker://bids/freesurfer recon-all --help
+```
 
 - how to generate a minimal reproducible conda environment
 
