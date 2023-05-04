@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#SBATCH --job-name=fmri_workflow
 #SBATCH --account=uoo03699
 #SBATCH --time=02-00:00:00
 #SBATCH --ntasks=1
@@ -12,9 +13,8 @@
 set -euo pipefail
 
 # load environment modules
-# TODO update modules and check that everything still works
 module purge
-module load Miniconda3/4.12.0 Singularity/3.10.0 snakemake/7.19.1-gimkl-2022a-Python-3.10.5
+module load Miniconda3/22.11.1-1 Singularity/3.11.0 snakemake/7.19.1-gimkl-2022a-Python-3.10.5
 
 # ensure user's local Python packages are not overriding Python module packages
 export PYTHONNOUSERSITE=1
@@ -26,8 +26,7 @@ NOBACKUPDIR="/nesi/nobackup/$SLURM_JOB_ACCOUNT/$USER"
 conda config --add pkgs_dirs "$NOBACKUPDIR/conda_pkgs"
 
 # ensure conda channel priority is strict (otherwise environment may no be built)
-# TODO check is needed (with more recent miniconda), or can use flexible?
-# conda config --set channel_priority strict
+conda config --set channel_priority strict
 
 # deactivate any conda environment already activate (e.g. base environment)
 # TODO check if this can also solve "conda init" issues
