@@ -6,7 +6,7 @@
 #SBATCH --mem=1GB
 #SBATCH --output nesi/logs/%j-%x.out
 #SBATCH --error nesi/logs/%j-%x.out
-#SBATCH --dependency=snakemake_workflow
+#SBATCH --dependency=singleton
 
 # exit on errors, undefined variables and errors in pipes
 set -euo pipefail
