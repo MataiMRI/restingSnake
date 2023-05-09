@@ -25,7 +25,7 @@ def list_scans(root_folder, prefix):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
-localrules: all, fmriprep_cleanup, freesurfer_rename
+localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter
 
 rule all:
     input:
@@ -194,6 +194,15 @@ rule freesurfer_rename:
     shell:
         "mkdir -p {output} && ln -s {input} {output}/ses-{wildcards.subject}"
 
+rule fmriprep_filter:
+    input:
+        "bids_filter_template.json"
+    output:
+        # TODO make it temporary
+        "{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json"
+    shell:
+        "sed 's/SESSIONID/{wildcards.session}/' bids_filter_template.json > {output}"
+
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
 # TODO Experiment with --longitudinal in fMRIPREP
@@ -201,6 +210,7 @@ rule freesurfer_rename:
 rule fmriprep:
     input:
         bids="{resultsdir}/bids/sub-{subject}",
+        bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
         freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
     output:
         # TODO list all files generated
@@ -226,7 +236,8 @@ rule fmriprep:
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
         "-w {wildcards.resultsdir}/work "
-        "--fs-license-file {config[freesurfer][license_path]}"
+        "--fs-license-file {config[freesurfer][license_path]} "
+        "--bids-filter-file {input.bids_filter}"
 
 rule fmriprep_cleanup:
     input:
