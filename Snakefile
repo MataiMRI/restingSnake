@@ -30,15 +30,6 @@ SUBJECTS, SESSIONS = zip(*MAPPING)
 
 localrules: all, fmriprep_cleanup
 
-
-def list_freesurfer_sessions(wildcards):
-    inputs = []
-    for subject, session in zip(SUBJECTS, SESSIONS):
-        if subject != wildcards.subject:
-            continue
-        inputs.append(f"{wildcards.resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
-    return inputs
-
 rule all:
     input:
         expand(
@@ -98,8 +89,6 @@ rule heudiconv:
         "--bids "
         "--overwrite"
 
-
-# TODO remove fs license from repo
 rule freesurfer_cross_sectional:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
@@ -222,7 +211,6 @@ rule fmriprep:
     input:
         list_bids_sessions,
         list_long_sessions
-#        "{resultsdir}/bids/derivatives/freesurfer_agg/sub-{subject}"
     output:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"),
         "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
@@ -315,4 +303,3 @@ rule first_level:
         "-fc {config[resting_first_level][func_conn_thresh]} "
         "-v "
         "2> {log}"
-        
