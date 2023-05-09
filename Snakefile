@@ -25,7 +25,7 @@ def list_scans(root_folder, prefix):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
-localrules: all, fmriprep_cleanup
+localrules: all, fmriprep_cleanup, freesurfer_rename
 
 rule all:
     input:
@@ -179,26 +179,20 @@ rule freesurfer_longitudinal:
         "-3T "
         "-openmp {threads} " 
 
-def list_bids_sessions(wildcards):
-    inputs = []
-    for subject, session in zip(SUBJECTS, SESSIONS):
-        if subject != wildcards.subject:
-            continue
-        inputs.append(f"{wildcards.resultsdir}/bids/sub-{subject}/ses-{session}")
-    return inputs
+def freesurfer_rename_input(wildcards):
+    if config["use_longitudinal"]:
+        suffix = ".long.{subject}_template"
+    else:
+        suffix = ""
+    return "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}" + suffix
 
-def list_long_sessions(wildcards):
-    inputs = []
-    freesurferdir = f"{wildcards.resultsdir}/bids/derivatives/freesurfer"
-    for subject, session in zip(SUBJECTS, SESSIONS):
-        if subject != wildcards.subject:
-            continue
-        if config["use_longitudinal"]:
-            input_path = f"{freesurferdir}/sub-{subject}_ses-{session}.long.{subject}_template"
-        else:
-            input_path = f"{freesurferdir}/sub-{subject}_ses-{session}"
-        inputs.append(input_path)
-    return inputs
+rule freesurfer_rename:
+    input:
+        freesurfer_rename_input
+    output:
+        temp(directory("{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"))
+    shell:
+        "mkdir -p {output} && ln -s {input} {output}/ses-{wildcards.subject}"
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
@@ -206,11 +200,12 @@ def list_long_sessions(wildcards):
 
 rule fmriprep:
     input:
-        list_bids_sessions,
-        list_long_sessions
+        bids="{resultsdir}/bids/sub-{subject}",
+        freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"),
-        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
+        # TODO list all files generated
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}"),
+        #"{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
     container:
         "docker://nipreps/fmriprep:22.0.2"
     resources:
@@ -224,7 +219,7 @@ rule fmriprep:
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-subjects-dir {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "--fs-subjects-dir {input.freesurfer} "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "
         "--low-mem "
@@ -267,7 +262,7 @@ def atlas_labels(wildcards):
 
 rule first_level:
     input:
-        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}"
     output:
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png"
