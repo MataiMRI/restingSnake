@@ -47,22 +47,6 @@ snakemake --keep-going --keep-incomplete --until freesurfer
 ```
 
 
-## Protect input DICOM folder
-
-**TODO remove this section as now the data is copied?**
-
-Make sure to create a dummy file in your input DICOM folder, `datadir` in the configuration file [config.yml](config.yml):
-
-```
-mkdir DATADIR
-touch DATADIR/keep_this_folder
-```
-
-where `DATADIR` is your input DICOM folder.
-
-Without the dummy file `keep_this_folder`, snakemake will remove the folder once every input DICOM in it has been processed.
-
-
 ## Formats
 
 The workflow assumes that input scan data are:
