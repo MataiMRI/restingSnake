@@ -1,10 +1,7 @@
 import shutil
 from pathlib import Path
 
-### READ CONFIG ###
 configfile: 'config.yml'
-
-NETWORKS = config['atlas_info']['networks']
 
 def list_scans(root_folder, prefix):
     mapping = {}
