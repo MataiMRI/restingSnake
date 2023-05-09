@@ -192,7 +192,7 @@ rule freesurfer_rename:
     output:
         temp(directory("{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"))
     shell:
-        "mkdir -p {output} && ln -s {input} {output}/ses-{wildcards.subject}"
+        "mkdir -p {output} && ln -s {input} {output}/sub-{wildcards.subject}"
 
 rule fmriprep_filter:
     input:
