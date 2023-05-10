@@ -1,6 +1,6 @@
-cluster:
-    sbatch
-        --parsable
+cluster-sync:
+    mkdir -p logs &&
+    nesi/submit.py
         --partition milan
         --account {config[account]}
         --time {resources.time_min}
@@ -13,9 +13,6 @@ default-resources:
     - cpus=1
     - mem_mb=512
     - time_min=5
-cluster-status: "slurm-status.py"
-cluster-sidecar: "slurm-sidecar.py"
-cluster-cancel: "scancel"
 jobs: 1000
 max-jobs-per-second: 10
 max-status-checks-per-second: 10
