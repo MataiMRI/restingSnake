@@ -1,5 +1,4 @@
 cluster-sync:
-    mkdir -p logs &&
     nesi/submit.py
         --partition milan
         --account {config[account]}
