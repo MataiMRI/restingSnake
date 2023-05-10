@@ -92,7 +92,7 @@ rule freesurfer_cross_sectional:
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     container:
-        "docker://bids/freesurfer:v6.0.1-6.1"
+        "docker://nipreps/fmriprep:21.0.4"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
@@ -134,7 +134,7 @@ rule freesurfer_long_template:
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/{subject}_template")
     container:
-        "docker://bids/freesurfer:v6.0.1-6.1"
+        "docker://nipreps/fmriprep:21.0.4"
     params:
         license_path=config["freesurfer"]["license_path"],
         timepoints=sessions_for_template
@@ -160,7 +160,7 @@ rule freesurfer_longitudinal:
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.{subject}_template")
     container:
-        "docker://bids/freesurfer:v6.0.1-6.1"
+        "docker://nipreps/fmriprep:21.0.4"
     params:
         license_path=config["freesurfer"]["license_path"],
     resources:
@@ -217,7 +217,7 @@ rule fmriprep:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}"),
         #"{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
     container:
-        "docker://nipreps/fmriprep:22.0.2"
+        "docker://nipreps/fmriprep:21.0.4"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
