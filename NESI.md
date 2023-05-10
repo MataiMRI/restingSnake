@@ -111,8 +111,10 @@ sacct -j JOBID
 If you need to cancel the workflow, use the `scancel` command as follows:
 
 ```
-scancel -j JOBID
+scancel --signal INT --full -j JOBID
 ```
+
+*Note: The options `--signal INT` and `--full` are very important to ensure all jobs related to this workflow are properly cancelled, not only the main Snakemake job.*
 
 
 ## Workflow monitoring
