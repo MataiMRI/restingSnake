@@ -198,8 +198,7 @@ rule fmriprep_filter:
     input:
         "bids_filter_template.json"
     output:
-        # TODO make it temporary
-        "{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json"
+        temp("{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json")
     shell:
         "sed 's/SESSIONID/{wildcards.session}/' bids_filter_template.json > {output}"
 
