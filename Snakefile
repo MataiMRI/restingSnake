@@ -25,7 +25,7 @@ def list_scans(root_folder, prefix):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
-localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter
+localrules: all, freesurfer_rename, fmriprep_filter, fmriprep_workdir
 
 rule all:
     input:
@@ -202,6 +202,12 @@ rule fmriprep_filter:
     template_engine:
         "jinja2"
 
+rule fmriprep_workdir:
+    output:
+        temp(directory("{config[resultsdir]}/work"))
+    shell:
+        "mkdir -p {output}"
+
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
 # TODO Experiment with --longitudinal in fMRIPREP
@@ -231,6 +237,7 @@ def previous_session(wildcards):
 rule fmriprep:
     input:
         unpack(previous_session),
+        workdir="{config[resultsdir]}/work",
         bids="{resultsdir}/bids/sub-{subject}",
         bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
         freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
@@ -257,21 +264,9 @@ rule fmriprep:
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {wildcards.resultsdir}/work "
+        "-w {input.workdir} "
         "--fs-license-file {config[freesurfer][license_path]} "
         "--bids-filter-file {input.bids_filter}"
-
-rule fmriprep_cleanup:
-    input:
-        expand(
-            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
-            resultsdir=config["resultsdir"],
-            subject=SUBJECTS,
-        )
-    output:
-        touch(expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]))
-    shell:
-        "rm -rf {config[resultsdir]}/work"
 
 #Query with Mangor:
 ### handling multiple runs within a session???
