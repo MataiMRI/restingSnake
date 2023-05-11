@@ -199,8 +199,8 @@ rule fmriprep_filter:
         "bids_filter_template.json"
     output:
         temp("{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json")
-    shell:
-        "sed 's/SESSIONID/{wildcards.session}/' bids_filter_template.json > {output}"
+    template_engine:
+        "jinja2"
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
