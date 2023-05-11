@@ -204,7 +204,7 @@ rule fmriprep_filter:
 
 rule fmriprep_workdir:
     output:
-        temp(directory("{config[resultsdir]}/work"))
+        temp(directory("{resultsdir}/work"))
     shell:
         "mkdir -p {output}"
 
@@ -237,7 +237,7 @@ def previous_session(wildcards):
 rule fmriprep:
     input:
         unpack(previous_session),
-        workdir="{config[resultsdir]}/work",
+        workdir="{resultsdir}/work",
         bids="{resultsdir}/bids/sub-{subject}",
         bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
         freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
