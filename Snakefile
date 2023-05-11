@@ -206,8 +206,31 @@ rule fmriprep_filter:
 # TODO add flexibility for both resting-state and task
 # TODO Experiment with --longitudinal in fMRIPREP
 
+def previous_session(wildcards):
+    """find the previous fmriprep session folder for a given session"""
+
+    last_session = None
+
+    for subject, session in zip(SUBJECTS, SESSIONS):
+        if subject != wildcards.subject:
+            continue
+        if session != wildcards.session:
+            last_session = session
+        else:
+            break
+
+    if last_session is None:
+        dependency = {}
+    else:
+        dependency = {
+            "previous": f"{{resultsdir}}/bids/derivatives/fmriprep/sub-{{subject}}/ses-{last_session}"
+        }
+
+    return dependency
+
 rule fmriprep:
     input:
+        unpack(previous_session),
         bids="{resultsdir}/bids/sub-{subject}",
         bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
         freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
