@@ -107,7 +107,7 @@ rule freesurfer_cross_sectional:
         "-all "
         "-qcache "
         "-3T "
-        "-openmp {threads} "
+        "-openmp {threads}"
 
 def list_freesurfer_sessions(wildcards):
     inputs = []
@@ -151,7 +151,7 @@ rule freesurfer_long_template:
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-all "
         "-3T "
-        "-openmp {threads} "
+        "-openmp {threads}"
 
 rule freesurfer_longitudinal:
     input:
@@ -177,7 +177,7 @@ rule freesurfer_longitudinal:
         "-all "
         "-qcache "
         "-3T "
-        "-openmp {threads} " 
+        "-openmp {threads}" 
 
 def freesurfer_rename_input(wildcards):
     if config["use_longitudinal"]:
