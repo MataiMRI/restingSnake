@@ -1,52 +1,14 @@
 # FMRI workflow
 
 
-## Installation (NeSI)
+## Getting started
 
-First, make sure to be logged on Mahuika.
+*If you are using the [NeSI](https://www.nesi.org.nz) platform, please follow the [NeSI related documentation](NESI.md).*
 
-Then, in your project folder, clone this repository:
-
-```
-git clone https://github.com/jpmcgeown/fmri_workflow.git
-```
+TODO explain local machine deployment
 
 
-## Usage (NeSI)
-
-
-Make sure to be in the folder of the repository:
-
-```
-cd PROJECT_FOLDER/fmri_workflow
-```
-
-where `PROJECT_FOLDER` is your project folder.
-
-There, edit the `config.yml` file to set your input dataset and result folder paths.
-
-Load the necessary environment modules:
-
-```
-module purge
-module load Miniconda3/4.12.0 Singularity/3.10.0 snakemake/7.19.1-gimkl-2022a-Python-3.10.5
-export PYTHONNOUSERSITE=1
-```
-
-Then run the workflow using the `nesi` profile, first in dry-mode:
-
-```
-snakemake --profile nesi -n
-```
-
-Finally, run the workflow:
-
-```
-snakemake --profile nesi
-```
-
-
-### Useful Snakemake options
+## Useful Snakemake options
 
 View steps within workflow using rulegraph:
 ```
@@ -81,59 +43,8 @@ snakemake --until freesurfer
 All these options can be combined and used with a profile, for example:
 
 ```
-snakemake --profile nesi --keep-going --keep-incomplete --until freesurfer
+snakemake --keep-going --keep-incomplete --until freesurfer
 ```
-
-
-### Protect input DICOM folder
-
-Make sure to create a dummy file in your input DICOM folder, `datadir` in the configuration file [config.yml](config.yml):
-
-```
-mkdir DATADIR
-touch DATADIR/keep_this_folder
-```
-
-where `DATADIR` is your input DICOM folder.
-
-Without the dummy file `keep_this_folder`, snakemake will remove the folder once every input DICOM in it has been processed.
-
-
-### Accessing JupyterLab via SSH (NeSI)
-
-JupyterLab is a convenient way to explore the results of the workflow (e.g. fmriprep html reports).
-
-We recommend to use it via an SSH tunnel to thw Mahuika login node.
-If you are using a terminal, add the `-L` option to your ssh command, for example:
-
-```
-ssh mahuika -L PORT:localhost:PORT
-```
-
-where `PORT` is an arbitrary number between 1024 and 49151.
-
-Then, on the login node, load the JupyterLab module and start a JupyterLab session as follows:
-
-```
-cd RESULTS_FOLDER
-module purge && module load JupyterLab
-jupyter-lab --port PORT --no-browser
-```
-
-where
-
-- `RESULTS_FOLDER` is the folder (on NeSI) where the results you want to inspect are,
-- `PORT` is the same number that you choose for your SSH tunnel.
-
-JupyterLab will print on the command line a url looking like:
-
-```
-http://localhost:PORT/lab?token=XXXXXXXXXXXXXXXXX
-```
-
-Copy and paste it (including the long token string) in your web-browser of choice to access the JupyterLab interface.
-
-*Note: Closing your SSH session or pressing CTRL-C twice in the terminal of your SSH session will terminate the JupyterLab session.*
 
 
 ## Formats
@@ -155,48 +66,10 @@ We strongly advise you to **keep a copy of our data** elsewhere.
 
 ## TODO
 
-- add a note about singularity cache and build directories
-
-```
-export SINGULARITY_CACHEDIR=/nesi/nobackup/<project_code>/singularity_cachedir
-export SINGULARITY_TMPDIR=/nesi/nobackup/<project_code>/singularity_tmpdir
-setfacl -b "$SINGULARITY_TMPDIR"  # avoid Singularity issues due to ACLs set on this folder
-```
-
-- add a note about conda package cache
-
-```
-conda config --add pkgs_dirs /nesi/nobackup/<project_code>/$USER/conda_pkgs
-```
-
-- add a note about conda channel priority setting
-
-```
-conda config --set channel_priority strict
-```
-
-- (idea) add a script to run once to do all the steps above
-  - set singularity cache/buildir
-  - add the variables in bashrc
-  - add export PYTHONNOUSERSITE=1 in bashrc
-  - unset conda init
-  - configure conda (no auto activate base, conda cache, channel order)
-  - use `/nesi/nobackup/<project_code>/$USER` for cache/build folders
-
-- integrate snakemake singularity cache in the configuration? same for conda environment?
-
 - add a note about the user having to run HeudiConv separately to determine populate heuristic.py prior to any run on NeSI
 
 - add a note about interacting with containers for learning/changing settings
-# inspect image using singularity exec docker://bids/freesurfer recon-all --help
-
-- how to generate a minimal reproducible conda environment
 
 ```
-module purge
-module load Miniconda3/4.12.0
-export PYTHONNOUSERSITE=1
-conda env create -f envs/mri_base.yaml -p ./mri_env
-conda env export -p ./mri_env --no-builds | grep -v '^prefix:' > envs/mri.yaml
-conda env remove -p ./mri_env
+singularity exec docker://bids/freesurfer recon-all --help
 ```

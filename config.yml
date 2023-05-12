@@ -1,6 +1,3 @@
-## NeSI project account
-account: uoa03264
-
 use_longitudinal: True
 
 ## Data import
@@ -20,7 +17,7 @@ rep_time: 1.5
 freesurfer:
   license_path: ./license.txt
   mem_mb: 4000
-  time_min: 540
+  time_min: 660
   threads: 8
 
 fmriprep:
@@ -56,5 +53,3 @@ atlas_info:
 resting_first_level:
     fdr_alpha: 0.01 ## False detection rate alpha
     func_conn_thresh: 0.25 ## Functional connectivity threshold
-
-
