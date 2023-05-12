@@ -300,9 +300,10 @@ rule first_level:
         a_img=atlas_image,
         a_lab=atlas_labels
     resources:
-        mem_mb=6000,
-        cpus=2,
-        time_min=10
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["first_level"]["mem_mb"],
+        time_min=config["first_level"]["time_min"]
+    threads: config["first_level"]["threads"]
     log:
         "{resultsdir}/first_level_results/sub-{subject}_ses-{session}_{network}.log"
     shell:

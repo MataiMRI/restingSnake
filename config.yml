@@ -25,6 +25,11 @@ fmriprep:
   time_min: 180
   threads: 8
 
+first_level:
+  mem_mb: 12000
+  time_min: 10
+  threads: 2
+
 ## Confounding (nuisance) variables to be regressed out of signal to improve SNR
 confounds:
     - csf
