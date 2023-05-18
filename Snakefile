@@ -237,8 +237,8 @@ def previous_session(wildcards):
 rule fmriprep:
     input:
         unpack(previous_session),
-        workdir="{resultsdir}/work",
-        bids="{resultsdir}/bids/sub-{subject}",
+        workdir=ancient("{resultsdir}/work"),
+        bids="{resultsdir}/bids/sub-{subject}/ses-{session}",
         bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
         freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
     output:
