@@ -40,7 +40,7 @@ rule all:
             network=config["atlas_info"]["networks"],
             figname=["unthresholded_fc.nii.gz", "figure.png"],
         ),
-        rules.fmriprep_cleanup.output
+        expand("{resultsdir}/.work_completed", resultsdir=config["resultsdir"])
 
 ruleorder: freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional
 
@@ -258,21 +258,22 @@ rule fmriprep:
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {config[resultsdir]}/work "
+        "-w {wildcards.resultsdir}/work "
         "--fs-license-file {config[freesurfer][license_path]} "
         "--bids-filter-file {input.bids_filter}"
 
 rule fmriprep_cleanup:
     input:
         expand(
-            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
-            resultsdir=config["resultsdir"],
+            "{{resultsdir}}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
+            zip,
             subject=SUBJECTS,
-        )
+            session=SESSIONS
+        ),
     output:
-        touch(expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]))
+        touch("{resultsdir}/.work_completed")
     shell:
-        "rm -rf {config[resultsdir]}/work"
+        "rm -rf {wildcards.resultsdir}/work"
 
 #Query with Mangor:
 ### handling multiple runs within a session???
