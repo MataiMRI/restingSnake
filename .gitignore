@@ -3,6 +3,7 @@
 __pycache__
 .snakemake
 .ipynb_checkpoints
+logs
 nesi/logs
 LICENSE
 license.txt
