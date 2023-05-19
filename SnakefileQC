@@ -1,4 +1,5 @@
 import shutil
+import pandas as pd
 from pathlib import Path
 
 configfile: 'config.yml'
@@ -26,6 +27,15 @@ MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
 rule all:
+        input:
+            expand(
+                expand(
+                    "{{resultsdir}}/bids/derivatives/mriqc/sub-{subject}",
+                    subject=SUBJECTS,
+                ),
+                resultsdir=config["resultsdir"]
+            )
+            
 
 rule unzip:
     input:
@@ -69,3 +79,51 @@ rule heudiconv:
         "--converter dcm2niix "
         "--bids "
         "--overwrite"
+        
+def list_bids_sessions(wildcards):
+    inputs = []
+    for subject, session in zip(SUBJECTS, SESSIONS):
+        if subject != wildcards.subject:
+            continue
+        inputs.append(f"{wildcards.resultsdir}/bids/sub-{subject}/ses-{session}")
+    return inputs
+
+rule mriqc:
+    input:
+        list_bids_sessions
+    output:
+        directory("{resultsdir}/bids/derivatives/mriqc/sub-{subject}")
+    container:
+        "docker://nipreps/mriqc:23.0.1"
+    resources:
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["mriqc"]["mem_gb"]*1000,
+        time_min=config["mriqc"]["time_min"]
+    threads: config["mriqc"]["threads"]
+    shell:
+        "mriqc {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/mriqc "
+        "participant "
+        "--participant-label {wildcards.subject} "
+        "--mem-gb {resources.mem_mb} "
+        "--nprocs {threads} "
+        "--no-sub "
+        "-w {wildcards.resultsdir}/work "
+        
+def gen_qc_file(wildcards):
+    qc_file = "./qc_file.csv"
+    if not qc_file.is_file():
+        d = {"subject": SUBJECTS, "session": SESSIONS}
+        qc_df = pd.DataFrame(data=d)
+        qc_df.to_csv(qc_file)
+        
+    elif qc_file.is_file():
+        qc_df = pd.read_csv(qc_file)
+        for subject, session in zip(SUBJECTS, SESSIONS):
+            if subject != wildcards.subject:
+                continue
+            qc_df = qc_df.append({'subject': subject, 'session': session})
+        qc_df.to_csv(qc_file)
+    return qc_file
+        
+        
+        
