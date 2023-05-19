@@ -25,7 +25,7 @@ def list_scans(root_folder, prefix):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
-localrules: all, fmriprep_cleanup
+localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter
 
 rule all:
     input:
@@ -39,7 +39,8 @@ rule all:
             resultsdir=config["resultsdir"],
             network=config["atlas_info"]["networks"],
             figname=["unthresholded_fc.nii.gz", "figure.png"],
-        )
+        ),
+        expand("{resultsdir}/.work_completed", resultsdir=config["resultsdir"])
 
 ruleorder: freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional
 
@@ -92,7 +93,7 @@ rule freesurfer_cross_sectional:
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     container:
-        "docker://bids/freesurfer:v6.0.1-6.1"
+        "docker://nipreps/fmriprep:21.0.4"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
@@ -107,7 +108,7 @@ rule freesurfer_cross_sectional:
         "-all "
         "-qcache "
         "-3T "
-        "-openmp {threads} "
+        "-openmp {threads}"
 
 def list_freesurfer_sessions(wildcards):
     inputs = []
@@ -134,7 +135,7 @@ rule freesurfer_long_template:
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/{subject}_template")
     container:
-        "docker://bids/freesurfer:v6.0.1-6.1"
+        "docker://nipreps/fmriprep:21.0.4"
     params:
         license_path=config["freesurfer"]["license_path"],
         timepoints=sessions_for_template
@@ -151,7 +152,7 @@ rule freesurfer_long_template:
         "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
         "-all "
         "-3T "
-        "-openmp {threads} "
+        "-openmp {threads}"
 
 rule freesurfer_longitudinal:
     input:
@@ -160,7 +161,7 @@ rule freesurfer_longitudinal:
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.{subject}_template")
     container:
-        "docker://bids/freesurfer:v6.0.1-6.1"
+        "docker://nipreps/fmriprep:21.0.4"
     params:
         license_path=config["freesurfer"]["license_path"],
     resources:
@@ -177,42 +178,69 @@ rule freesurfer_longitudinal:
         "-all "
         "-qcache "
         "-3T "
-        "-openmp {threads} " 
+        "-openmp {threads}" 
 
-def list_bids_sessions(wildcards):
-    inputs = []
-    for subject, session in zip(SUBJECTS, SESSIONS):
-        if subject != wildcards.subject:
-            continue
-        inputs.append(f"{wildcards.resultsdir}/bids/sub-{subject}/ses-{session}")
-    return inputs
+def freesurfer_rename_input(wildcards):
+    if config["use_longitudinal"]:
+        suffix = ".long.{subject}_template"
+    else:
+        suffix = ""
+    return "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}" + suffix
 
-def list_long_sessions(wildcards):
-    inputs = []
-    freesurferdir = f"{wildcards.resultsdir}/bids/derivatives/freesurfer"
-    for subject, session in zip(SUBJECTS, SESSIONS):
-        if subject != wildcards.subject:
-            continue
-        if config["use_longitudinal"]:
-            input_path = f"{freesurferdir}/sub-{subject}_ses-{session}.long.{subject}_template"
-        else:
-            input_path = f"{freesurferdir}/sub-{subject}_ses-{session}"
-        inputs.append(input_path)
-    return inputs
+rule freesurfer_rename:
+    input:
+        freesurfer_rename_input
+    output:
+        temp(directory("{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"))
+    shell:
+        "mkdir -p {output} && ln -s {input} {output}/sub-{wildcards.subject}"
+
+rule fmriprep_filter:
+    input:
+        "bids_filter_template.json"
+    output:
+        temp("{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json")
+    template_engine:
+        "jinja2"
 
 # TODO make sure fmriprep has functionality to handle multiple runs within the same session
 # TODO add flexibility for both resting-state and task
 # TODO Experiment with --longitudinal in fMRIPREP
 
+def previous_session(wildcards):
+    """find the previous fmriprep session folder for a given session"""
+
+    last_session = None
+
+    for subject, session in zip(SUBJECTS, SESSIONS):
+        if subject != wildcards.subject:
+            continue
+        if session != wildcards.session:
+            last_session = session
+        else:
+            break
+
+    if last_session is None:
+        dependency = {}
+    else:
+        dependency = {
+            "previous": f"{{resultsdir}}/bids/derivatives/fmriprep/sub-{{subject}}/ses-{last_session}"
+        }
+
+    return dependency
+
 rule fmriprep:
     input:
-        list_bids_sessions,
-        list_long_sessions
+        unpack(previous_session),
+        bids="{resultsdir}/bids/sub-{subject}/ses-{session}",
+        bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
+        freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"),
-        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
+        # TODO list all files generated
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}"),
+        #"{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
     container:
-        "docker://nipreps/fmriprep:22.0.2"
+        "docker://nipreps/fmriprep:21.0.4"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
@@ -224,26 +252,28 @@ rule fmriprep:
         "--participant-label {wildcards.subject} "
         "--skip-bids-validation "
         "--md-only-boilerplate "
-        "--fs-subjects-dir {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "--fs-subjects-dir {input.freesurfer} "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
         "-w {wildcards.resultsdir}/work "
-        "--fs-license-file {config[freesurfer][license_path]}"
+        "--fs-license-file {config[freesurfer][license_path]} "
+        "--bids-filter-file {input.bids_filter}"
 
 rule fmriprep_cleanup:
     input:
         expand(
-            "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}",
-            resultsdir=config["resultsdir"],
+            "{{resultsdir}}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
+            zip,
             subject=SUBJECTS,
-        )
+            session=SESSIONS
+        ),
     output:
-        touch(expand("{resultsdir}/.work.completed", resultsdir=config["resultsdir"]))
+        touch("{resultsdir}/.work_completed")
     shell:
-        "rm -rf {config[resultsdir]}/work"
+        "rm -rf {wildcards.resultsdir}/work"
 
 #Query with Mangor:
 ### handling multiple runs within a session???
@@ -267,7 +297,7 @@ def atlas_labels(wildcards):
 
 rule first_level:
     input:
-        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}"
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}"
     output:
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png"
@@ -277,16 +307,17 @@ rule first_level:
         a_img=atlas_image,
         a_lab=atlas_labels
     resources:
-        mem_mb=6000,
-        cpus=2,
-        time_min=10
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["first_level"]["mem_mb"],
+        time_min=config["first_level"]["time_min"]
+    threads: config["first_level"]["threads"]
     log:
         "{resultsdir}/first_level_results/sub-{subject}_ses-{session}_{network}.log"
     shell:
         "python ./scripts/first_level.py "
-        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
-        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
-        "{input}/ses-{wildcards.session}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_desc-confounds_timeseries.tsv "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_desc-confounds_timeseries.tsv "
         "{output} "
         "{params.a_img} "
         "{params.a_lab} "
