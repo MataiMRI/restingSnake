@@ -1,0 +1,18 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Fri Dec  9 16:19:17 2022]
+rule unzip:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test_josh/Conc_20Ntb14_Control_17_A.zip
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test_josh/Conc_20Ntb14_Control_17_A
+    jobid: 0
+    wildcards: folder=/nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test_josh/Conc_20Ntb14_Control_17_A
+    resources: mem_mb=512, disk_mb=1000, tmpdir=/dev/shm/jobs/31831201, cpus=1, time_min=5, gpu=0
+
+unzip -q -d /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test_josh/Conc_20Ntb14_Control_17_A /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test_josh/Conc_20Ntb14_Control_17_A.zip && rm /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test_josh/Conc_20Ntb14_Control_17_A.zip
+[Fri Dec  9 16:19:35 2022]
+Finished job 0.
+1 of 1 steps (100%) done

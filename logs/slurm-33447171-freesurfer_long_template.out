@@ -1,0 +1,19 @@
+The flag 'directory' used in rule freesurfer_longitudinal is only valid for outputs, not inputs.
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Tue Mar 14 20:17:02 2023]
+rule freesurfer_long_template:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long2/bids/derivatives/freesurfer/sub-rugby1_ses-b, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long2/bids/derivatives/freesurfer/sub-rugby1_ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long2/bids/derivatives/freesurfer/rugby1_template
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long2, subject=rugby1
+    threads: 8
+    resources: mem_mb=4000, disk_mb=1000, tmpdir=/dev/shm/jobs/33447171, cpus=8, time_min=540, gpu=0
+
+export FS_LICENSE=$(realpath ./license.txt) && recon-all -base rugby1_template -tp sub-rugby1_ses-a -tp sub-rugby1_ses-b -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long2/bids/derivatives/freesurfer -all -3T -openmp 8 
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/c66156cbff3a6cc1d877931475183419.simg
+slurmstepd: error: *** JOB 33447171 ON wmc005 CANCELLED AT 2023-03-14T07:17:06 ***

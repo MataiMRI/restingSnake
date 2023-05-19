@@ -1,0 +1,104 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=4000, mem_mib=3815, disk_mb=1000, disk_mib=954, cpus=2, time_min=60, gpu=0
+Select jobs to execute...
+
+[Sun Apr  2 10:57:29 2023]
+rule heudiconv:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/tidy/sub_rugby1/ses_a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/.heudiconv/rugby1/ses-a
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/.heudiconv/rugby1/ses-a
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross, subject=rugby1, session=a
+    resources: mem_mb=4000, mem_mib=3815, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/33835274, cpus=2, time_min=60, gpu=0
+
+heudiconv --dicom_dir_template '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/tidy/sub_{subject}/ses_{session}/*/*' --outdir /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids --heuristic scripts/heuristic.py --subjects rugby1 --ses a --converter dcm2niix --bids --overwrite
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/10b2306ed15c5efc917232958423bfe6.simg
+INFO: Running heudiconv version 0.11.4.post18+g1fe815b.d20221025 latest 0.12.2
+INFO: Need to process 1 study sessions
+INFO: PROCESSING STARTS: {'subject': 'rugby1', 'outdir': '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/', 'session': 'a'}
+INFO: Processing 10599 dicoms
+INFO: Analyzing 10599 dicoms
+INFO: Generated sequence info for 2 studies with 10599 entries total
+INFO: Doing conversion using dcm2niix
+INFO: Converting /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/anat/sub-rugby1_ses-a_run-001_T1w (199 DICOMs) -> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/anat . Converter: dcm2niix . Output types: ('nii.gz',)
+230401-23:02:19,639 nipype.workflow INFO:
+	 [Node] Setting-up "convert" in "/tmp/dcm2niixh8vudjrh/convert".
+INFO: [Node] Setting-up "convert" in "/tmp/dcm2niixh8vudjrh/convert".
+230401-23:02:19,818 nipype.workflow INFO:
+	 [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+INFO: [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+230401-23:02:21,221 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:21.221044:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+INFO: stdout 2023-04-01T23:02:21.221044:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+230401-23:02:21,221 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:21.221044:Found 199 DICOM file(s)
+INFO: stdout 2023-04-01T23:02:21.221044:Found 199 DICOM file(s)
+230401-23:02:21,221 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:21.221044:DICOM images may be missing, expected 300 spatial locations per volume, but found 199 slices.
+INFO: stdout 2023-04-01T23:02:21.221044:DICOM images may be missing, expected 300 spatial locations per volume, but found 199 slices.
+230401-23:02:21,221 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:21.221044:Convert 199 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/anat/sub-rugby1_ses-a_run-001_T1w_heudiconv971 (512x512x199x1)
+INFO: stdout 2023-04-01T23:02:21.221044:Convert 199 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/anat/sub-rugby1_ses-a_run-001_T1w_heudiconv971 (512x512x199x1)
+230401-23:02:25,325 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:25.325711:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/anat/sub-rugby1_ses-a_run-001_T1w_heudiconv971.nii"
+INFO: stdout 2023-04-01T23:02:25.325711:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/anat/sub-rugby1_ses-a_run-001_T1w_heudiconv971.nii"
+230401-23:02:25,327 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:25.325711:Conversion required 5.267967 seconds (0.437426 for core code).
+INFO: stdout 2023-04-01T23:02:25.325711:Conversion required 5.267967 seconds (0.437426 for core code).
+230401-23:02:25,362 nipype.workflow INFO:
+	 [Node] Finished "convert", elapsed time 5.318335s.
+INFO: [Node] Finished "convert", elapsed time 5.318335s.
+WARNING: Failed to find task field in /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/anat/sub-rugby1_ses-a_run-001_T1w.json.
+230401-23:02:25,390 nipype.workflow INFO:
+	 [Node] Setting-up "embedder" in "/tmp/embedmetapnu6o1p6/embedder".
+INFO: [Node] Setting-up "embedder" in "/tmp/embedmetapnu6o1p6/embedder".
+230401-23:02:25,436 nipype.workflow INFO:
+	 [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+INFO: [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+230401-23:02:29,9 nipype.workflow INFO:
+	 [Node] Finished "embedder", elapsed time 3.5730079999999997s.
+INFO: [Node] Finished "embedder", elapsed time 3.5730079999999997s.
+INFO: Post-treating /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/anat/sub-rugby1_ses-a_run-001_T1w.json file
+INFO: Converting /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_bold (10400 DICOMs) -> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/func . Converter: dcm2niix . Output types: ('nii.gz',)
+230401-23:02:31,194 nipype.workflow INFO:
+	 [Node] Setting-up "convert" in "/tmp/dcm2niix0_3mk9jn/convert".
+INFO: [Node] Setting-up "convert" in "/tmp/dcm2niix0_3mk9jn/convert".
+230401-23:02:39,733 nipype.workflow INFO:
+	 [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+INFO: [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+230401-23:02:51,647 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:51.647299:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+INFO: stdout 2023-04-01T23:02:51.647299:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+230401-23:02:51,647 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:51.647299:Found 10400 DICOM file(s)
+INFO: stdout 2023-04-01T23:02:51.647299:Found 10400 DICOM file(s)
+230401-23:02:51,647 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:51.647299:Convert 10400 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_bold_heudiconv990 (64x64x52x200)
+INFO: stdout 2023-04-01T23:02:51.647299:Convert 10400 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_bold_heudiconv990 (64x64x52x200)
+230401-23:02:55,896 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:55.895953:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_bold_heudiconv990.nii"
+INFO: stdout 2023-04-01T23:02:55.895953:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_bold_heudiconv990.nii"
+230401-23:02:55,896 nipype.interface INFO:
+	 stdout 2023-04-01T23:02:55.895953:Conversion required 16.124873 seconds (5.468197 for core code).
+INFO: stdout 2023-04-01T23:02:55.895953:Conversion required 16.124873 seconds (5.468197 for core code).
+230401-23:02:55,958 nipype.workflow INFO:
+	 [Node] Finished "convert", elapsed time 16.22319s.
+INFO: [Node] Finished "convert", elapsed time 16.22319s.
+230401-23:02:56,582 nipype.workflow INFO:
+	 [Node] Setting-up "embedder" in "/tmp/embedmetasm0umqfl/embedder".
+INFO: [Node] Setting-up "embedder" in "/tmp/embedmetasm0umqfl/embedder".
+230401-23:02:58,838 nipype.workflow INFO:
+	 [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+INFO: [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+230401-23:06:44,773 nipype.workflow INFO:
+	 [Node] Finished "embedder", elapsed time 225.934196s.
+INFO: [Node] Finished "embedder", elapsed time 225.934196s.
+INFO: Post-treating /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_bold.json file
+INFO: Populating template files under /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/
+INFO: PROCESSING DONE: {'subject': 'rugby1', 'outdir': '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/', 'session': 'a'}
+[Sun Apr  2 11:06:47 2023]
+Finished job 0.
+1 of 1 steps (100%) done

@@ -1,0 +1,132 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=25000, mem_mib=23842, disk_mb=1000, disk_mib=954, cpus=8, time_min=180, gpu=0
+Select jobs to execute...
+
+[Wed Mar 29 12:32:45 2023]
+rule fmriprep:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-rugby1/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-rugby1/ses-b, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer/sub-rugby1_ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer/sub-rugby1_ses-b, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/sub-rugby1
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1.html
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1.html
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long, subject=rugby1
+    threads: 8
+    resources: mem_mb=25000, mem_mib=23842, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/33757146, cpus=8, time_min=180, gpu=0
+
+fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep participant --participant-label rugby1 --skip-bids-validation --md-only-boilerplate --fs-subjects-dir /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg --output-spaces MNI152NLin2009cAsym:res-2 --stop-on-first-crash --low-mem --mem-mb 25000 --nprocs 8 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/work --fs-license-file ./license.txt
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/8ba2e11db7a36df6ed76807c131c9dc5.simg
+You are using fMRIPrep-22.0.2, and a newer version of fMRIPrep is available: 23.0.1.
+Please check out our documentation about how and when to upgrade:
+https://fmriprep.readthedocs.io/en/latest/faq.html#upgrading
+230328-23:33:12,460 nipype.workflow IMPORTANT:
+	 Running fMRIPrep version 22.0.2
+
+         License NOTICE ##################################################
+         fMRIPrep 22.0.2
+         Copyright 2022 The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software redistributes the versioneer Python package, which is
+         Public domain source code.
+         
+         This software is also distributed as a Docker container image.
+         The bootstraping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+230328-23:33:12,519 nipype.workflow IMPORTANT:
+	 Building fMRIPrep's workflow:
+           * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids.
+           * Participant list: ['rugby1'].
+           * Run identifier: 20230328-233253_88715cfd-8103-4354-90bb-5544a097ec4e.
+           * Output spaces: MNI152NLin2009cAsym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg.
+230328-23:33:15,303 nipype.workflow INFO:
+	 No single-band-reference found for sub-rugby1_ses-a_task-rest_run-001_bold.nii.gz.
+230328-23:33:15,445 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.721s.
+230328-23:33:15,846 nipype.workflow INFO:
+	 No single-band-reference found for sub-rugby1_ses-b_task-rest_run-001_bold.nii.gz.
+230328-23:33:20,44 nipype.workflow INFO:
+	 fMRIPrep workflow graph with 585 nodes built successfully.
+230328-23:33:36,428 nipype.workflow IMPORTANT:
+	 fMRIPrep started!
+230328-23:33:40,743 nipype.workflow WARNING:
+	 Storing result file without outputs
+230328-23:33:40,745 nipype.workflow WARNING:
+	 [Node] Error on "fmriprep_22_0_wf.fsdir_run_20230328_233253_88715cfd_8103_4354_90bb_5544a097ec4e" (/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/work/fmriprep_22_0_wf/fsdir_run_20230328_233253_88715cfd_8103_4354_90bb_5544a097ec4e)
+230328-23:33:40,749 nipype.workflow ERROR:
+	 Node fsdir_run_20230328_233253_88715cfd_8103_4354_90bb_5544a097ec4e failed to run on host wmc005.
+230328-23:33:40,754 nipype.workflow ERROR:
+	 Saving crash info to /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/logs/crash-20230328-233340-jmcg465-fsdir_run_20230328_233253_88715cfd_8103_4354_90bb_5544a097ec4e-785fd151-cf1f-4114-83a7-4501647af69c.txt
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/plugins/multiproc.py", line 344, in _send_procs_to_workers
+    self.procs[jobid].run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 527, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 645, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 771, in _run_command
+    raise NodeExecutionError(msg)
+nipype.pipeline.engine.nodes.NodeExecutionError: Exception raised while executing Node fsdir_run_20230328_233253_88715cfd_8103_4354_90bb_5544a097ec4e.
+
+Traceback:
+	Traceback (most recent call last):
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 398, in run
+	    runtime = self._run_interface(runtime)
+	  File "/opt/conda/lib/python3.9/site-packages/niworkflows/interfaces/bids.py", line 935, in _run_interface
+	    shutil.copytree(source, dest, copy_function=shutil.copy)
+	  File "/opt/conda/lib/python3.9/shutil.py", line 566, in copytree
+	    return _copytree(entries=entries, src=src, dst=dst, symlinks=symlinks,
+	  File "/opt/conda/lib/python3.9/shutil.py", line 522, in _copytree
+	    raise Error(errors)
+	shutil.Error: [('/opt/freesurfer/subjects/fsaverage/mri', '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/fsaverage/mri', "[Errno 17] File exists: '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/fsaverage/mri'"), ('/opt/freesurfer/subjects/fsaverage/xhemi', '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/fsaverage/xhemi', "[Errno 17] File exists: '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/fsaverage/xhemi'")]
+
+
+230328-23:33:40,773 nipype.workflow CRITICAL:
+	 fMRIPrep failed: Traceback (most recent call last):
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/plugins/multiproc.py", line 344, in _send_procs_to_workers
+    self.procs[jobid].run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 527, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 645, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 771, in _run_command
+    raise NodeExecutionError(msg)
+nipype.pipeline.engine.nodes.NodeExecutionError: Exception raised while executing Node fsdir_run_20230328_233253_88715cfd_8103_4354_90bb_5544a097ec4e.
+
+Traceback:
+	Traceback (most recent call last):
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 398, in run
+	    runtime = self._run_interface(runtime)
+	  File "/opt/conda/lib/python3.9/site-packages/niworkflows/interfaces/bids.py", line 935, in _run_interface
+	    shutil.copytree(source, dest, copy_function=shutil.copy)
+	  File "/opt/conda/lib/python3.9/shutil.py", line 566, in copytree
+	    return _copytree(entries=entries, src=src, dst=dst, symlinks=symlinks,
+	  File "/opt/conda/lib/python3.9/shutil.py", line 522, in _copytree
+	    raise Error(errors)
+	shutil.Error: [('/opt/freesurfer/subjects/fsaverage/mri', '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/fsaverage/mri', "[Errno 17] File exists: '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/fsaverage/mri'"), ('/opt/freesurfer/subjects/fsaverage/xhemi', '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/fsaverage/xhemi', "[Errno 17] File exists: '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/fsaverage/xhemi'")]
+
+
+[Wed Mar 29 12:33:41 2023]
+Error in rule fmriprep:
+    jobid: 0
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-rugby1/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-rugby1/ses-b, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer/sub-rugby1_ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer/sub-rugby1_ses-b, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg/sub-rugby1
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1.html
+    shell:
+        fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep participant --participant-label rugby1 --skip-bids-validation --md-only-boilerplate --fs-subjects-dir /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/freesurfer_agg --output-spaces MNI152NLin2009cAsym:res-2 --stop-on-first-crash --low-mem --mem-mb 25000 --nprocs 8 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/work --fs-license-file ./license.txt
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job fmriprep since they might be corrupted:
+/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1.html
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

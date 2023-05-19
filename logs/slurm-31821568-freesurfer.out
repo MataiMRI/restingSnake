@@ -1,0 +1,28 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Fri Dec  9 12:39:16 2022]
+rule freesurfer:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-ctrl18/ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer/sub-ctrl18_ses-a
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test, subject=ctrl18, session=a
+    threads: 8
+    resources: mem_mb=10000, disk_mb=1000, tmpdir=/dev/shm/jobs/31821568, cpus=8, time_min=600, gpu=0
+
+export FS_LICENSE=$(realpath ./license.txt) && python run.py /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer participant --stages all --steps cross-sectional --participant-label ctrl18 --session_label a --multiple_sessions longitudinal --3T 
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/b862ddfcead2bab5771175db9e31b12f.simg
+python: can't open file 'run.py': [Errno 2] No such file or directory
+[Fri Dec  9 12:39:18 2022]
+Error in rule freesurfer:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer/sub-ctrl18_ses-a
+    shell:
+        export FS_LICENSE=$(realpath ./license.txt) && python run.py /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer participant --stages all --steps cross-sectional --participant-label ctrl18 --session_label a --multiple_sessions longitudinal --3T 
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

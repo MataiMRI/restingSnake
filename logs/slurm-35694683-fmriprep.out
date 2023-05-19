@@ -1,0 +1,76 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=25000, mem_mib=23842, disk_mb=1000, disk_mib=954, cpus=8, time_min=180, gpu=0
+Select jobs to execute...
+
+[Fri May 12 09:23:37 2023]
+rule fmriprep:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1
+    log: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1.html
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil, subject=gil1
+    threads: 8
+    resources: mem_mb=25000, mem_mib=23842, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/35694683, cpus=8, time_min=180, gpu=0
+
+fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep participant --participant-label gil1 --skip-bids-validation --md-only-boilerplate --fs-no-reconall --output-spaces MNI152NLin2009cAsym:res-2 --stop-on-first-crash --low-mem --mem-mb 25000 --nprocs 8 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work --fs-license-file ./license.txt
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/8ba2e11db7a36df6ed76807c131c9dc5.simg
+You are using fMRIPrep-22.0.2, and a newer version of fMRIPrep is available: 23.0.2.
+Please check out our documentation about how and when to upgrade:
+https://fmriprep.readthedocs.io/en/latest/faq.html#upgrading
+230511-21:24:09,438 nipype.workflow IMPORTANT:
+	 Running fMRIPrep version 22.0.2
+
+         License NOTICE ##################################################
+         fMRIPrep 22.0.2
+         Copyright 2022 The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software redistributes the versioneer Python package, which is
+         Public domain source code.
+         
+         This software is also distributed as a Docker container image.
+         The bootstraping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+230511-21:24:09,462 nipype.workflow IMPORTANT:
+	 Building fMRIPrep's workflow:
+           * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids.
+           * Participant list: ['gil1'].
+           * Run identifier: 20230511-212353_03f5b443-9c27-4705-a50b-835217960df7.
+           * Output spaces: MNI152NLin2009cAsym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer.
+230511-21:24:11,711 nipype.workflow INFO:
+	 No single-band-reference found for sub-gil1_ses-a_task-rest_run-001_bold.nii.gz.
+230511-21:24:11,822 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.721s.
+230511-21:24:14,808 nipype.workflow INFO:
+	 fMRIPrep workflow graph with 325 nodes built successfully.
+230511-21:24:28,188 nipype.workflow IMPORTANT:
+	 fMRIPrep started!
+230511-21:25:57,711 nipype.interface WARNING:
+	 Changing /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_desc-brain_mask.nii.gz dtype from int16 to uint8
+230511-21:26:57,936 nipype.interface WARNING:
+	 Changing /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz dtype from float64 to uint8
+230511-21:26:58,189 nipype.interface WARNING:
+	 Changing /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_space-MNI152NLin2009cAsym_res-2_dseg.nii.gz dtype from float64 to int16
+230511-21:30:05,841 nipype.interface WARNING:
+	 Changing /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz dtype from float64 to uint8
+230511-21:30:18,49 nipype.workflow IMPORTANT:
+	 fMRIPrep finished successfully!
+230511-21:30:18,54 nipype.workflow IMPORTANT:
+	 Works derived from this fMRIPrep execution should include the boilerplate text found in <OUTPUT_PATH>/logs/CITATION.md.
+[Fri May 12 09:30:19 2023]
+Finished job 0.
+1 of 1 steps (100%) done

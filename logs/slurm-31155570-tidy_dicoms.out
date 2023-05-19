@@ -1,0 +1,27 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Tue Nov  1 09:47:33 2022]
+rule tidy_dicoms:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test/Conc_20Ntb14_Control_17_B
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/tidy/sub_control17/ses_b/.completed
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test, subject=control17, session=b
+    resources: mem_mb=512, disk_mb=1000, tmpdir=/dev/shm/jobs/31155570, cpus=1, time_min=5, gpu=0
+
+[Tue Nov  1 09:47:33 2022]
+Error in rule tidy_dicoms:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/tidy/sub_control17/ses_b/.completed
+
+RuleException:
+PermissionError in line 71 of /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/Snakefile:
+[Errno 13] Permission denied: '/nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test/Conc_20Ntb14_Control_17_B/Unnamed - 830/Ax_fMRI_Resting_State_HB_6/IM-0002-3791.dcm'
+  File "/scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/Snakefile", line 71, in __rule_tidy_dicoms
+  File "/opt/nesi/CS400_centos7_bdw/Python/3.9.9-gimkl-2020a/lib/python3.9/shutil.py", line 836, in move
+  File "/opt/nesi/CS400_centos7_bdw/Python/3.9.9-gimkl-2020a/lib/python3.9/concurrent/futures/thread.py", line 58, in run
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

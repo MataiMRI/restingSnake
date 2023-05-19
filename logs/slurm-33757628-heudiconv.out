@@ -1,0 +1,153 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=4000, mem_mib=3815, disk_mb=1000, disk_mib=954, cpus=2, time_min=60, gpu=0
+Select jobs to execute...
+
+[Wed Mar 29 12:52:47 2023]
+rule heudiconv:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/tidy/sub_control17/ses_a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/.heudiconv/control17/ses-a
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/.heudiconv/control17/ses-a
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long, subject=control17, session=a
+    resources: mem_mb=4000, mem_mib=3815, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/33757628, cpus=2, time_min=60, gpu=0
+
+heudiconv --dicom_dir_template '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/tidy/sub_{subject}/ses_{session}/*/*' --outdir /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids --heuristic scripts/heuristic.py --subjects control17 --ses a --converter dcm2niix --bids --overwrite
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/10b2306ed15c5efc917232958423bfe6.simg
+INFO: Running heudiconv version 0.11.4.post18+g1fe815b.d20221025 latest 0.12.2
+INFO: Need to process 1 study sessions
+INFO: PROCESSING STARTS: {'subject': 'control17', 'outdir': '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/', 'session': 'a'}
+INFO: Processing 16504 dicoms
+INFO: Analyzing 16504 dicoms
+INFO: Generated sequence info for 5 studies with 16504 entries total
+INFO: Doing conversion using dcm2niix
+INFO: Converting /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/anat/sub-control17_ses-a_run-001_T1w (320 DICOMs) -> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/anat . Converter: dcm2niix . Output types: ('nii.gz',)
+230329-00:03:49,528 nipype.workflow INFO:
+	 [Node] Setting-up "convert" in "/tmp/dcm2niix9khuhhug/convert".
+INFO: [Node] Setting-up "convert" in "/tmp/dcm2niix9khuhhug/convert".
+230329-00:03:49,824 nipype.workflow INFO:
+	 [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+INFO: [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+230329-00:04:05,444 nipype.interface INFO:
+	 stdout 2023-03-29T00:04:05.444110:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+INFO: stdout 2023-03-29T00:04:05.444110:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+230329-00:04:05,445 nipype.interface INFO:
+	 stdout 2023-03-29T00:04:05.444110:Found 320 DICOM file(s)
+INFO: stdout 2023-03-29T00:04:05.444110:Found 320 DICOM file(s)
+230329-00:04:05,446 nipype.interface INFO:
+	 stdout 2023-03-29T00:04:05.444110:Image Decompression is new: please validate conversions
+INFO: stdout 2023-03-29T00:04:05.444110:Image Decompression is new: please validate conversions
+230329-00:04:05,446 nipype.interface INFO:
+	 stdout 2023-03-29T00:04:05.444110:Resolved discrepancy between tags (0020,1002; 0021,104F; 0054,0081)
+INFO: stdout 2023-03-29T00:04:05.444110:Resolved discrepancy between tags (0020,1002; 0021,104F; 0054,0081)
+230329-00:04:05,446 nipype.interface INFO:
+	 stdout 2023-03-29T00:04:05.444110:Convert 320 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/anat/sub-control17_ses-a_run-001_T1w_heudiconv536 (512x512x320x1)
+INFO: stdout 2023-03-29T00:04:05.444110:Convert 320 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/anat/sub-control17_ses-a_run-001_T1w_heudiconv536 (512x512x320x1)
+230329-00:04:11,871 nipype.interface INFO:
+	 stdout 2023-03-29T00:04:11.871384:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/anat/sub-control17_ses-a_run-001_T1w_heudiconv536.nii"
+INFO: stdout 2023-03-29T00:04:11.871384:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/anat/sub-control17_ses-a_run-001_T1w_heudiconv536.nii"
+230329-00:04:11,872 nipype.interface INFO:
+	 stdout 2023-03-29T00:04:11.871384:Conversion required 21.958473 seconds (10.393047 for core code).
+INFO: stdout 2023-03-29T00:04:11.871384:Conversion required 21.958473 seconds (10.393047 for core code).
+230329-00:04:11,899 nipype.workflow INFO:
+	 [Node] Finished "convert", elapsed time 21.999828s.
+INFO: [Node] Finished "convert", elapsed time 21.999828s.
+WARNING: Failed to find task field in /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/anat/sub-control17_ses-a_run-001_T1w.json.
+230329-00:04:11,934 nipype.workflow INFO:
+	 [Node] Setting-up "embedder" in "/tmp/embedmeta7yqtw_ud/embedder".
+INFO: [Node] Setting-up "embedder" in "/tmp/embedmeta7yqtw_ud/embedder".
+230329-00:04:12,12 nipype.workflow INFO:
+	 [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+INFO: [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+/opt/miniconda-py39_4.12.0/lib/python3.9/site-packages/pydicom/valuerep.py:290: UserWarning: The value length (32) exceeds the maximum length of 16 allowed for VR SH.
+  warnings.warn(msg)
+230329-00:04:27,219 nipype.workflow INFO:
+	 [Node] Finished "embedder", elapsed time 15.206276s.
+INFO: [Node] Finished "embedder", elapsed time 15.206276s.
+INFO: Post-treating /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/anat/sub-control17_ses-a_run-001_T1w.json file
+INFO: Converting /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-001_bold (10400 DICOMs) -> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func . Converter: dcm2niix . Output types: ('nii.gz',)
+230329-00:04:33,180 nipype.workflow INFO:
+	 [Node] Setting-up "convert" in "/tmp/dcm2niixeua6i3nz/convert".
+INFO: [Node] Setting-up "convert" in "/tmp/dcm2niixeua6i3nz/convert".
+230329-00:04:43,110 nipype.workflow INFO:
+	 [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+INFO: [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+230329-00:07:32,208 nipype.interface INFO:
+	 stdout 2023-03-29T00:07:32.208382:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+INFO: stdout 2023-03-29T00:07:32.208382:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+230329-00:07:32,209 nipype.interface INFO:
+	 stdout 2023-03-29T00:07:32.208382:Found 10400 DICOM file(s)
+INFO: stdout 2023-03-29T00:07:32.208382:Found 10400 DICOM file(s)
+230329-00:07:32,209 nipype.interface INFO:
+	 stdout 2023-03-29T00:07:32.208382:Image Decompression is new: please validate conversions
+INFO: stdout 2023-03-29T00:07:32.208382:Image Decompression is new: please validate conversions
+230329-00:07:32,209 nipype.interface INFO:
+	 stdout 2023-03-29T00:07:32.208382:Warning: Unable to determine slice times for early GE HyperBand.
+INFO: stdout 2023-03-29T00:07:32.208382:Warning: Unable to determine slice times for early GE HyperBand.
+230329-00:07:32,209 nipype.interface INFO:
+	 stdout 2023-03-29T00:07:32.208382:Convert 10400 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-001_bold_heudiconv978 (64x64x52x200)
+INFO: stdout 2023-03-29T00:07:32.208382:Convert 10400 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-001_bold_heudiconv978 (64x64x52x200)
+230329-00:07:37,627 nipype.interface INFO:
+	 stdout 2023-03-29T00:07:37.627448:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-001_bold_heudiconv978.nii"
+INFO: stdout 2023-03-29T00:07:37.627448:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-001_bold_heudiconv978.nii"
+230329-00:07:37,628 nipype.interface INFO:
+	 stdout 2023-03-29T00:07:37.627448:Conversion required 174.482284 seconds (15.947769 for core code).
+INFO: stdout 2023-03-29T00:07:37.627448:Conversion required 174.482284 seconds (15.947769 for core code).
+230329-00:07:37,715 nipype.workflow INFO:
+	 [Node] Finished "convert", elapsed time 174.603156s.
+INFO: [Node] Finished "convert", elapsed time 174.603156s.
+230329-00:07:38,486 nipype.workflow INFO:
+	 [Node] Setting-up "embedder" in "/tmp/embedmetajff5imiw/embedder".
+INFO: [Node] Setting-up "embedder" in "/tmp/embedmetajff5imiw/embedder".
+230329-00:07:41,490 nipype.workflow INFO:
+	 [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+INFO: [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+230329-00:11:49,390 nipype.workflow INFO:
+	 [Node] Finished "embedder", elapsed time 247.899463s.
+INFO: [Node] Finished "embedder", elapsed time 247.899463s.
+INFO: Post-treating /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-001_bold.json file
+INFO: Converting /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-002_bold (5460 DICOMs) -> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func . Converter: dcm2niix . Output types: ('nii.gz',)
+230329-00:11:51,521 nipype.workflow INFO:
+	 [Node] Setting-up "convert" in "/tmp/dcm2niixhtlob2ep/convert".
+INFO: [Node] Setting-up "convert" in "/tmp/dcm2niixhtlob2ep/convert".
+230329-00:11:56,701 nipype.workflow INFO:
+	 [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+INFO: [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+230329-00:13:24,983 nipype.interface INFO:
+	 stdout 2023-03-29T00:13:24.983807:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+INFO: stdout 2023-03-29T00:13:24.983807:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+230329-00:13:24,984 nipype.interface INFO:
+	 stdout 2023-03-29T00:13:24.983807:Found 5460 DICOM file(s)
+INFO: stdout 2023-03-29T00:13:24.983807:Found 5460 DICOM file(s)
+230329-00:13:24,984 nipype.interface INFO:
+	 stdout 2023-03-29T00:13:24.983807:Image Decompression is new: please validate conversions
+INFO: stdout 2023-03-29T00:13:24.983807:Image Decompression is new: please validate conversions
+230329-00:13:24,984 nipype.interface INFO:
+	 stdout 2023-03-29T00:13:24.983807:Convert 5460 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-002_bold_heudiconv194 (64x64x52x105)
+INFO: stdout 2023-03-29T00:13:24.983807:Convert 5460 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-002_bold_heudiconv194 (64x64x52x105)
+230329-00:13:27,429 nipype.interface INFO:
+	 stdout 2023-03-29T00:13:27.429205:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-002_bold_heudiconv194.nii"
+INFO: stdout 2023-03-29T00:13:27.429205:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-002_bold_heudiconv194.nii"
+230329-00:13:27,429 nipype.interface INFO:
+	 stdout 2023-03-29T00:13:27.429205:Conversion required 90.535823 seconds (8.332138 for core code).
+INFO: stdout 2023-03-29T00:13:27.429205:Conversion required 90.535823 seconds (8.332138 for core code).
+230329-00:13:29,6 nipype.workflow INFO:
+	 [Node] Finished "convert", elapsed time 92.303684s.
+INFO: [Node] Finished "convert", elapsed time 92.303684s.
+230329-00:13:29,394 nipype.workflow INFO:
+	 [Node] Setting-up "embedder" in "/tmp/embedmetaki_i7q6z/embedder".
+INFO: [Node] Setting-up "embedder" in "/tmp/embedmetaki_i7q6z/embedder".
+230329-00:13:30,856 nipype.workflow INFO:
+	 [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+INFO: [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+230329-00:15:40,860 nipype.workflow INFO:
+	 [Node] Finished "embedder", elapsed time 130.002684s.
+INFO: [Node] Finished "embedder", elapsed time 130.002684s.
+INFO: Post-treating /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/sub-control17/ses-a/func/sub-control17_ses-a_task-rest_run-002_bold.json file
+INFO: Populating template files under /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/
+INFO: PROCESSING DONE: {'subject': 'control17', 'outdir': '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/', 'session': 'a'}
+[Wed Mar 29 13:15:42 2023]
+Finished job 0.
+1 of 1 steps (100%) done

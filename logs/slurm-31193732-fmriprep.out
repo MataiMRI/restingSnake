@@ -1,0 +1,172 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Thu Nov  3 08:07:25 2022]
+rule fmriprep:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-control17/ses-b
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sub-control17/ses-b
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test, subject=control17, session=b
+    threads: 16
+    resources: mem_mb=25000, disk_mb=1000, tmpdir=/dev/shm/jobs/31193732, cpus=16, time_min=720, gpu=0
+
+fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives participant --participant-label control17 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --output-spaces MNI152NLin2009cAsym:res-2 --nthreads 16 --stop-on-first-crash --mem_mb 25000 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/acc9d3918a4ab8d0f562f9b72a87bc1b.simg
+/opt/conda/lib/python3.8/site-packages/bids/config.py:39: FutureWarning: Setting 'extension_initial_dot' will be removed in pybids 0.16.
+  warnings.warn("Setting 'extension_initial_dot' will be removed in pybids 0.16.",
+You are using fMRIPrep-21.0.0, and a newer version of fMRIPrep is available: 22.0.2.
+Please check out our documentation about how and when to upgrade:
+https://fmriprep.readthedocs.io/en/latest/faq.html#upgrading
+221102-19:07:47,850 nipype.workflow IMPORTANT:
+	 Running fMRIPrep version 21.0.0
+
+         License NOTICE ##################################################
+         fMRIPrep 21.0.0
+         Copyright 2021 The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software redistributes the versioneer Python package, which is
+         Public domain source code.
+         
+         This software is also distributed as a Docker container image.
+         The bootstraping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+221102-19:07:47,909 nipype.workflow IMPORTANT:
+	 Building fMRIPrep's workflow:
+           * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids.
+           * Participant list: ['control17'].
+           * Run identifier: 20221102-190735_7d17ecd6-7888-4616-bdce-9c7239c92738.
+           * Output spaces: MNI152NLin2009cAsym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sourcedata/freesurfer.
+221102-19:07:50,758 nipype.workflow INFO:
+	 No single-band-reference found for sub-control17_ses-b_task-rest_run-001_bold.nii.gz.
+221102-19:07:51,152 nipype.workflow INFO:
+	 No single-band-reference found for sub-control17_ses-b_task-rest_run-002_bold.nii.gz.
+221102-19:07:51,286 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.981s.
+221102-19:07:54,872 nipype.workflow INFO:
+	 fMRIPrep workflow graph with 581 nodes built successfully.
+221102-19:08:05,499 nipype.workflow IMPORTANT:
+	 fMRIPrep started!
+221102-19:08:14,253 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_control17_wf.anat_preproc_wf.fs_isrunning" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_control17_wf/anat_preproc_wf/fs_isrunning".
+221102-19:08:14,257 nipype.workflow INFO:
+	 [Node] Outdated cache found for "fmriprep_wf.single_subject_control17_wf.anat_preproc_wf.fs_isrunning".
+221102-19:08:14,279 nipype.workflow INFO:
+	 [Node] Running "fs_isrunning" ("nipype.interfaces.utility.wrappers.Function")
+221102-19:08:14,348 nipype.workflow WARNING:
+	 Storing result file without outputs
+221102-19:08:14,353 nipype.workflow WARNING:
+	 [Node] Error on "fmriprep_wf.single_subject_control17_wf.anat_preproc_wf.fs_isrunning" (/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_control17_wf/anat_preproc_wf/fs_isrunning)
+221102-19:08:14,379 nipype.workflow ERROR:
+	 Node fs_isrunning failed to run on host wbn123.
+221102-19:08:14,389 nipype.workflow ERROR:
+	 Saving crash info to /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sub-control17/log/20221102-190735_7d17ecd6-7888-4616-bdce-9c7239c92738/crash-20221102-190814-jmcg465-fs_isrunning-5f3611b1-8b78-4993-b9c7-c2df5bfe2570.txt
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/multiproc.py", line 67, in run_node
+    result["result"] = node.run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 516, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 635, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 741, in _run_command
+    result = self._interface.run(cwd=outdir)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/base/core.py", line 428, in run
+    runtime = self._run_interface(runtime)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/utility/wrappers.py", line 142, in _run_interface
+    out = function_handle(**args)
+  File "<string>", line 36, in fs_isRunning
+RuntimeError: The FreeSurfer's subject folder </nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sourcedata/freesurfer/sub-control17> contains IsRunning files that may pertain to a current or past execution: (PosixPath('/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sourcedata/freesurfer/sub-control17/scripts/IsRunning.lh+rh'),).
+FreeSurfer cannot run if these are present, to avoid interfering with a running process. Please, make sure no other process is running ``recon-all`` on this subject and proceed to delete the files listed above.
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/cli/run.py", line 114, in main
+    fmriprep_wf.run(**config.nipype.get_plugin())
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/workflows.py", line 638, in run
+    runner.run(execgraph, updatehash=updatehash, config=self.config)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/base.py", line 164, in run
+    self._clean_queue(jobid, graph, result=result)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/base.py", line 227, in _clean_queue
+    raise RuntimeError("".join(result["traceback"]))
+RuntimeError: Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/multiproc.py", line 67, in run_node
+    result["result"] = node.run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 516, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 635, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 741, in _run_command
+    result = self._interface.run(cwd=outdir)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/base/core.py", line 428, in run
+    runtime = self._run_interface(runtime)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/utility/wrappers.py", line 142, in _run_interface
+    out = function_handle(**args)
+  File "<string>", line 36, in fs_isRunning
+RuntimeError: The FreeSurfer's subject folder </nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sourcedata/freesurfer/sub-control17> contains IsRunning files that may pertain to a current or past execution: (PosixPath('/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sourcedata/freesurfer/sub-control17/scripts/IsRunning.lh+rh'),).
+FreeSurfer cannot run if these are present, to avoid interfering with a running process. Please, make sure no other process is running ``recon-all`` on this subject and proceed to delete the files listed above.
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/cli/run.py", line 128, in main
+    process_crashfile(crashfile)
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/utils/sentry.py", line 85, in process_crashfile
+    crash_info = read_crashfile(str(crashfile))
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/utils/misc.py", line 138, in read_crashfile
+    return _read_txt(path)
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/utils/misc.py", line 195, in _read_txt
+    cur_key, cur_val = tuple(line.split(" = ", 1))
+ValueError: not enough values to unpack (expected 2, got 1)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/bin/fmriprep", line 8, in <module>
+    sys.exit(main())
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/cli/run.py", line 175, in main
+    failed_reports = generate_reports(
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/reports/core.py", line 105, in generate_reports
+    report_errors = [
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/reports/core.py", line 106, in <listcomp>
+    run_reports(
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/reports/core.py", line 88, in run_reports
+    return Report(
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/reports/core.py", line 291, in __init__
+    self._load_config(Path(config or pkgrf("niworkflows", "reports/default.yml")))
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/reports/core.py", line 47, in _load_config
+    self.index(settings["sections"])
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/reports/core.py", line 378, in index
+    self.errors = [read_crashfile(str(f)) for f in error_dir.glob("crash*.*")]
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/reports/core.py", line 378, in <listcomp>
+    self.errors = [read_crashfile(str(f)) for f in error_dir.glob("crash*.*")]
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/utils/misc.py", line 138, in read_crashfile
+    return _read_txt(path)
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/utils/misc.py", line 195, in _read_txt
+    cur_key, cur_val = tuple(line.split(" = ", 1))
+ValueError: not enough values to unpack (expected 2, got 1)
+Sentry is attempting to send 1 pending error messages
+Waiting up to 2 seconds
+Press Ctrl-C to quit
+[Thu Nov  3 08:08:16 2022]
+Error in rule fmriprep:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sub-control17/ses-b
+    shell:
+        fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives participant --participant-label control17 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --output-spaces MNI152NLin2009cAsym:res-2 --nthreads 16 --stop-on-first-crash --mem_mb 25000 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

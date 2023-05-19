@@ -1,0 +1,41 @@
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however crucial for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, cpus=1, time_min=5, gpu=0
+Select jobs to execute...
+
+[Tue Mar 14 11:25:36 2023]
+rule first_level:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_unthresholded_fc.nii.gz, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_figure.png
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_unthresholded_fc.nii.gz, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_figure.png
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh, subject=rugby1, session=b, network=DMN
+    resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/33427519, cpus=1, time_min=5, gpu=0
+
+python ./scripts/first_level_prob_atlas_hcp1.py /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1/ses-b/func/sub-rugby1_ses-b_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1/ses-b/func/sub-rugby1_ses-b_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1/ses-b/func/sub-rugby1_ses-b_task-rest_run-001_desc-confounds_timeseries.tsv /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_unthresholded_fc.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_figure.png -a_img ./atlas/MSDL_rois/msdl_rois.nii -a_lab ./atlas/MSDL_rois/msdl_rois_labels.csv -tr 1.5 -rg csf white_matter trans_x trans_y trans_z rot_x rot_y rot_z framewise_displacement -ntwk DMN -hp 0.01 -lp 0.1 -fwhm 6 -fdr 0.01 -fc 0.25
+Activating conda environment: .snakemake/conda/77cd6f8bc7354c0aed9f21ce8b6acbbb_
+/scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/conda/77cd6f8bc7354c0aed9f21ce8b6acbbb_/lib/python3.9/site-packages/nilearn/datasets/__init__.py:93: FutureWarning: Fetchers from the nilearn.datasets module will be updated in version 0.9 to return python strings instead of bytes and Pandas dataframes instead of Numpy arrays.
+  warn("Fetchers from the nilearn.datasets module will be "
+/scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/conda/77cd6f8bc7354c0aed9f21ce8b6acbbb_/lib/python3.9/site-packages/nilearn/plotting/img_plotting.py:341: FutureWarning: Default resolution of the MNI template will change from 2mm to 1mm in version 0.10.0
+  anat_img = load_mni152_template()
+/scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/conda/77cd6f8bc7354c0aed9f21ce8b6acbbb_/lib/python3.9/site-packages/numpy/ma/core.py:2826: UserWarning: Warning: converting a masked element to nan.
+  _data = np.array(data, dtype=dtype, copy=copy,
+/scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/conda/77cd6f8bc7354c0aed9f21ce8b6acbbb_/lib/python3.9/site-packages/nilearn/image/image.py:1106: FutureWarning: The parameter "sessions" will be removed in 0.9.0 release of Nilearn. Please use the parameter "runs" instead.
+  data = signal.clean(
+/usr/bin/bash: line 1: 4045455 Killed                  python ./scripts/first_level_prob_atlas_hcp1.py /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1/ses-b/func/sub-rugby1_ses-b_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1/ses-b/func/sub-rugby1_ses-b_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1/ses-b/func/sub-rugby1_ses-b_task-rest_run-001_desc-confounds_timeseries.tsv /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_unthresholded_fc.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_figure.png -a_img ./atlas/MSDL_rois/msdl_rois.nii -a_lab ./atlas/MSDL_rois/msdl_rois_labels.csv -tr 1.5 -rg csf white_matter trans_x trans_y trans_z rot_x rot_y rot_z framewise_displacement -ntwk DMN -hp 0.01 -lp 0.1 -fwhm 6 -fdr 0.01 -fc 0.25
+[Tue Mar 14 11:26:17 2023]
+Error in rule first_level:
+    jobid: 0
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_unthresholded_fc.nii.gz, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_figure.png
+    conda-env: /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/conda/77cd6f8bc7354c0aed9f21ce8b6acbbb_
+    shell:
+        python ./scripts/first_level_prob_atlas_hcp1.py /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1/ses-b/func/sub-rugby1_ses-b_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1/ses-b/func/sub-rugby1_ses-b_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/fmriprep/sub-rugby1/ses-b/func/sub-rugby1_ses-b_task-rest_run-001_desc-confounds_timeseries.tsv /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_unthresholded_fc.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/first_level_results/sub-rugby1/ses-b/sub-rugby1_ses-b_DMN_figure.png -a_img ./atlas/MSDL_rois/msdl_rois.nii -a_lab ./atlas/MSDL_rois/msdl_rois_labels.csv -tr 1.5 -rg csf white_matter trans_x trans_y trans_z rot_x rot_y rot_z framewise_displacement -ntwk DMN -hp 0.01 -lp 0.1 -fwhm 6 -fdr 0.01 -fc 0.25
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=33427519.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.

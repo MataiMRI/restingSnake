@@ -1,0 +1,28 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Tue Nov  1 16:19:37 2022]
+rule fmriprep:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-ctrl18/ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sub-ctrl18/ses-a
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test, subject=ctrl18, session=a
+    threads: 8
+    resources: mem_mb=25000, disk_mb=1000, tmpdir=/dev/shm/jobs/31165098, cpus=8, time_min=300, gpu=0
+
+fmriprep-docker /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives participant --participant-label ctrl18 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --output-spaces MNI152NLin2009cAsym:res-2 --nthreads 8 --stop-on-first-crash --mem_mb 25000 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/acc9d3918a4ab8d0f562f9b72a87bc1b.simg
+/bin/bash: fmriprep-docker: command not found
+[Tue Nov  1 16:19:41 2022]
+Error in rule fmriprep:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sub-ctrl18/ses-a
+    shell:
+        fmriprep-docker /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives participant --participant-label ctrl18 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --output-spaces MNI152NLin2009cAsym:res-2 --nthreads 8 --stop-on-first-crash --mem_mb 25000 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

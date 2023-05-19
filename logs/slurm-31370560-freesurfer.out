@@ -1,0 +1,36 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Wed Nov 16 15:47:11 2022]
+rule freesurfer:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-control17/ses-b
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer/sub-control17-b
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test, subject=control17, session=b
+    threads: 16
+    resources: mem_mb=20000, disk_mb=1000, tmpdir=/dev/shm/jobs/31370560, cpus=16, time_min=600, gpu=0
+
+recon-all -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer -i /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-control17/ses-b/anat/sub-control17_ses-b_run-001_T1w.nii.gz -subjid sub-control17 -all -qcache -3T --license_file "/license.txt" 
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/b862ddfcead2bab5771175db9e31b12f.simg
+ERROR: Flag --license_file unrecognized.
+-sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer -i /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-control17/ses-b/anat/sub-control17_ses-b_run-001_T1w.nii.gz -subjid sub-control17 -all -qcache -3T --license_file /license.txt
+Linux wbn041 3.10.0-693.2.2.el7.x86_64 #1 SMP Tue Sep 12 22:26:13 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+
+recon-all -s sub-control17 exited with ERRORS at Wed Nov 16 02:47:17  2022
+
+For more details, see the log file 
+To report a problem, see http://surfer.nmr.mgh.harvard.edu/fswiki/BugReporting
+
+[Wed Nov 16 15:47:17 2022]
+Error in rule freesurfer:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer/sub-control17-b
+    shell:
+        recon-all -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer -i /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-control17/ses-b/anat/sub-control17_ses-b_run-001_T1w.nii.gz -subjid sub-control17 -all -qcache -3T --license_file "/license.txt" 
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

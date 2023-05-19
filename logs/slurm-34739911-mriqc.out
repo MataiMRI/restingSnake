@@ -1,0 +1,40 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=16000, mem_mib=15259, disk_mb=1000, disk_mib=954, cpus=8, time_min=120, gpu=0
+Select jobs to execute...
+
+[Sun Apr 23 15:33:06 2023]
+rule mriqc:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-b
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc/sub-rugby1
+    log: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/fmriprep/sub-rugby1.html
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc/sub-rugby1
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross, subject=rugby1
+    threads: 8
+    resources: mem_mb=16000, mem_mib=15259, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/34739911, cpus=8, time_min=120, gpu=0
+
+mriqc /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc participant --participant-label rugby1 --mem-gb 16000 --nprocs 8 --no-sub -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/work 
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/62b788ffbe002df7aabb5b5b0b010147.simg
+230423-03:33:17,847 cli IMPORTANT:
+	 
+    Running MRIQC version 23.0.1:
+      * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids.
+      * Output folder: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc.
+      * Analysis levels: ['participant'].
+
+230423-03:40:07,866 cli WARNING:
+	 Building bold report: no exclude index was found
+230423-04:35:57,97 nipype.interface WARNING:
+	 Estimated signal variation in the background was too small (MAD=0.0, sigma=12.956889150902756)
+230423-04:35:57,99 nipype.interface WARNING:
+	 Estimated signal variation in the background was too small (MAD=0.0, sigma=12.956889150902756)
+230423-04:35:57,99 nipype.interface WARNING:
+	 Estimated signal variation in the background was too small (MAD=0.0, sigma=12.956889150902756)
+230423-04:37:03,126 cli IMPORTANT:
+	 Participant level finished successfully.
+[Sun Apr 23 16:37:04 2023]
+Finished job 0.
+1 of 1 steps (100%) done

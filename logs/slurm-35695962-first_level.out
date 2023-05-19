@@ -1,0 +1,29 @@
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however crucial for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=12000, mem_mib=11445, disk_mb=1000, disk_mib=954, cpus=2, time_min=10, gpu=0
+Select jobs to execute...
+
+[Fri May 12 09:53:30 2023]
+rule first_level:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/first_level_results/sub-gil1/ses-a/sub-gil1_ses-a_DMN_unthresholded_fc.nii.gz, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/first_level_results/sub-gil1/ses-a/sub-gil1_ses-a_DMN_figure.png
+    log: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/first_level_results/sub-gil1_ses-a_DMN.log
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/first_level_results/sub-gil1/ses-a/sub-gil1_ses-a_DMN_figure.png, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/first_level_results/sub-gil1/ses-a/sub-gil1_ses-a_DMN_unthresholded_fc.nii.gz
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil, subject=gil1, session=a, network=DMN
+    resources: mem_mb=12000, mem_mib=11445, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/35695962, cpus=2, time_min=10, gpu=0
+
+python ./scripts/first_level.py /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_desc-confounds_timeseries.tsv /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/first_level_results/sub-gil1/ses-a/sub-gil1_ses-a_DMN_unthresholded_fc.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/first_level_results/sub-gil1/ses-a/sub-gil1_ses-a_DMN_figure.png   -tr 1.5 -rg csf white_matter trans_x trans_y trans_z rot_x rot_y rot_z -ntwk DMN -hp 0.01 -lp 0.1 -fwhm 6 -fdr 0.01 -fc 0.25 -v 2> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/first_level_results/sub-gil1_ses-a_DMN.log
+Activating conda environment: .snakemake/conda/1750d9341bc4e52019603b2589bd5795_
+[NiftiMasker.fit] Loading data from None
+[NiftiMasker.fit] Resampling mask
+[NiftiMasker.transform_single_imgs] Loading data from Nifti1Image('/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz')
+[NiftiMasker.transform_single_imgs] Smoothing images
+[NiftiMasker.transform_single_imgs] Extracting region signals
+[NiftiMasker.transform_single_imgs] Cleaning extracted signals
+[Fri May 12 09:54:36 2023]
+Finished job 0.
+1 of 1 steps (100%) done

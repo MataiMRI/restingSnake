@@ -1,0 +1,33 @@
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however crucial for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=12000, mem_mib=11445, disk_mb=1000, disk_mib=954, cpus=2, time_min=10, gpu=0
+Select jobs to execute...
+
+[Sun Apr  2 10:34:27 2023]
+rule first_level:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_unthresholded_fc.nii.gz, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_figure.png
+    log: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1_ses-a_Salience.log
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_unthresholded_fc.nii.gz, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_figure.png
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long, subject=rugby1, session=a, network=Salience
+    resources: mem_mb=12000, mem_mib=11445, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/33835113, cpus=2, time_min=10, gpu=0
+
+python ./scripts/first_level.py /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_desc-confounds_timeseries.tsv /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_unthresholded_fc.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_figure.png   -tr 1.5 -rg csf white_matter trans_x trans_y trans_z rot_x rot_y rot_z -ntwk Salience -hp 0.01 -lp 0.1 -fwhm 6 -fdr 0.01 -fc 0.25 -v 2> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1_ses-a_Salience.log
+Activating conda environment: .snakemake/conda/1750d9341bc4e52019603b2589bd5795_
+[Sun Apr  2 10:34:28 2023]
+Error in rule first_level:
+    jobid: 0
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_unthresholded_fc.nii.gz, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_figure.png
+    log: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1_ses-a_Salience.log (check log file(s) for error details)
+    conda-env: /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/conda/1750d9341bc4e52019603b2589bd5795_
+    shell:
+        python ./scripts/first_level.py /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/bids/derivatives/fmriprep/sub-rugby1/ses-a/func/sub-rugby1_ses-a_task-rest_run-001_desc-confounds_timeseries.tsv /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_unthresholded_fc.nii.gz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1/ses-a/sub-rugby1_ses-a_Salience_figure.png   -tr 1.5 -rg csf white_matter trans_x trans_y trans_z rot_x rot_y rot_z -ntwk Salience -hp 0.01 -lp 0.1 -fwhm 6 -fdr 0.01 -fc 0.25 -v 2> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long/first_level_results/sub-rugby1_ses-a_Salience.log
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

@@ -1,0 +1,101 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=4000, mem_mib=3815, disk_mb=1000, disk_mib=954, cpus=2, time_min=60, gpu=0
+Select jobs to execute...
+
+[Sun Apr  9 18:43:52 2023]
+rule heudiconv:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/tidy/sub_gil1/ses_a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/.heudiconv/gil1/ses-a
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/.heudiconv/gil1/ses-a
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil, subject=gil1, session=a
+    resources: mem_mb=4000, mem_mib=3815, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/34083418, cpus=2, time_min=60, gpu=0
+
+heudiconv --dicom_dir_template '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/tidy/sub_{subject}/ses_{session}/*/*' --outdir /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids --heuristic scripts/heuristic.py --subjects gil1 --ses a --converter dcm2niix --bids --overwrite
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/10b2306ed15c5efc917232958423bfe6.simg
+INFO: Running heudiconv version 0.11.4.post18+g1fe815b.d20221025 latest 0.12.2
+INFO: Need to process 1 study sessions
+INFO: PROCESSING STARTS: {'subject': 'gil1', 'outdir': '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/', 'session': 'a'}
+INFO: Processing 10692 dicoms
+INFO: Analyzing 10692 dicoms
+INFO: Generated sequence info for 2 studies with 10692 entries total
+INFO: Doing conversion using dcm2niix
+INFO: Converting /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_T1w (292 DICOMs) -> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/anat . Converter: dcm2niix . Output types: ('nii.gz',)
+230409-06:49:11,842 nipype.workflow INFO:
+	 [Node] Setting-up "convert" in "/tmp/dcm2niixwyodwtyk/convert".
+INFO: [Node] Setting-up "convert" in "/tmp/dcm2niixwyodwtyk/convert".
+230409-06:49:12,125 nipype.workflow INFO:
+	 [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+INFO: [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+230409-06:49:12,637 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:12.637401:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+INFO: stdout 2023-04-09T06:49:12.637401:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+230409-06:49:12,638 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:12.637401:Found 292 DICOM file(s)
+INFO: stdout 2023-04-09T06:49:12.637401:Found 292 DICOM file(s)
+230409-06:49:12,638 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:12.637401:Convert 292 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_T1w_heudiconv790 (512x512x292x1)
+INFO: stdout 2023-04-09T06:49:12.637401:Convert 292 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_T1w_heudiconv790 (512x512x292x1)
+230409-06:49:22,247 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:22.247584:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_T1w_heudiconv790.nii"
+INFO: stdout 2023-04-09T06:49:22.247584:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_T1w_heudiconv790.nii"
+230409-06:49:22,250 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:22.247584:Conversion required 9.864925 seconds (0.774561 for core code).
+INFO: stdout 2023-04-09T06:49:22.247584:Conversion required 9.864925 seconds (0.774561 for core code).
+230409-06:49:22,290 nipype.workflow INFO:
+	 [Node] Finished "convert", elapsed time 9.923642s.
+INFO: [Node] Finished "convert", elapsed time 9.923642s.
+WARNING: Failed to find task field in /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_T1w.json.
+230409-06:49:22,333 nipype.workflow INFO:
+	 [Node] Setting-up "embedder" in "/tmp/embedmetad4rswa6i/embedder".
+INFO: [Node] Setting-up "embedder" in "/tmp/embedmetad4rswa6i/embedder".
+230409-06:49:22,436 nipype.workflow INFO:
+	 [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+INFO: [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+230409-06:49:29,432 nipype.workflow INFO:
+	 [Node] Finished "embedder", elapsed time 6.995341s.
+INFO: [Node] Finished "embedder", elapsed time 6.995341s.
+INFO: Post-treating /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/anat/sub-gil1_ses-a_run-001_T1w.json file
+INFO: Converting /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_bold (10400 DICOMs) -> /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/func . Converter: dcm2niix . Output types: ('nii.gz',)
+230409-06:49:30,717 nipype.workflow INFO:
+	 [Node] Setting-up "convert" in "/tmp/dcm2niixldj89_lt/convert".
+INFO: [Node] Setting-up "convert" in "/tmp/dcm2niixldj89_lt/convert".
+230409-06:49:42,321 nipype.workflow INFO:
+	 [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+INFO: [Node] Executing "convert" <nipype.interfaces.dcm2nii.Dcm2niix>
+230409-06:49:47,529 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:47.529089:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+INFO: stdout 2023-04-09T06:49:47.529089:Chris Rorden's dcm2niiX version v1.0.20220720  (JP2:OpenJPEG) (JP-LS:CharLS) GCC10.2.1 x86-64 (64-bit Linux)
+230409-06:49:47,530 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:47.529089:Found 10400 DICOM file(s)
+INFO: stdout 2023-04-09T06:49:47.529089:Found 10400 DICOM file(s)
+230409-06:49:47,530 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:47.529089:Convert 10400 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_bold_heudiconv072 (64x64x52x200)
+INFO: stdout 2023-04-09T06:49:47.529089:Convert 10400 DICOM as /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_bold_heudiconv072 (64x64x52x200)
+230409-06:49:52,293 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:52.292937:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_bold_heudiconv072.nii"
+INFO: stdout 2023-04-09T06:49:52.292937:Compress: "/usr/bin/pigz" -b 960 -n -f -6 "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_bold_heudiconv072.nii"
+230409-06:49:52,293 nipype.interface INFO:
+	 stdout 2023-04-09T06:49:52.292937:Conversion required 9.924740 seconds (5.133931 for core code).
+INFO: stdout 2023-04-09T06:49:52.292937:Conversion required 9.924740 seconds (5.133931 for core code).
+230409-06:49:52,362 nipype.workflow INFO:
+	 [Node] Finished "convert", elapsed time 10.037398s.
+INFO: [Node] Finished "convert", elapsed time 10.037398s.
+230409-06:49:53,89 nipype.workflow INFO:
+	 [Node] Setting-up "embedder" in "/tmp/embedmeta1l5wf6m0/embedder".
+INFO: [Node] Setting-up "embedder" in "/tmp/embedmeta1l5wf6m0/embedder".
+230409-06:49:55,733 nipype.workflow INFO:
+	 [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+INFO: [Node] Executing "embedder" <nipype.interfaces.utility.wrappers.Function>
+230409-06:53:56,306 nipype.workflow INFO:
+	 [Node] Finished "embedder", elapsed time 240.571363s.
+INFO: [Node] Finished "embedder", elapsed time 240.571363s.
+INFO: Post-treating /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a/func/sub-gil1_ses-a_task-rest_run-001_bold.json file
+INFO: Populating template files under /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/
+INFO: PROCESSING DONE: {'subject': 'gil1', 'outdir': '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/', 'session': 'a'}
+[Sun Apr  9 18:53:58 2023]
+Finished job 0.
+1 of 1 steps (100%) done

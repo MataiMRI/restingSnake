@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, cpus=1, time_min=5, gpu=0
+Select jobs to execute...
+
+[Fri Apr  7 14:20:03 2023]
+rule freesurfer_aggregate:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/freesurfer/sub-rugby1_ses-b
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/freesurfer_agg/sub-rugby1
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/freesurfer_agg/sub-rugby1
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross, subject=rugby1
+    resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/33980673, cpus=1, time_min=5, gpu=0
+
+cp -r /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/freesurfer/sub-rugby1_ses-b /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/freesurfer_agg/sub-rugby1
+[Fri Apr  7 14:20:11 2023]
+Finished job 0.
+1 of 1 steps (100%) done

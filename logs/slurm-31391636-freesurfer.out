@@ -1,0 +1,35 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Fri Nov 18 07:37:55 2022]
+rule freesurfer:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-ctrl18/ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer/sub-ctrl18-a
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test, subject=ctrl18, session=a
+    resources: mem_mb=20000, disk_mb=1000, tmpdir=/dev/shm/jobs/31391636, cpus=8, time_min=1200, gpu=0
+
+export FS_LICENSE="/nesi/project/uoa03264/fmri_workflow/license.txt" ; recon-all -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer -i /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-ctrl18/ses-a/anat/sub-ctrl18_ses-a_run-001_T1w.nii.gz -subjid sub-ctrl18 -all -qcache -3T -n_cpus 8
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/b862ddfcead2bab5771175db9e31b12f.simg
+ERROR: Flag -n_cpus unrecognized.
+-sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer -i /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-ctrl18/ses-a/anat/sub-ctrl18_ses-a_run-001_T1w.nii.gz -subjid sub-ctrl18 -all -qcache -3T -n_cpus 8
+Linux wbn009 3.10.0-693.2.2.el7.x86_64 #1 SMP Tue Sep 12 22:26:13 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+
+recon-all -s sub-ctrl18 exited with ERRORS at Thu Nov 17 18:38:02  2022
+
+For more details, see the log file 
+To report a problem, see http://surfer.nmr.mgh.harvard.edu/fswiki/BugReporting
+
+[Fri Nov 18 07:38:02 2022]
+Error in rule freesurfer:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer/sub-ctrl18-a
+    shell:
+        export FS_LICENSE="/nesi/project/uoa03264/fmri_workflow/license.txt" ; recon-all -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer -i /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-ctrl18/ses-a/anat/sub-ctrl18_ses-a_run-001_T1w.nii.gz -subjid sub-ctrl18 -all -qcache -3T -n_cpus 8
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

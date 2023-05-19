@@ -1,0 +1,170 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=35000, mem_mib=33379, disk_mb=1000, disk_mib=954, cpus=8, time_min=900, gpu=0
+Select jobs to execute...
+
+[Sun Apr 23 14:08:57 2023]
+rule fmriprep:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/sub-gil1/ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1
+    log: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1.html
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sub-gil1
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil, subject=gil1
+    threads: 8
+    resources: mem_mb=35000, mem_mib=33379, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/34736088, cpus=8, time_min=900, gpu=0
+
+fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep participant --participant-label gil1 --skip-bids-validation --md-only-boilerplate --output-spaces MNI152NLin2009cAsym:res-2 --stop-on-first-crash --low-mem --mem-mb 35000 --nprocs 8 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work --fs-license-file ./license.txt
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/8ba2e11db7a36df6ed76807c131c9dc5.simg
+You are using fMRIPrep-22.0.2, and a newer version of fMRIPrep is available: 23.0.1.
+Please check out our documentation about how and when to upgrade:
+https://fmriprep.readthedocs.io/en/latest/faq.html#upgrading
+230423-02:09:29,72 nipype.workflow IMPORTANT:
+	 Running fMRIPrep version 22.0.2
+
+         License NOTICE ##################################################
+         fMRIPrep 22.0.2
+         Copyright 2022 The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software redistributes the versioneer Python package, which is
+         Public domain source code.
+         
+         This software is also distributed as a Docker container image.
+         The bootstraping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+230423-02:09:29,99 nipype.workflow IMPORTANT:
+	 Building fMRIPrep's workflow:
+           * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids.
+           * Participant list: ['gil1'].
+           * Run identifier: 20230423-020914_237b1f53-2029-47d9-8833-f273125c63c3.
+           * Output spaces: MNI152NLin2009cAsym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer.
+230423-02:09:31,623 nipype.workflow INFO:
+	 No single-band-reference found for sub-gil1_ses-a_task-rest_run-001_bold.nii.gz.
+230423-02:09:31,746 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.721s.
+230423-02:09:34,870 nipype.workflow INFO:
+	 fMRIPrep workflow graph with 374 nodes built successfully.
+230423-02:09:48,845 nipype.workflow IMPORTANT:
+	 fMRIPrep started!
+230423-02:09:59,501 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.fs_isrunning" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/fs_isrunning".
+230423-02:09:59,504 nipype.workflow INFO:
+	 [Node] Outdated cache found for "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.fs_isrunning".
+230423-02:09:59,516 nipype.workflow INFO:
+	 [Node] Executing "fs_isrunning" <nipype.interfaces.utility.wrappers.Function>
+230423-02:09:59,522 nipype.workflow INFO:
+	 [Node] Finished "fs_isrunning", elapsed time 0.000888s.
+230423-02:10:15,667 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.autorecon1" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/autorecon1".
+230423-02:10:15,669 nipype.workflow INFO:
+	 [Node] Outdated cache found for "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.autorecon1".
+230423-02:10:15,684 nipype.workflow INFO:
+	 [Node] Executing "autorecon1" <smriprep.interfaces.freesurfer.ReconAll>
+230423-03:55:11,289 nipype.workflow INFO:
+	 [Node] Finished "autorecon1", elapsed time 6295.603675s.
+230423-03:55:13,149 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.fsnative2t1w_xfm" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/fsnative2t1w_xfm".
+230423-03:55:13,150 nipype.workflow INFO:
+	 [Node] Outdated cache found for "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.fsnative2t1w_xfm".
+230423-03:55:13,197 nipype.workflow INFO:
+	 [Node] Executing "fsnative2t1w_xfm" <niworkflows.interfaces.freesurfer.PatchedRobustRegister>
+230423-03:56:29,124 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.skull_strip_extern" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/skull_strip_extern".
+230423-03:56:29,132 nipype.workflow INFO:
+	 [Node] Outdated cache found for "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.skull_strip_extern".
+230423-03:56:29,146 nipype.workflow INFO:
+	 [Node] Executing "skull_strip_extern" <niworkflows.interfaces.freesurfer.FSInjectBrainExtracted>
+230423-03:56:39,891 nipype.workflow INFO:
+	 [Node] Finished "skull_strip_extern", elapsed time 10.737165s.
+230423-03:56:42,385 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.autorecon_resume_wf.autorecon2_vol" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/autorecon_resume_wf/autorecon2_vol".
+230423-03:56:42,386 nipype.workflow INFO:
+	 [Node] Outdated cache found for "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.autorecon_resume_wf.autorecon2_vol".
+230423-03:56:42,410 nipype.workflow INFO:
+	 [Node] Executing "autorecon2_vol" <smriprep.interfaces.freesurfer.ReconAll>
+230423-03:56:42,411 nipype.interface INFO:
+	 resume recon-all : recon-all -autorecon2-volonly -openmp 7 -subjid sub-gil1 -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer 
+230423-03:56:42,412 nipype.interface INFO:
+	 resume recon-all : recon-all -autorecon2-volonly -openmp 7 -subjid sub-gil1 -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer 
+230423-04:01:08,572 nipype.workflow INFO:
+	 [Node] Finished "fsnative2t1w_xfm", elapsed time 355.373764s.
+230423-04:01:09,510 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.t1w2fsnative_xfm" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/t1w2fsnative_xfm".
+230423-04:01:09,511 nipype.workflow INFO:
+	 [Node] Outdated cache found for "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.t1w2fsnative_xfm".
+230423-04:01:09,533 nipype.workflow INFO:
+	 [Node] Executing "t1w2fsnative_xfm" <niworkflows.interfaces.freesurfer.PatchedLTAConvert>
+230423-04:01:09,613 nipype.workflow INFO:
+	 [Node] Finished "t1w2fsnative_xfm", elapsed time 0.072442s.
+230423-11:01:05,101 nipype.workflow INFO:
+	 [Node] Finished "autorecon2_vol", elapsed time 25462.64639s.
+230423-11:01:08,252 nipype.workflow INFO:
+	 [Node] Setting-up "_autorecon_surfs0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/autorecon_resume_wf/autorecon_surfs/mapflow/_autorecon_surfs0".
+230423-11:01:08,252 nipype.workflow INFO:
+	 [Node] Outdated cache found for "_autorecon_surfs0".
+230423-11:01:08,281 nipype.workflow INFO:
+	 [Node] Executing "_autorecon_surfs0" <smriprep.interfaces.freesurfer.ReconAll>
+230423-11:01:08,283 nipype.interface INFO:
+	 resume recon-all : recon-all -autorecon-hemi lh -noparcstats -noparcstats2 -noparcstats3 -nohyporelabel -nobalabels -lh-only -openmp 7 -subjid sub-gil1 -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer 
+230423-11:01:08,284 nipype.interface INFO:
+	 resume recon-all : recon-all -autorecon-hemi lh -noparcstats -noparcstats2 -noparcstats3 -nohyporelabel -nobalabels -lh-only -openmp 7 -subjid sub-gil1 -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer 
+230423-13:08:53,517 nipype.workflow INFO:
+	 [Node] Finished "_autorecon_surfs0", elapsed time 7665.234582s.
+230423-13:08:55,655 nipype.workflow INFO:
+	 [Node] Setting-up "_autorecon_surfs1" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/autorecon_resume_wf/autorecon_surfs/mapflow/_autorecon_surfs1".
+230423-13:08:55,656 nipype.workflow INFO:
+	 [Node] Outdated cache found for "_autorecon_surfs1".
+230423-13:08:55,684 nipype.workflow INFO:
+	 [Node] Executing "_autorecon_surfs1" <smriprep.interfaces.freesurfer.ReconAll>
+230423-13:08:55,687 nipype.interface INFO:
+	 resume recon-all : recon-all -autorecon-hemi rh -noparcstats -noparcstats2 -noparcstats3 -nohyporelabel -nobalabels -rh-only -openmp 7 -subjid sub-gil1 -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer 
+230423-13:08:55,687 nipype.interface INFO:
+	 resume recon-all : recon-all -autorecon-hemi rh -noparcstats -noparcstats2 -noparcstats3 -nohyporelabel -nobalabels -rh-only -openmp 7 -subjid sub-gil1 -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer 
+230423-15:29:19,988 nipype.workflow INFO:
+	 [Node] Finished "_autorecon_surfs1", elapsed time 8424.302617s.
+230423-15:29:21,543 nipype.workflow INFO:
+	 [Node] Outdated cache found for "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.autorecon_resume_wf.autorecon_surfs".
+230423-15:29:21,552 nipype.workflow INFO:
+	 [Node] Setting-up "_autorecon_surfs0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/autorecon_resume_wf/autorecon_surfs/mapflow/_autorecon_surfs0".
+230423-15:29:21,555 nipype.workflow INFO:
+	 [Node] Executing "_autorecon_surfs0" <smriprep.interfaces.freesurfer.ReconAll>
+230423-15:29:21,558 nipype.interface INFO:
+	 recon-all complete : Not running
+230423-15:29:21,559 nipype.interface INFO:
+	 recon-all complete : Not running
+230423-15:29:21,637 nipype.workflow INFO:
+	 [Node] Finished "_autorecon_surfs0", elapsed time 0.080956s.
+230423-15:29:21,643 nipype.workflow INFO:
+	 [Node] Setting-up "_autorecon_surfs1" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/autorecon_resume_wf/autorecon_surfs/mapflow/_autorecon_surfs1".
+230423-15:29:21,647 nipype.workflow INFO:
+	 [Node] Executing "_autorecon_surfs1" <smriprep.interfaces.freesurfer.ReconAll>
+230423-15:29:21,649 nipype.interface INFO:
+	 recon-all complete : Not running
+230423-15:29:21,651 nipype.interface INFO:
+	 recon-all complete : Not running
+230423-15:29:21,735 nipype.workflow INFO:
+	 [Node] Finished "_autorecon_surfs1", elapsed time 0.086685s.
+230423-15:29:23,536 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.autorecon_resume_wf.cortribbon" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/work/fmriprep_22_0_wf/single_subject_gil1_wf/anat_preproc_wf/surface_recon_wf/autorecon_resume_wf/cortribbon".
+230423-15:29:23,536 nipype.workflow INFO:
+	 [Node] Outdated cache found for "fmriprep_22_0_wf.single_subject_gil1_wf.anat_preproc_wf.surface_recon_wf.autorecon_resume_wf.cortribbon".
+230423-15:29:23,555 nipype.workflow INFO:
+	 [Node] Executing "cortribbon" <smriprep.interfaces.freesurfer.ReconAll>
+230423-15:29:23,556 nipype.interface INFO:
+	 resume recon-all : recon-all -parallel -subjid sub-gil1 -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer -cortribbon
+230423-15:29:23,557 nipype.interface INFO:
+	 resume recon-all : recon-all -parallel -subjid sub-gil1 -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/fmriprep/sourcedata/freesurfer -cortribbon
+slurmstepd: error: *** JOB 34736088 ON wmc005 CANCELLED AT 2023-04-23T17:09:06 DUE TO TIME LIMIT ***

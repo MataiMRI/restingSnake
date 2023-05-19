@@ -1,0 +1,1117 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Thu Mar 16 12:51:17 2023]
+rule fmriprep:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/sub-rugby1/ses-b, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/sub-rugby1/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/freesurfer/sub-rugby1_ses-b.long.rugby1_template, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/freesurfer/sub-rugby1_ses-a.long.rugby1_template
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/fmriprep/sub-rugby1
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long, subject=rugby1
+    threads: 16
+    resources: mem_mb=25000, disk_mb=1000, tmpdir=/dev/shm/jobs/33491318, cpus=16, time_min=180, gpu=0
+
+fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/fmriprep participant --participant-label rugby1 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --fs-subjects-dir /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/freesurfer_agg --output-spaces MNI152NLin2009cAsym:res-2 --stop-on-first-crash --low-mem --mem-mb 25000 --nprocs 16 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/8ba2e11db7a36df6ed76807c131c9dc5.simg
+You are using fMRIPrep-22.0.2, and a newer version of fMRIPrep is available: 23.0.0.
+Please check out our documentation about how and when to upgrade:
+https://fmriprep.readthedocs.io/en/latest/faq.html#upgrading
+230315-23:51:40,490 nipype.workflow IMPORTANT:
+	 Running fMRIPrep version 22.0.2
+
+         License NOTICE ##################################################
+         fMRIPrep 22.0.2
+         Copyright 2022 The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software redistributes the versioneer Python package, which is
+         Public domain source code.
+         
+         This software is also distributed as a Docker container image.
+         The bootstraping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+230315-23:51:40,526 nipype.workflow IMPORTANT:
+	 Building fMRIPrep's workflow:
+           * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids.
+           * Participant list: ['rugby1'].
+           * Run identifier: 20230315-235126_22cfe8e4-d1ee-4d6d-a000-67a7df8064d2.
+           * Output spaces: MNI152NLin2009cAsym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/freesurfer_agg.
+230315-23:51:42,377 nipype.workflow INFO:
+	 No single-band-reference found for sub-rugby1_ses-a_task-rest_run-001_bold.nii.gz.
+230315-23:51:42,495 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.721s.
+230315-23:51:42,771 nipype.workflow INFO:
+	 No single-band-reference found for sub-rugby1_ses-b_task-rest_run-001_bold.nii.gz.
+230315-23:51:45,996 nipype.workflow INFO:
+	 fMRIPrep workflow graph with 585 nodes built successfully.
+230315-23:51:59,25 nipype.workflow IMPORTANT:
+	 fMRIPrep started!
+230315-23:52:07,230 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.anat_preproc_wf.brain_extraction_wf.full_wm" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/brain_extraction_wf/full_wm".
+230315-23:52:07,235 nipype.workflow INFO:
+	 [Node] Executing "full_wm" <nipype.interfaces.utility.wrappers.Function>
+230315-23:52:07,392 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.anat_preproc_wf.brain_extraction_wf.res_tmpl" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/brain_extraction_wf/res_tmpl".
+230315-23:52:07,395 nipype.workflow INFO:
+	 [Node] Executing "res_tmpl" <niworkflows.interfaces.nibabel.RegridToZooms>
+230315-23:52:07,840 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.anat_preproc_wf.brain_extraction_wf.lap_tmpl" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/brain_extraction_wf/lap_tmpl".
+230315-23:52:07,844 nipype.workflow INFO:
+	 [Node] Executing "lap_tmpl" <nipype.interfaces.ants.utils.ImageMath>
+230315-23:52:07,938 nipype.workflow INFO:
+	 [Node] Finished "full_wm", elapsed time 0.696304s.
+230315-23:52:07,944 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_source" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_source".
+230315-23:52:07,947 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+230315-23:52:07,949 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000287s.
+230315-23:52:07,954 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.func_derivatives_wf.raw_sources" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/func_derivatives_wf/raw_sources".
+230315-23:52:07,957 nipype.workflow INFO:
+	 [Node] Executing "raw_sources" <nipype.interfaces.utility.wrappers.Function>
+230315-23:52:07,959 nipype.workflow INFO:
+	 [Node] Finished "raw_sources", elapsed time 0.000382s.
+230315-23:52:08,10 nipype.workflow INFO:
+	 [Node] Setting-up "_val_bold0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/val_bold/mapflow/_val_bold0".
+230315-23:52:08,13 nipype.workflow INFO:
+	 [Node] Executing "_val_bold0" <niworkflows.interfaces.header.ValidateImage>
+230315-23:52:08,65 nipype.workflow INFO:
+	 [Node] Finished "_val_bold0", elapsed time 0.051452s.
+230315-23:52:08,77 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.get_dummy" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/get_dummy".
+230315-23:52:08,80 nipype.workflow INFO:
+	 [Node] Executing "get_dummy" <niworkflows.interfaces.bold.NonsteadyStatesDetector>
+230315-23:52:08,255 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.bold_source" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_source".
+230315-23:52:08,259 nipype.workflow INFO:
+	 [Node] Executing "bold_source" <nipype.interfaces.utility.base.Select>
+230315-23:52:08,265 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.func_derivatives_wf.raw_sources" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/func_derivatives_wf/raw_sources".
+230315-23:52:08,269 nipype.workflow INFO:
+	 [Node] Finished "bold_source", elapsed time 0.000775s.
+230315-23:52:08,269 nipype.workflow INFO:
+	 [Node] Executing "raw_sources" <nipype.interfaces.utility.wrappers.Function>
+230315-23:52:08,277 nipype.workflow INFO:
+	 [Node] Finished "raw_sources", elapsed time 0.000573s.
+230315-23:52:08,494 nipype.workflow INFO:
+	 [Node] Setting-up "_val_bold0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/val_bold/mapflow/_val_bold0".
+230315-23:52:08,497 nipype.workflow INFO:
+	 [Node] Executing "_val_bold0" <niworkflows.interfaces.header.ValidateImage>
+230315-23:52:08,500 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.bidssrc" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/bidssrc".
+230315-23:52:08,501 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.get_dummy" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/get_dummy".
+230315-23:52:08,505 nipype.workflow INFO:
+	 [Node] Executing "bidssrc" <niworkflows.interfaces.bids.BIDSDataGrabber>
+230315-23:52:08,505 nipype.workflow INFO:
+	 [Node] Executing "get_dummy" <niworkflows.interfaces.bold.NonsteadyStatesDetector>
+230315-23:52:08,514 nipype.interface INFO:
+	 No "t2w" images found for sub-rugby1
+230315-23:52:08,514 nipype.interface INFO:
+	 No "flair" images found for sub-rugby1
+230315-23:52:08,514 nipype.interface INFO:
+	 No "fmap" images found for sub-rugby1
+230315-23:52:08,514 nipype.interface INFO:
+	 No "sbref" images found for sub-rugby1
+230315-23:52:08,514 nipype.interface INFO:
+	 No "roi" images found for sub-rugby1
+230315-23:52:08,515 nipype.workflow INFO:
+	 [Node] Finished "bidssrc", elapsed time 0.001082s.
+230315-23:52:08,548 nipype.workflow INFO:
+	 [Node] Finished "_val_bold0", elapsed time 0.049447s.
+230315-23:52:08,796 nipype.workflow INFO:
+	 [Node] Finished "get_dummy", elapsed time 0.715128s.
+230315-23:52:09,28 nipype.workflow INFO:
+	 [Node] Finished "res_tmpl", elapsed time 1.624756s.
+230315-23:52:09,197 nipype.workflow INFO:
+	 [Node] Finished "get_dummy", elapsed time 0.690486s.
+230315-23:52:10,29 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.select_bold" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/select_bold".
+230315-23:52:10,119 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.anat_preproc_wf.anat_template_wf.t1w_ref_dimensions" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/t1w_ref_dimensions".
+230315-23:52:10,232 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.gen_avg" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/gen_avg".
+230315-23:52:10,233 nipype.workflow INFO:
+	 [Node] Executing "select_bold" <nipype.interfaces.utility.base.Select>
+230315-23:52:10,244 nipype.workflow INFO:
+	 [Node] Finished "select_bold", elapsed time 0.00097s.
+230315-23:52:10,245 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.select_bold" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/select_bold".
+230315-23:52:10,330 nipype.workflow INFO:
+	 [Node] Executing "gen_avg" <niworkflows.interfaces.images.RobustAverage>
+230315-23:52:10,556 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.gen_avg" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/gen_avg".
+230315-23:52:10,567 nipype.workflow INFO:
+	 [Node] Executing "gen_avg" <niworkflows.interfaces.images.RobustAverage>
+230315-23:52:10,613 nipype.workflow INFO:
+	 [Node] Executing "select_bold" <nipype.interfaces.utility.base.Select>
+230315-23:52:10,624 nipype.workflow INFO:
+	 [Node] Finished "select_bold", elapsed time 0.000653s.
+230315-23:52:11,283 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.bids_info" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/bids_info".
+230315-23:52:11,287 nipype.workflow INFO:
+	 [Node] Executing "bids_info" <niworkflows.interfaces.bids.BIDSInfo>
+230315-23:52:11,301 nipype.workflow INFO:
+	 [Node] Finished "bids_info", elapsed time 0.00625s.
+230315-23:52:11,351 nipype.workflow INFO:
+	 [Node] Executing "t1w_ref_dimensions" <niworkflows.interfaces.images.TemplateDimensions>
+230315-23:52:11,377 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.377810:++ 3dvolreg: AFNI version=AFNI_22.1.14 (Jun 24 2022) [64-bit]
+230315-23:52:11,378 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.377810:++ Authored by: RW Cox
+230315-23:52:11,378 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.378928:** AFNI converts NIFTI_datatype=4 (INT16) in file /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/gen_avg/sub-rugby1_ses-a_task-rest_run-001_bold_sliced.nii.gz to FLOAT32
+230315-23:52:11,379 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.379044:     Warnings of this type will be muted for this session.
+230315-23:52:11,379 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.379044:     Set AFNI_NIFTI_TYPE_WARN to YES to see them all, NO to see none.
+230315-23:52:11,379 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.379808:++ Coarse del was 10, replaced with 5
+230315-23:52:11,477 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.477699:++ 3dvolreg: AFNI version=AFNI_22.1.14 (Jun 24 2022) [64-bit]
+230315-23:52:11,478 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.477699:++ Authored by: RW Cox
+230315-23:52:11,478 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.478796:** AFNI converts NIFTI_datatype=4 (INT16) in file /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/gen_avg/sub-rugby1_ses-b_task-rest_run-001_bold_sliced.nii.gz to FLOAT32
+230315-23:52:11,478 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.478895:     Warnings of this type will be muted for this session.
+230315-23:52:11,478 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.478895:     Set AFNI_NIFTI_TYPE_WARN to YES to see them all, NO to see none.
+230315-23:52:11,479 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:11.479655:++ Coarse del was 10, replaced with 5
+230315-23:52:11,641 nipype.workflow INFO:
+	 [Node] Finished "t1w_ref_dimensions", elapsed time 0.2829s.
+230315-23:52:12,56 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.anat_preproc_wf.fs_isrunning" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/fs_isrunning".
+230315-23:52:12,178 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.anat_preproc_wf.anat_derivatives_wf.raw_sources" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_derivatives_wf/raw_sources".
+230315-23:52:12,348 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.bold_split" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_split".
+230315-23:52:12,489 nipype.workflow INFO:
+	 [Node] Executing "bold_split" <nipype.interfaces.fsl.utils.Split>
+230315-23:52:12,557 nipype.workflow INFO:
+	 [Node] Executing "raw_sources" <nipype.interfaces.utility.wrappers.Function>
+230315-23:52:12,571 nipype.workflow INFO:
+	 [Node] Finished "raw_sources", elapsed time 0.001064s.
+230315-23:52:13,963 nipype.workflow INFO:
+	 [Node] Executing "fs_isrunning" <nipype.interfaces.utility.wrappers.Function>
+230315-23:52:13,973 nipype.workflow INFO:
+	 [Node] Finished "fs_isrunning", elapsed time 0.000936s.
+230315-23:52:14,156 nipype.workflow INFO:
+	 [Node] Setting-up "_t1w_conform0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/t1w_conform/mapflow/_t1w_conform0".
+230315-23:52:14,158 nipype.workflow INFO:
+	 [Node] Setting-up "_t1w_conform1" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/t1w_conform/mapflow/_t1w_conform1".
+230315-23:52:14,160 nipype.workflow INFO:
+	 [Node] Executing "_t1w_conform0" <niworkflows.interfaces.images.Conform>
+230315-23:52:14,161 nipype.workflow INFO:
+	 [Node] Executing "_t1w_conform1" <niworkflows.interfaces.images.Conform>
+230315-23:52:14,189 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_stc_wf.slice_timing_correction" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_stc_wf/slice_timing_correction".
+230315-23:52:14,196 nipype.workflow INFO:
+	 [Node] Executing "slice_timing_correction" <fmriprep.workflows.bold.stc.TShift>
+230315-23:52:15,826 nipype.workflow INFO:
+	 [Node] Finished "bold_split", elapsed time 3.334386s.
+230315-23:52:17,552 nipype.workflow INFO:
+	 [Node] Finished "lap_tmpl", elapsed time 9.525672s.
+230315-23:52:17,918 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.anat_preproc_wf.brain_extraction_wf.mrg_tmpl" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/brain_extraction_wf/mrg_tmpl".
+230315-23:52:17,924 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.bold_std_trans_wf.gen_ref" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_std_trans_wf/_std_target_MNI152NLin2009cAsym.res2/gen_ref".
+230315-23:52:17,953 nipype.workflow INFO:
+	 [Node] Executing "mrg_tmpl" <nipype.interfaces.utility.base.Merge>
+230315-23:52:17,956 nipype.workflow INFO:
+	 [Node] Finished "mrg_tmpl", elapsed time 0.000248s.
+230315-23:52:18,13 nipype.workflow INFO:
+	 [Node] Executing "gen_ref" <niworkflows.interfaces.nibabel.GenerateSamplingReference>
+230315-23:52:18,15 nipype.workflow INFO:
+	 [Node] Finished "gen_ref", elapsed time 0.000355s.
+230315-23:52:18,79 nipype.workflow INFO:
+	 [Node] Finished "_t1w_conform1", elapsed time 3.916085s.
+230315-23:52:27,680 nipype.workflow INFO:
+	 [Node] Finished "slice_timing_correction", elapsed time 13.482211s.
+230315-23:52:27,948 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_stc_wf.copy_xform" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_stc_wf/copy_xform".
+230315-23:52:28,284 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:28.284733:++ Max displacement in automask = 0.27 (mm) at sub-brick 19
+230315-23:52:28,284 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:28.284733:++ Max delta displ  in automask = 0.36 (mm) at sub-brick 2
+230315-23:52:28,428 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:28.428022:++ Max displacement in automask = 1.31 (mm) at sub-brick 16
+230315-23:52:28,428 nipype.interface INFO:
+	 stderr 2023-03-15T23:52:28.428022:++ Max delta displ  in automask = 0.71 (mm) at sub-brick 15
+230315-23:52:28,741 nipype.workflow INFO:
+	 [Node] Executing "copy_xform" <niworkflows.interfaces.header.CopyXForm>
+230315-23:52:29,463 nipype.workflow INFO:
+	 [Node] Finished "gen_avg", elapsed time 19.130761s.
+230315-23:52:29,616 nipype.workflow INFO:
+	 [Node] Finished "gen_avg", elapsed time 19.047032s.
+230315-23:52:29,971 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.bold_hmc_wf.mcflirt" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_hmc_wf/mcflirt".
+230315-23:52:29,984 nipype.workflow INFO:
+	 [Node] Executing "mcflirt" <nipype.interfaces.fsl.preprocess.MCFLIRT>
+230315-23:52:30,2 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.init_aff" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/init_aff".
+230315-23:52:30,9 nipype.workflow INFO:
+	 [Node] Executing "init_aff" <nipype.interfaces.ants.utils.AI>
+230315-23:52:30,25 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_hmc_wf.mcflirt" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_hmc_wf/mcflirt".
+230315-23:52:30,41 nipype.workflow INFO:
+	 [Node] Executing "mcflirt" <nipype.interfaces.fsl.preprocess.MCFLIRT>
+230315-23:52:30,970 nipype.workflow INFO:
+	 [Node] Finished "copy_xform", elapsed time 2.227382s.
+230315-23:52:31,994 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_split" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_split".
+230315-23:52:32,42 nipype.workflow INFO:
+	 [Node] Executing "bold_split" <nipype.interfaces.fsl.utils.Split>
+230315-23:52:35,358 nipype.workflow INFO:
+	 [Node] Finished "bold_split", elapsed time 3.315501s.
+230315-23:52:35,947 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_std_trans_wf.gen_ref" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_std_trans_wf/_std_target_MNI152NLin2009cAsym.res2/gen_ref".
+230315-23:52:36,28 nipype.workflow INFO:
+	 [Node] Executing "gen_ref" <niworkflows.interfaces.nibabel.GenerateSamplingReference>
+230315-23:52:36,30 nipype.workflow INFO:
+	 [Node] Finished "gen_ref", elapsed time 0.000168s.
+230315-23:52:44,904 nipype.workflow INFO:
+	 [Node] Finished "_t1w_conform0", elapsed time 30.741427s.
+230315-23:52:45,949 nipype.workflow INFO:
+	 [Node] Setting-up "_t1w_conform0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/t1w_conform/mapflow/_t1w_conform0".
+230315-23:52:45,951 nipype.workflow INFO:
+	 [Node] Cached "_t1w_conform0" - collecting precomputed outputs
+230315-23:52:45,951 nipype.workflow INFO:
+	 [Node] "_t1w_conform0" found cached.
+230315-23:52:45,952 nipype.workflow INFO:
+	 [Node] Setting-up "_t1w_conform1" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/t1w_conform/mapflow/_t1w_conform1".
+230315-23:52:45,954 nipype.workflow INFO:
+	 [Node] Cached "_t1w_conform1" - collecting precomputed outputs
+230315-23:52:45,954 nipype.workflow INFO:
+	 [Node] "_t1w_conform1" found cached.
+230315-23:52:49,975 nipype.workflow INFO:
+	 [Node] Setting-up "_n4_correct1" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/n4_correct/mapflow/_n4_correct1".
+230315-23:52:49,975 nipype.workflow INFO:
+	 [Node] Setting-up "_n4_correct0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/n4_correct/mapflow/_n4_correct0".
+230315-23:52:49,981 nipype.workflow INFO:
+	 [Node] Setting-up "_t1w_conform_xfm1" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/t1w_conform_xfm/mapflow/_t1w_conform_xfm1".
+230315-23:52:49,985 nipype.workflow INFO:
+	 [Node] Executing "_n4_correct0" <nipype.interfaces.ants.segmentation.N4BiasFieldCorrection>
+230315-23:52:49,986 nipype.workflow INFO:
+	 [Node] Executing "_t1w_conform_xfm1" <niworkflows.interfaces.freesurfer.PatchedLTAConvert>
+230315-23:52:49,991 nipype.workflow INFO:
+	 [Node] Executing "_n4_correct1" <nipype.interfaces.ants.segmentation.N4BiasFieldCorrection>
+230315-23:52:50,97 nipype.workflow INFO:
+	 [Node] Finished "_t1w_conform_xfm1", elapsed time 0.109587s.
+230315-23:52:51,107 nipype.workflow INFO:
+	 [Node] Setting-up "_t1w_conform_xfm0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/t1w_conform_xfm/mapflow/_t1w_conform_xfm0".
+230315-23:52:51,112 nipype.workflow INFO:
+	 [Node] Executing "_t1w_conform_xfm0" <niworkflows.interfaces.freesurfer.PatchedLTAConvert>
+230315-23:52:51,215 nipype.workflow INFO:
+	 [Node] Finished "_t1w_conform_xfm0", elapsed time 0.100919s.
+230315-23:52:52,43 nipype.workflow INFO:
+	 [Node] Setting-up "_t1w_conform_xfm0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/t1w_conform_xfm/mapflow/_t1w_conform_xfm0".
+230315-23:52:52,46 nipype.workflow INFO:
+	 [Node] Cached "_t1w_conform_xfm0" - collecting precomputed outputs
+230315-23:52:52,46 nipype.workflow INFO:
+	 [Node] "_t1w_conform_xfm0" found cached.
+230315-23:52:52,48 nipype.workflow INFO:
+	 [Node] Setting-up "_t1w_conform_xfm1" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/t1w_conform_xfm/mapflow/_t1w_conform_xfm1".
+230315-23:52:52,50 nipype.workflow INFO:
+	 [Node] Cached "_t1w_conform_xfm1" - collecting precomputed outputs
+230315-23:52:52,50 nipype.workflow INFO:
+	 [Node] "_t1w_conform_xfm1" found cached.
+230315-23:53:15,858 nipype.workflow INFO:
+	 [Node] Finished "init_aff", elapsed time 45.752099s.
+230315-23:53:16,14 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.init_aff" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/init_aff".
+230315-23:53:16,26 nipype.workflow INFO:
+	 [Node] Executing "init_aff" <nipype.interfaces.ants.utils.AI>
+230315-23:53:19,935 nipype.workflow INFO:
+	 [Node] Finished "mcflirt", elapsed time 49.892503s.
+230315-23:53:21,480 nipype.workflow INFO:
+	 [Node] Finished "mcflirt", elapsed time 51.494354s.
+230315-23:53:22,183 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.bold_hmc_wf.normalize_motion" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_hmc_wf/normalize_motion".
+230315-23:53:22,363 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_hmc_wf.normalize_motion" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_hmc_wf/normalize_motion".
+230315-23:53:22,371 nipype.workflow INFO:
+	 [Node] Executing "normalize_motion" <niworkflows.interfaces.confounds.NormalizeMotionParams>
+230315-23:53:22,382 nipype.workflow INFO:
+	 [Node] Finished "normalize_motion", elapsed time 0.004486s.
+230315-23:53:22,404 nipype.workflow INFO:
+	 [Node] Executing "normalize_motion" <niworkflows.interfaces.confounds.NormalizeMotionParams>
+230315-23:53:22,409 nipype.workflow INFO:
+	 [Node] Finished "normalize_motion", elapsed time 0.003122s.
+230315-23:53:24,16 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_confounds_wf.fdisp" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_confounds_wf/fdisp".
+230315-23:53:24,173 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.bold_confounds_wf.fdisp" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_confounds_wf/fdisp".
+230315-23:53:24,184 nipype.workflow INFO:
+	 [Node] Executing "fdisp" <nipype.algorithms.confounds.FramewiseDisplacement>
+230315-23:53:24,190 nipype.workflow INFO:
+	 [Node] Finished "fdisp", elapsed time 0.003883s.
+230315-23:53:24,433 nipype.workflow INFO:
+	 [Node] Executing "fdisp" <nipype.algorithms.confounds.FramewiseDisplacement>
+230315-23:53:24,439 nipype.workflow INFO:
+	 [Node] Finished "fdisp", elapsed time 0.004149s.
+230315-23:54:03,89 nipype.workflow INFO:
+	 [Node] Finished "init_aff", elapsed time 47.059554s.
+230315-23:54:04,18 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.norm" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/norm".
+230315-23:54:04,33 nipype.workflow INFO:
+	 [Node] Executing "norm" <niworkflows.interfaces.fixes.FixHeaderRegistration>
+230315-23:54:05,866 nipype.workflow INFO:
+	 [Node] Finished "norm", elapsed time 1.54703s.
+230315-23:54:06,17 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_hmc_wf.fsl2itk" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_hmc_wf/fsl2itk".
+230315-23:54:06,19 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.map_brainmask" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/map_brainmask".
+230315-23:54:06,28 nipype.workflow INFO:
+	 [Node] Executing "map_brainmask" <niworkflows.interfaces.fixes.FixHeaderApplyTransforms>
+230315-23:54:06,152 nipype.workflow INFO:
+	 [Node] Executing "fsl2itk" <niworkflows.interfaces.itk.MCFLIRT2ITK>
+230315-23:54:06,704 nipype.workflow INFO:
+	 [Node] Finished "map_brainmask", elapsed time 0.674216s.
+230315-23:54:10,48 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.n4_correct" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/n4_correct".
+230315-23:54:10,54 nipype.workflow INFO:
+	 [Node] Executing "n4_correct" <niworkflows.interfaces.fixes.FixN4BiasFieldCorrection>
+230315-23:54:11,194 nipype.workflow INFO:
+	 [Node] Finished "n4_correct", elapsed time 1.053181s.
+230315-23:54:12,20 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.skullstrip_first_pass" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/skullstrip_first_pass".
+230315-23:54:12,54 nipype.workflow INFO:
+	 [Node] Executing "skullstrip_first_pass" <nipype.interfaces.fsl.preprocess.BET>
+230315-23:54:13,207 nipype.workflow INFO:
+	 [Node] Finished "skullstrip_first_pass", elapsed time 1.151586s.
+230315-23:54:14,20 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.first_dilate" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/first_dilate".
+230315-23:54:14,26 nipype.workflow INFO:
+	 [Node] Executing "first_dilate" <niworkflows.interfaces.nibabel.BinaryDilation>
+230315-23:54:14,327 nipype.workflow INFO:
+	 [Node] Finished "first_dilate", elapsed time 0.298627s.
+230315-23:54:16,29 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.first_mask" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/first_mask".
+230315-23:54:16,35 nipype.workflow INFO:
+	 [Node] Executing "first_mask" <niworkflows.interfaces.nibabel.ApplyMask>
+230315-23:54:16,66 nipype.workflow INFO:
+	 [Node] Finished "first_mask", elapsed time 0.028636s.
+230315-23:54:18,47 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.unifize" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/unifize".
+230315-23:54:18,63 nipype.workflow INFO:
+	 [Node] Executing "unifize" <nipype.interfaces.afni.utils.Unifize>
+230315-23:54:27,114 nipype.workflow INFO:
+	 [Node] Finished "fsl2itk", elapsed time 20.959179s.
+230315-23:54:28,61 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.norm" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/norm".
+230315-23:54:28,73 nipype.workflow INFO:
+	 [Node] Executing "norm" <niworkflows.interfaces.fixes.FixHeaderRegistration>
+230315-23:54:32,877 nipype.workflow INFO:
+	 [Node] Finished "norm", elapsed time 4.525074s.
+230315-23:54:34,33 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.map_brainmask" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/map_brainmask".
+230315-23:54:34,34 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.bold_hmc_wf.fsl2itk" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_hmc_wf/fsl2itk".
+230315-23:54:34,43 nipype.workflow INFO:
+	 [Node] Executing "map_brainmask" <niworkflows.interfaces.fixes.FixHeaderApplyTransforms>
+230315-23:54:34,133 nipype.workflow INFO:
+	 [Node] Executing "fsl2itk" <niworkflows.interfaces.itk.MCFLIRT2ITK>
+230315-23:54:34,541 nipype.workflow INFO:
+	 [Node] Finished "map_brainmask", elapsed time 0.49447s.
+230315-23:54:38,58 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.n4_correct" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/n4_correct".
+230315-23:54:38,72 nipype.workflow INFO:
+	 [Node] Executing "n4_correct" <niworkflows.interfaces.fixes.FixN4BiasFieldCorrection>
+230315-23:54:39,630 nipype.workflow INFO:
+	 [Node] Finished "n4_correct", elapsed time 1.556752s.
+230315-23:54:40,57 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.skullstrip_first_pass" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/skullstrip_first_pass".
+230315-23:54:40,65 nipype.workflow INFO:
+	 [Node] Executing "skullstrip_first_pass" <nipype.interfaces.fsl.preprocess.BET>
+230315-23:54:41,330 nipype.workflow INFO:
+	 [Node] Finished "skullstrip_first_pass", elapsed time 1.263158s.
+230315-23:54:42,65 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.first_dilate" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/first_dilate".
+230315-23:54:42,81 nipype.workflow INFO:
+	 [Node] Executing "first_dilate" <niworkflows.interfaces.nibabel.BinaryDilation>
+230315-23:54:42,656 nipype.workflow INFO:
+	 [Node] Finished "first_dilate", elapsed time 0.572334s.
+230315-23:54:44,100 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.first_mask" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/first_mask".
+230315-23:54:44,109 nipype.workflow INFO:
+	 [Node] Executing "first_mask" <niworkflows.interfaces.nibabel.ApplyMask>
+230315-23:54:44,148 nipype.workflow INFO:
+	 [Node] Finished "first_mask", elapsed time 0.035683s.
+230315-23:54:46,84 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.unifize" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/unifize".
+230315-23:54:46,91 nipype.workflow INFO:
+	 [Node] Executing "unifize" <nipype.interfaces.afni.utils.Unifize>
+230315-23:54:47,491 nipype.workflow INFO:
+	 [Node] Finished "fsl2itk", elapsed time 13.356268s.
+230315-23:54:48,131 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_bold_trans_wf.bold_transform" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/bold_transform".
+230315-23:54:48,216 nipype.workflow INFO:
+	 [Node] Executing "bold_transform" <niworkflows.interfaces.itk.MultiApplyTransforms>
+230315-23:55:42,453 nipype.workflow INFO:
+	 [Node] Finished "bold_transform", elapsed time 54.23557s.
+230315-23:55:44,100 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.bold_bold_trans_wf.bold_transform" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_bold_trans_wf/bold_transform".
+230315-23:55:44,205 nipype.workflow INFO:
+	 [Node] Executing "bold_transform" <niworkflows.interfaces.itk.MultiApplyTransforms>
+230315-23:55:46,120 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold2" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold2".
+230315-23:55:46,126 nipype.workflow INFO:
+	 [Node] Executing "_threshold2" <fmriprep.interfaces.maths.Clip>
+230315-23:55:46,240 nipype.workflow INFO:
+	 [Node] Finished "_threshold2", elapsed time 0.112334s.
+230315-23:55:47,472 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold0".
+230315-23:55:47,479 nipype.workflow INFO:
+	 [Node] Executing "_threshold0" <fmriprep.interfaces.maths.Clip>
+230315-23:55:47,522 nipype.workflow INFO:
+	 [Node] Finished "_threshold0", elapsed time 0.039635s.
+230315-23:55:48,506 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold1" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold1".
+230315-23:55:48,510 nipype.workflow INFO:
+	 [Node] Executing "_threshold1" <fmriprep.interfaces.maths.Clip>
+230315-23:55:48,629 nipype.workflow INFO:
+	 [Node] Finished "_threshold1", elapsed time 0.117378s.
+230315-23:55:48,815 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold3" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold3".
+230315-23:55:48,818 nipype.workflow INFO:
+	 [Node] Executing "_threshold3" <fmriprep.interfaces.maths.Clip>
+230315-23:55:48,929 nipype.workflow INFO:
+	 [Node] Finished "_threshold3", elapsed time 0.109199s.
+230315-23:55:49,653 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold4" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold4".
+230315-23:55:49,660 nipype.workflow INFO:
+	 [Node] Executing "_threshold4" <fmriprep.interfaces.maths.Clip>
+230315-23:55:49,770 nipype.workflow INFO:
+	 [Node] Finished "_threshold4", elapsed time 0.106449s.
+230315-23:55:49,780 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold5" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold5".
+230315-23:55:49,784 nipype.workflow INFO:
+	 [Node] Executing "_threshold5" <fmriprep.interfaces.maths.Clip>
+230315-23:55:49,923 nipype.workflow INFO:
+	 [Node] Finished "_threshold5", elapsed time 0.13585s.
+230315-23:55:50,167 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold6" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold6".
+230315-23:55:50,172 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold7" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold7".
+230315-23:55:50,173 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold9" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold9".
+230315-23:55:50,173 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold8" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold8".
+230315-23:55:50,177 nipype.workflow INFO:
+	 [Node] Executing "_threshold7" <fmriprep.interfaces.maths.Clip>
+230315-23:55:50,178 nipype.workflow INFO:
+	 [Node] Executing "_threshold9" <fmriprep.interfaces.maths.Clip>
+230315-23:55:50,178 nipype.workflow INFO:
+	 [Node] Executing "_threshold8" <fmriprep.interfaces.maths.Clip>
+230315-23:55:50,220 nipype.workflow INFO:
+	 [Node] Executing "_threshold6" <fmriprep.interfaces.maths.Clip>
+230315-23:55:50,311 nipype.workflow INFO:
+	 [Node] Finished "_threshold9", elapsed time 0.12986s.
+230315-23:55:50,312 nipype.workflow INFO:
+	 [Node] Finished "_threshold8", elapsed time 0.1302s.
+230315-23:55:50,341 nipype.workflow INFO:
+	 [Node] Finished "_threshold6", elapsed time 0.118333s.
+230315-23:55:50,354 nipype.workflow INFO:
+	 [Node] Finished "_threshold7", elapsed time 0.175143s.
+230315-23:55:52,107 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold10" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold10".
+230315-23:55:52,111 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold11" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold11".
+230315-23:55:52,111 nipype.workflow INFO:
+	 [Node] Executing "_threshold10" <fmriprep.interfaces.maths.Clip>
+230315-23:55:52,112 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold12" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold12".
+230315-23:55:52,112 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold13" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold13".
+230315-23:55:52,116 nipype.workflow INFO:
+	 [Node] Executing "_threshold11" <fmriprep.interfaces.maths.Clip>
+230315-23:55:52,118 nipype.workflow INFO:
+	 [Node] Executing "_threshold12" <fmriprep.interfaces.maths.Clip>
+230315-23:55:52,135 nipype.workflow INFO:
+	 [Node] Executing "_threshold13" <fmriprep.interfaces.maths.Clip>
+230315-23:55:52,225 nipype.workflow INFO:
+	 [Node] Finished "_threshold10", elapsed time 0.111983s.
+230315-23:55:52,233 nipype.workflow INFO:
+	 [Node] Finished "_threshold11", elapsed time 0.11438s.
+230315-23:55:52,248 nipype.workflow INFO:
+	 [Node] Finished "_threshold12", elapsed time 0.126755s.
+230315-23:55:52,256 nipype.workflow INFO:
+	 [Node] Finished "_threshold13", elapsed time 0.119226s.
+230315-23:55:54,177 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold14" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold14".
+230315-23:55:54,179 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold15" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold15".
+230315-23:55:54,182 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold16" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold16".
+230315-23:55:54,183 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold17" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold17".
+230315-23:55:54,183 nipype.workflow INFO:
+	 [Node] Executing "_threshold14" <fmriprep.interfaces.maths.Clip>
+230315-23:55:54,250 nipype.workflow INFO:
+	 [Node] Executing "_threshold17" <fmriprep.interfaces.maths.Clip>
+230315-23:55:54,258 nipype.workflow INFO:
+	 [Node] Executing "_threshold15" <fmriprep.interfaces.maths.Clip>
+230315-23:55:54,277 nipype.workflow INFO:
+	 [Node] Executing "_threshold16" <fmriprep.interfaces.maths.Clip>
+230315-23:55:54,297 nipype.workflow INFO:
+	 [Node] Finished "_threshold14", elapsed time 0.100531s.
+230315-23:55:54,358 nipype.workflow INFO:
+	 [Node] Finished "_threshold17", elapsed time 0.105805s.
+230315-23:55:54,494 nipype.workflow INFO:
+	 [Node] Finished "_threshold15", elapsed time 0.233375s.
+230315-23:55:54,508 nipype.workflow INFO:
+	 [Node] Finished "_threshold16", elapsed time 0.228465s.
+230315-23:55:56,149 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold18" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold18".
+230315-23:55:56,150 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold19" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold19".
+230315-23:55:56,151 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold20" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold20".
+230315-23:55:56,155 nipype.workflow INFO:
+	 [Node] Executing "_threshold18" <fmriprep.interfaces.maths.Clip>
+230315-23:55:56,153 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold21" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold21".
+230315-23:55:56,159 nipype.workflow INFO:
+	 [Node] Executing "_threshold20" <fmriprep.interfaces.maths.Clip>
+230315-23:55:56,164 nipype.workflow INFO:
+	 [Node] Executing "_threshold21" <fmriprep.interfaces.maths.Clip>
+230315-23:55:56,210 nipype.workflow INFO:
+	 [Node] Executing "_threshold19" <fmriprep.interfaces.maths.Clip>
+230315-23:55:56,261 nipype.workflow INFO:
+	 [Node] Finished "_threshold18", elapsed time 0.103491s.
+230315-23:55:56,297 nipype.workflow INFO:
+	 [Node] Finished "_threshold21", elapsed time 0.129331s.
+230315-23:55:56,317 nipype.workflow INFO:
+	 [Node] Finished "_threshold20", elapsed time 0.155581s.
+230315-23:55:56,477 nipype.workflow INFO:
+	 [Node] Finished "_threshold19", elapsed time 0.255294s.
+230315-23:55:58,120 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold22" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold22".
+230315-23:55:58,121 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold23" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold23".
+230315-23:55:58,123 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold24" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold24".
+230315-23:55:58,125 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold25" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold25".
+230315-23:55:58,127 nipype.workflow INFO:
+	 [Node] Executing "_threshold22" <fmriprep.interfaces.maths.Clip>
+230315-23:55:58,128 nipype.workflow INFO:
+	 [Node] Executing "_threshold23" <fmriprep.interfaces.maths.Clip>
+230315-23:55:58,130 nipype.workflow INFO:
+	 [Node] Executing "_threshold25" <fmriprep.interfaces.maths.Clip>
+230315-23:55:58,172 nipype.workflow INFO:
+	 [Node] Executing "_threshold24" <fmriprep.interfaces.maths.Clip>
+230315-23:55:58,228 nipype.workflow INFO:
+	 [Node] Finished "_threshold25", elapsed time 0.095474s.
+230315-23:55:58,236 nipype.workflow INFO:
+	 [Node] Finished "_threshold22", elapsed time 0.105227s.
+230315-23:55:58,306 nipype.workflow INFO:
+	 [Node] Finished "_threshold23", elapsed time 0.176243s.
+230315-23:55:58,318 nipype.workflow INFO:
+	 [Node] Finished "_threshold24", elapsed time 0.143836s.
+230315-23:56:00,148 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold27" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold27".
+230315-23:56:00,148 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold26" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold26".
+230315-23:56:00,149 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold28" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold28".
+230315-23:56:00,152 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold29" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold29".
+230315-23:56:00,153 nipype.workflow INFO:
+	 [Node] Executing "_threshold27" <fmriprep.interfaces.maths.Clip>
+230315-23:56:00,154 nipype.workflow INFO:
+	 [Node] Executing "_threshold28" <fmriprep.interfaces.maths.Clip>
+230315-23:56:00,154 nipype.workflow INFO:
+	 [Node] Executing "_threshold26" <fmriprep.interfaces.maths.Clip>
+230315-23:56:00,156 nipype.workflow INFO:
+	 [Node] Executing "_threshold29" <fmriprep.interfaces.maths.Clip>
+230315-23:56:00,253 nipype.workflow INFO:
+	 [Node] Finished "_threshold29", elapsed time 0.094957s.
+230315-23:56:00,269 nipype.workflow INFO:
+	 [Node] Finished "_threshold26", elapsed time 0.11221s.
+230315-23:56:00,269 nipype.workflow INFO:
+	 [Node] Finished "_threshold27", elapsed time 0.114615s.
+230315-23:56:00,270 nipype.workflow INFO:
+	 [Node] Finished "_threshold28", elapsed time 0.114371s.
+230315-23:56:02,148 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold30" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold30".
+230315-23:56:02,151 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold31" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold31".
+230315-23:56:02,153 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold33" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold33".
+230315-23:56:02,152 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold32" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold32".
+230315-23:56:02,158 nipype.workflow INFO:
+	 [Node] Executing "_threshold30" <fmriprep.interfaces.maths.Clip>
+230315-23:56:02,159 nipype.workflow INFO:
+	 [Node] Executing "_threshold31" <fmriprep.interfaces.maths.Clip>
+230315-23:56:02,159 nipype.workflow INFO:
+	 [Node] Executing "_threshold33" <fmriprep.interfaces.maths.Clip>
+230315-23:56:02,215 nipype.workflow INFO:
+	 [Node] Executing "_threshold32" <fmriprep.interfaces.maths.Clip>
+230315-23:56:02,279 nipype.workflow INFO:
+	 [Node] Finished "_threshold31", elapsed time 0.116406s.
+230315-23:56:02,282 nipype.workflow INFO:
+	 [Node] Finished "_threshold33", elapsed time 0.11861s.
+230315-23:56:02,308 nipype.workflow INFO:
+	 [Node] Finished "_threshold30", elapsed time 0.148121s.
+230315-23:56:02,390 nipype.workflow INFO:
+	 [Node] Finished "_threshold32", elapsed time 0.172924s.
+230315-23:56:04,155 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold34" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold34".
+230315-23:56:04,156 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold35" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold35".
+230315-23:56:04,157 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold36" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold36".
+230315-23:56:04,159 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold37" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold37".
+230315-23:56:04,162 nipype.workflow INFO:
+	 [Node] Executing "_threshold34" <fmriprep.interfaces.maths.Clip>
+230315-23:56:04,164 nipype.workflow INFO:
+	 [Node] Executing "_threshold35" <fmriprep.interfaces.maths.Clip>
+230315-23:56:04,164 nipype.workflow INFO:
+	 [Node] Executing "_threshold36" <fmriprep.interfaces.maths.Clip>
+230315-23:56:04,209 nipype.workflow INFO:
+	 [Node] Executing "_threshold37" <fmriprep.interfaces.maths.Clip>
+230315-23:56:04,275 nipype.workflow INFO:
+	 [Node] Finished "_threshold34", elapsed time 0.111424s.
+230315-23:56:04,277 nipype.workflow INFO:
+	 [Node] Finished "_threshold36", elapsed time 0.108901s.
+230315-23:56:04,326 nipype.workflow INFO:
+	 [Node] Finished "_threshold35", elapsed time 0.159419s.
+230315-23:56:04,346 nipype.workflow INFO:
+	 [Node] Finished "_threshold37", elapsed time 0.134388s.
+230315-23:56:06,213 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold39" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold39".
+230315-23:56:06,213 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold38" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold38".
+230315-23:56:06,213 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold40" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold40".
+230315-23:56:06,213 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold41" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold41".
+230315-23:56:06,217 nipype.workflow INFO:
+	 [Node] Executing "_threshold39" <fmriprep.interfaces.maths.Clip>
+230315-23:56:06,218 nipype.workflow INFO:
+	 [Node] Executing "_threshold38" <fmriprep.interfaces.maths.Clip>
+230315-23:56:06,219 nipype.workflow INFO:
+	 [Node] Executing "_threshold41" <fmriprep.interfaces.maths.Clip>
+230315-23:56:06,220 nipype.workflow INFO:
+	 [Node] Executing "_threshold40" <fmriprep.interfaces.maths.Clip>
+230315-23:56:06,326 nipype.workflow INFO:
+	 [Node] Finished "_threshold39", elapsed time 0.106934s.
+230315-23:56:06,332 nipype.workflow INFO:
+	 [Node] Finished "_threshold40", elapsed time 0.10774s.
+230315-23:56:06,341 nipype.workflow INFO:
+	 [Node] Finished "_threshold38", elapsed time 0.120658s.
+230315-23:56:06,344 nipype.workflow INFO:
+	 [Node] Finished "_threshold41", elapsed time 0.121835s.
+230315-23:56:06,794 nipype.workflow INFO:
+	 [Node] Finished "unifize", elapsed time 108.728981s.
+230315-23:56:08,350 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.fixhdr_unifize" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/fixhdr_unifize".
+230315-23:56:08,358 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold42" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold42".
+230315-23:56:08,362 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold43" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold43".
+230315-23:56:08,364 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold44" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold44".
+230315-23:56:08,365 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold45" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold45".
+230315-23:56:08,399 nipype.workflow INFO:
+	 [Node] Executing "_threshold45" <fmriprep.interfaces.maths.Clip>
+230315-23:56:08,409 nipype.workflow INFO:
+	 [Node] Executing "_threshold42" <fmriprep.interfaces.maths.Clip>
+230315-23:56:08,420 nipype.workflow INFO:
+	 [Node] Executing "_threshold44" <fmriprep.interfaces.maths.Clip>
+230315-23:56:08,429 nipype.workflow INFO:
+	 [Node] Executing "_threshold43" <fmriprep.interfaces.maths.Clip>
+230315-23:56:08,506 nipype.workflow INFO:
+	 [Node] Finished "_threshold45", elapsed time 0.105136s.
+230315-23:56:08,546 nipype.workflow INFO:
+	 [Node] Executing "fixhdr_unifize" <niworkflows.interfaces.header.CopyXForm>
+230315-23:56:08,597 nipype.workflow INFO:
+	 [Node] Finished "_threshold42", elapsed time 0.186399s.
+230315-23:56:08,614 nipype.workflow INFO:
+	 [Node] Finished "fixhdr_unifize", elapsed time 0.065577s.
+230315-23:56:08,619 nipype.workflow INFO:
+	 [Node] Finished "_threshold44", elapsed time 0.197215s.
+230315-23:56:08,646 nipype.workflow INFO:
+	 [Node] Finished "_threshold43", elapsed time 0.215115s.
+230315-23:56:10,211 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold46" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold46".
+230315-23:56:10,212 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold47" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold47".
+230315-23:56:10,222 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold49" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold49".
+230315-23:56:10,222 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold48" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold48".
+230315-23:56:10,259 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.skullstrip_second_pass" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/skullstrip_second_pass".
+230315-23:56:10,264 nipype.workflow INFO:
+	 [Node] Executing "_threshold49" <fmriprep.interfaces.maths.Clip>
+230315-23:56:10,286 nipype.workflow INFO:
+	 [Node] Executing "_threshold47" <fmriprep.interfaces.maths.Clip>
+230315-23:56:10,332 nipype.workflow INFO:
+	 [Node] Executing "_threshold48" <fmriprep.interfaces.maths.Clip>
+230315-23:56:10,344 nipype.workflow INFO:
+	 [Node] Executing "_threshold46" <fmriprep.interfaces.maths.Clip>
+230315-23:56:10,376 nipype.workflow INFO:
+	 [Node] Finished "_threshold49", elapsed time 0.110189s.
+230315-23:56:10,388 nipype.workflow INFO:
+	 [Node] Executing "skullstrip_second_pass" <nipype.interfaces.afni.preprocess.Automask>
+230315-23:56:10,423 nipype.workflow INFO:
+	 [Node] Finished "_threshold47", elapsed time 0.134774s.
+230315-23:56:10,442 nipype.workflow INFO:
+	 [Node] Finished "_threshold48", elapsed time 0.107826s.
+230315-23:56:10,475 nipype.workflow INFO:
+	 [Node] Finished "_threshold46", elapsed time 0.127255s.
+230315-23:56:10,839 nipype.workflow INFO:
+	 [Node] Finished "skullstrip_second_pass", elapsed time 0.447703s.
+230315-23:56:12,238 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.fixhdr_skullstrip2" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/fixhdr_skullstrip2".
+230315-23:56:12,251 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold50" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold50".
+230315-23:56:12,264 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold51" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold51".
+230315-23:56:12,267 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold52" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold52".
+230315-23:56:12,267 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold53" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold53".
+230315-23:56:12,282 nipype.workflow INFO:
+	 [Node] Executing "_threshold52" <fmriprep.interfaces.maths.Clip>
+230315-23:56:12,289 nipype.workflow INFO:
+	 [Node] Executing "_threshold50" <fmriprep.interfaces.maths.Clip>
+230315-23:56:12,315 nipype.workflow INFO:
+	 [Node] Executing "_threshold53" <fmriprep.interfaces.maths.Clip>
+230315-23:56:12,343 nipype.workflow INFO:
+	 [Node] Executing "fixhdr_skullstrip2" <niworkflows.interfaces.header.CopyXForm>
+230315-23:56:12,392 nipype.workflow INFO:
+	 [Node] Executing "_threshold51" <fmriprep.interfaces.maths.Clip>
+230315-23:56:12,400 nipype.workflow INFO:
+	 [Node] Finished "_threshold50", elapsed time 0.10861s.
+230315-23:56:12,406 nipype.workflow INFO:
+	 [Node] Finished "fixhdr_skullstrip2", elapsed time 0.060303s.
+230315-23:56:12,439 nipype.workflow INFO:
+	 [Node] Finished "_threshold52", elapsed time 0.155152s.
+230315-23:56:12,477 nipype.workflow INFO:
+	 [Node] Finished "_threshold53", elapsed time 0.158882s.
+230315-23:56:12,598 nipype.workflow INFO:
+	 [Node] Finished "_threshold51", elapsed time 0.204495s.
+230315-23:56:14,295 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.combine_masks" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/combine_masks".
+230315-23:56:14,297 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold55" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold55".
+230315-23:56:14,299 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold56" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold56".
+230315-23:56:14,301 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold57" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold57".
+230315-23:56:14,296 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold54" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold54".
+230315-23:56:14,311 nipype.workflow INFO:
+	 [Node] Executing "combine_masks" <nipype.interfaces.fsl.maths.BinaryMaths>
+230315-23:56:14,311 nipype.workflow INFO:
+	 [Node] Executing "_threshold56" <fmriprep.interfaces.maths.Clip>
+230315-23:56:14,320 nipype.workflow INFO:
+	 [Node] Executing "_threshold57" <fmriprep.interfaces.maths.Clip>
+230315-23:56:14,330 nipype.workflow INFO:
+	 [Node] Executing "_threshold55" <fmriprep.interfaces.maths.Clip>
+230315-23:56:14,341 nipype.workflow INFO:
+	 [Node] Executing "_threshold54" <fmriprep.interfaces.maths.Clip>
+230315-23:56:14,503 nipype.workflow INFO:
+	 [Node] Finished "_threshold56", elapsed time 0.188789s.
+230315-23:56:14,506 nipype.workflow INFO:
+	 [Node] Finished "_threshold57", elapsed time 0.183032s.
+230315-23:56:14,526 nipype.workflow INFO:
+	 [Node] Finished "_threshold54", elapsed time 0.182354s.
+230315-23:56:14,537 nipype.workflow INFO:
+	 [Node] Finished "_threshold55", elapsed time 0.204448s.
+230315-23:56:14,621 nipype.workflow INFO:
+	 [Node] Finished "combine_masks", elapsed time 0.307368s.
+230315-23:56:16,180 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.enhance_and_skullstrip_bold_wf.apply_mask" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/enhance_and_skullstrip_bold_wf/apply_mask".
+230315-23:56:16,186 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold58" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold58".
+230315-23:56:16,190 nipype.workflow INFO:
+	 [Node] Executing "_threshold58" <fmriprep.interfaces.maths.Clip>
+230315-23:56:16,193 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold59" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold59".
+230315-23:56:16,193 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold61" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold61".
+230315-23:56:16,193 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold60" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold60".
+230315-23:56:16,208 nipype.workflow INFO:
+	 [Node] Executing "_threshold61" <fmriprep.interfaces.maths.Clip>
+230315-23:56:16,220 nipype.workflow INFO:
+	 [Node] Executing "_threshold60" <fmriprep.interfaces.maths.Clip>
+230315-23:56:16,280 nipype.workflow INFO:
+	 [Node] Finished "_threshold58", elapsed time 0.087675s.
+230315-23:56:16,283 nipype.workflow INFO:
+	 [Node] Executing "apply_mask" <niworkflows.interfaces.nibabel.ApplyMask>
+230315-23:56:16,315 nipype.workflow INFO:
+	 [Node] Finished "apply_mask", elapsed time 0.03s.
+230315-23:56:16,320 nipype.workflow INFO:
+	 [Node] Executing "_threshold59" <fmriprep.interfaces.maths.Clip>
+230315-23:56:16,341 nipype.workflow INFO:
+	 [Node] Finished "_threshold60", elapsed time 0.118707s.
+230315-23:56:16,349 nipype.workflow INFO:
+	 [Node] Finished "_threshold61", elapsed time 0.138662s.
+230315-23:56:16,533 nipype.workflow INFO:
+	 [Node] Finished "_threshold59", elapsed time 0.21137s.
+230315-23:56:18,166 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold62" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold62".
+230315-23:56:18,168 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold63" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold63".
+230315-23:56:18,169 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold64" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold64".
+230315-23:56:18,169 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold66" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold66".
+230315-23:56:18,169 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold65" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold65".
+230315-23:56:18,175 nipype.workflow INFO:
+	 [Node] Executing "_threshold62" <fmriprep.interfaces.maths.Clip>
+230315-23:56:18,176 nipype.workflow INFO:
+	 [Node] Executing "_threshold63" <fmriprep.interfaces.maths.Clip>
+230315-23:56:18,178 nipype.workflow INFO:
+	 [Node] Executing "_threshold65" <fmriprep.interfaces.maths.Clip>
+230315-23:56:18,184 nipype.workflow INFO:
+	 [Node] Executing "_threshold66" <fmriprep.interfaces.maths.Clip>
+230315-23:56:18,187 nipype.workflow INFO:
+	 [Node] Executing "_threshold64" <fmriprep.interfaces.maths.Clip>
+230315-23:56:18,278 nipype.workflow INFO:
+	 [Node] Finished "_threshold66", elapsed time 0.091777s.
+230315-23:56:18,286 nipype.workflow INFO:
+	 [Node] Finished "_threshold65", elapsed time 0.105194s.
+230315-23:56:18,346 nipype.workflow INFO:
+	 [Node] Finished "_threshold63", elapsed time 0.167419s.
+230315-23:56:18,403 nipype.workflow INFO:
+	 [Node] Finished "_threshold64", elapsed time 0.213845s.
+230315-23:56:18,412 nipype.workflow INFO:
+	 [Node] Finished "_threshold62", elapsed time 0.233255s.
+230315-23:56:20,146 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold68" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold68".
+230315-23:56:20,146 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold67" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold67".
+230315-23:56:20,148 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold69" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold69".
+230315-23:56:20,148 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold70" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold70".
+230315-23:56:20,150 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold71" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold71".
+230315-23:56:20,151 nipype.workflow INFO:
+	 [Node] Executing "_threshold68" <fmriprep.interfaces.maths.Clip>
+230315-23:56:20,154 nipype.workflow INFO:
+	 [Node] Executing "_threshold69" <fmriprep.interfaces.maths.Clip>
+230315-23:56:20,154 nipype.workflow INFO:
+	 [Node] Executing "_threshold67" <fmriprep.interfaces.maths.Clip>
+230315-23:56:20,154 nipype.workflow INFO:
+	 [Node] Executing "_threshold70" <fmriprep.interfaces.maths.Clip>
+230315-23:56:20,155 nipype.workflow INFO:
+	 [Node] Executing "_threshold71" <fmriprep.interfaces.maths.Clip>
+230315-23:56:20,240 nipype.workflow INFO:
+	 [Node] Finished "_threshold68", elapsed time 0.087067s.
+230315-23:56:20,253 nipype.workflow INFO:
+	 [Node] Finished "_threshold69", elapsed time 0.095506s.
+230315-23:56:20,258 nipype.workflow INFO:
+	 [Node] Finished "_threshold70", elapsed time 0.100402s.
+230315-23:56:20,261 nipype.workflow INFO:
+	 [Node] Finished "_threshold71", elapsed time 0.103726s.
+230315-23:56:20,262 nipype.workflow INFO:
+	 [Node] Finished "_threshold67", elapsed time 0.104002s.
+230315-23:56:22,294 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold72" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold72".
+230315-23:56:22,308 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold73" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold73".
+230315-23:56:22,310 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold74" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold74".
+230315-23:56:22,311 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold76" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold76".
+230315-23:56:22,312 nipype.workflow INFO:
+	 [Node] Setting-up "_threshold75" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_bold_trans_wf/threshold/mapflow/_threshold75".
+230315-23:56:22,314 nipype.workflow INFO:
+	 [Node] Executing "_threshold73" <fmriprep.interfaces.maths.Clip>
+230315-23:56:22,317 nipype.workflow INFO:
+	 [Node] Executing "_threshold74" <fmriprep.interfaces.maths.Clip>
+230315-23:56:22,336 nipype.workflow INFO:
+	 [Node] Executing "_threshold76" <fmriprep.interfaces.maths.Clip>
+230315-23:56:22,361 nipype.workflow INFO:
+	 [Node] Executing "_threshold72" <fmriprep.interfaces.maths.Clip>
+230315-23:56:22,363 nipype.workflow INFO:
+	 [Node] Executing "_threshold75" <fmriprep.interfaces.maths.Clip>
+230315-23:56:22,431 nipype.workflow INFO:
+	 [Node] Finished "_threshold73", elapsed time 0.113886s.
+230315-23:56:22,465 nipype.workflow INFO:
+	 [Node] Finished "_threshold72", elapsed time 0.101835s.
+230315-23:56:22,480 nipype.workflow INFO:
+	 [Node] Finished "_threshold74", elapsed time 0.160837s.
+230315-23:56:22,569 nipype.workflow INFO:
+	 [Node] Finished "_threshold76", elapsed time 0.230194s.
+230315-23:56:22,571 nipype.workflow INFO:
+	 [Node] Finished "_threshold75", elapsed time 0.20567s.
+230315-23:56:23,671 nipype.workflow INFO:
+	 [Node] Finished "bold_transform", elapsed time 39.44859s.
+230315-23:56:23,671 nipype.workflow WARNING:
+	 Storing result file without outputs
+230315-23:56:23,676 nipype.workflow WARNING:
+	 [Node] Error on "fmriprep_22_0_wf.single_subject_rugby1_wf.func_preproc_ses_b_task_rest_run_001_wf.bold_bold_trans_wf.bold_transform" (/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_bold_trans_wf/bold_transform)
+230315-23:56:24,54 nipype.workflow ERROR:
+	 Node bold_transform failed to run on host wmc005.
+230315-23:56:24,59 nipype.workflow ERROR:
+	 Saving crash info to /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/fmriprep/sub-rugby1/log/20230315-235126_22cfe8e4-d1ee-4d6d-a000-67a7df8064d2/crash-20230315-235624-jmcg465-bold_transform-977bcd2a-91b9-4570-8be1-357c02d4ef87.txt
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/plugins/multiproc.py", line 67, in run_node
+    result["result"] = node.run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 527, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 645, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 771, in _run_command
+    raise NodeExecutionError(msg)
+nipype.pipeline.engine.nodes.NodeExecutionError: Exception raised while executing Node bold_transform.
+
+Traceback:
+	Traceback (most recent call last):
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 398, in run
+	    runtime = self._run_interface(runtime)
+	  File "/opt/conda/lib/python3.9/site-packages/niworkflows/interfaces/itk.py", line 186, in _run_interface
+	    out_files = list(
+	  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 609, in result_iterator
+	    yield fs.pop().result()
+	  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 439, in result
+	    return self.__get_result()
+	  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 391, in __get_result
+	    raise self._exception
+	  File "/opt/conda/lib/python3.9/concurrent/futures/thread.py", line 58, in run
+	    result = self.fn(*self.args, **self.kwargs)
+	  File "/opt/conda/lib/python3.9/site-packages/niworkflows/interfaces/itk.py", line 249, in _applytfms
+	    xfm = ApplyTransforms(
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/ants/base.py", line 77, in __init__
+	    super(ANTSCommand, self).__init__(**inputs)
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 630, in __init__
+	    super(CommandLine, self).__init__(**inputs)
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 202, in __init__
+	    self.inputs.trait_set(**inputs)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/has_traits.py", line 1520, in trait_set
+	    setattr(self, name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/traits_extension.py", line 425, in validate
+	    value = super(MultiObject, self).validate(objekt, name, newvalue)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_types.py", line 2699, in validate
+	    return TraitListObject(self, object, name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_list_object.py", line 582, in __init__
+	    super().__init__(
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_list_object.py", line 213, in __init__
+	    super().__init__(self.item_validator(item) for item in iterable)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_list_object.py", line 213, in <genexpr>
+	    super().__init__(self.item_validator(item) for item in iterable)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_list_object.py", line 865, in _item_validator
+	    return trait_validator(object, self.name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_handlers.py", line 873, in validate
+	    return self.slow_validate(object, name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_handlers.py", line 881, in slow_validate
+	    self.error(object, name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/base_trait_handler.py", line 74, in error
+	    raise TraitError(
+	traits.trait_errors.TraitError: Each element of the 'transforms' trait of a _FixTraitApplyTransformsInputSpec instance must be a pathlike object or string representing an existing file or 'identity', but a value of '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_bold_trans_wf/bold_transform/tmp-e36lr75w/mat2itk_pos-001_xfm-00127.txt' <class 'str'> was specified.
+
+
+230315-23:56:24,82 nipype.workflow CRITICAL:
+	 fMRIPrep failed: Traceback (most recent call last):
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/plugins/multiproc.py", line 67, in run_node
+    result["result"] = node.run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 527, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 645, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 771, in _run_command
+    raise NodeExecutionError(msg)
+nipype.pipeline.engine.nodes.NodeExecutionError: Exception raised while executing Node bold_transform.
+
+Traceback:
+	Traceback (most recent call last):
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 398, in run
+	    runtime = self._run_interface(runtime)
+	  File "/opt/conda/lib/python3.9/site-packages/niworkflows/interfaces/itk.py", line 186, in _run_interface
+	    out_files = list(
+	  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 609, in result_iterator
+	    yield fs.pop().result()
+	  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 439, in result
+	    return self.__get_result()
+	  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 391, in __get_result
+	    raise self._exception
+	  File "/opt/conda/lib/python3.9/concurrent/futures/thread.py", line 58, in run
+	    result = self.fn(*self.args, **self.kwargs)
+	  File "/opt/conda/lib/python3.9/site-packages/niworkflows/interfaces/itk.py", line 249, in _applytfms
+	    xfm = ApplyTransforms(
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/ants/base.py", line 77, in __init__
+	    super(ANTSCommand, self).__init__(**inputs)
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 630, in __init__
+	    super(CommandLine, self).__init__(**inputs)
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 202, in __init__
+	    self.inputs.trait_set(**inputs)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/has_traits.py", line 1520, in trait_set
+	    setattr(self, name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/traits_extension.py", line 425, in validate
+	    value = super(MultiObject, self).validate(objekt, name, newvalue)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_types.py", line 2699, in validate
+	    return TraitListObject(self, object, name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_list_object.py", line 582, in __init__
+	    super().__init__(
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_list_object.py", line 213, in __init__
+	    super().__init__(self.item_validator(item) for item in iterable)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_list_object.py", line 213, in <genexpr>
+	    super().__init__(self.item_validator(item) for item in iterable)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_list_object.py", line 865, in _item_validator
+	    return trait_validator(object, self.name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_handlers.py", line 873, in validate
+	    return self.slow_validate(object, name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/trait_handlers.py", line 881, in slow_validate
+	    self.error(object, name, value)
+	  File "/opt/conda/lib/python3.9/site-packages/traits/base_trait_handler.py", line 74, in error
+	    raise TraitError(
+	traits.trait_errors.TraitError: Each element of the 'transforms' trait of a _FixTraitApplyTransformsInputSpec instance must be a pathlike object or string representing an existing file or 'identity', but a value of '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/func_preproc_ses_b_task_rest_run_001_wf/bold_bold_trans_wf/bold_transform/tmp-e36lr75w/mat2itk_pos-001_xfm-00127.txt' <class 'str'> was specified.
+
+
+230315-23:56:25,236 cli ERROR:
+	 Preprocessing did not finish successfully. Errors occurred while processing data from participants: rugby1 (1). Check the HTML reports for details.
+230315-23:56:25,236 cli ERROR:
+	 Preprocessing did not finish successfully. Errors occurred while processing data from participants: rugby1 (1). Check the HTML reports for details.
+230315-23:56:26,398 nipype.workflow INFO:
+	 [Node] Finished "unifize", elapsed time 100.305802s.
+230316-00:02:30,672 nipype.workflow INFO:
+	 [Node] Finished "_n4_correct1", elapsed time 580.587674s.
+230316-00:02:30,673 nipype.workflow WARNING:
+	 Storing result file without outputs
+230316-00:02:30,678 nipype.workflow WARNING:
+	 [Node] Error on "_n4_correct1" (/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/n4_correct/mapflow/_n4_correct1)
+230316-00:02:44,26 nipype.workflow INFO:
+	 [Node] Finished "_n4_correct0", elapsed time 593.926083s.
+230316-00:02:44,27 nipype.workflow WARNING:
+	 Storing result file without outputs
+230316-00:02:44,31 nipype.workflow WARNING:
+	 [Node] Error on "_n4_correct0" (/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work/fmriprep_22_0_wf/single_subject_rugby1_wf/anat_preproc_wf/anat_template_wf/n4_correct/mapflow/_n4_correct0)
+[Thu Mar 16 13:02:44 2023]
+Error in rule fmriprep:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/fmriprep/sub-rugby1
+    shell:
+        fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/fmriprep participant --participant-label rugby1 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --fs-subjects-dir /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/freesurfer_agg --output-spaces MNI152NLin2009cAsym:res-2 --stop-on-first-crash --low-mem --mem-mb 25000 --nprocs 16 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/work
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job fmriprep since they might be corrupted:
+/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_long/bids/derivatives/fmriprep/sub-rugby1
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

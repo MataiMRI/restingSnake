@@ -1,0 +1,17 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Fri Dec  9 16:20:21 2022]
+rule tidy_dicoms:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom_test_josh/Conc_20Ntb14_Ctrl_18_A
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/tidy/sub_ctrl18/ses_a/.completed
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh, subject=ctrl18, session=a
+    resources: mem_mb=512, disk_mb=1000, tmpdir=/dev/shm/jobs/31831278, cpus=1, time_min=5, gpu=0
+
+[Fri Dec  9 16:20:29 2022]
+Finished job 0.
+1 of 1 steps (100%) done

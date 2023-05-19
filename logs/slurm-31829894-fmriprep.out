@@ -1,0 +1,135 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Fri Dec  9 16:01:57 2022]
+rule fmriprep:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-ctrl18/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer_agg/sub-ctrl18
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/fmriprep/sub-ctrl18
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test, subject=ctrl18
+    threads: 16
+    resources: mem_mb=20000, disk_mb=1000, tmpdir=/dev/shm/jobs/31829894, cpus=16, time_min=1440, gpu=0
+
+fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/fmriprep participant --participant-label ctrl18 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --fs-subjects-dir /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer_agg --output-spaces MNI152NLin2009cAsym:res-2 --stop-on-first-crash --low-mem --mem-mb 20000 --nprocs 16 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/8ba2e11db7a36df6ed76807c131c9dc5.simg
+221209-03:02:14,579 nipype.workflow IMPORTANT:
+	 Running fMRIPrep version 22.0.2
+
+         License NOTICE ##################################################
+         fMRIPrep 22.0.2
+         Copyright 2022 The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software redistributes the versioneer Python package, which is
+         Public domain source code.
+         
+         This software is also distributed as a Docker container image.
+         The bootstraping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+221209-03:02:14,616 nipype.workflow IMPORTANT:
+	 Building fMRIPrep's workflow:
+           * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids.
+           * Participant list: ['ctrl18'].
+           * Run identifier: 20221209-030201_0da49aef-3a2e-48f0-a4f4-291c77260e07.
+           * Output spaces: MNI152NLin2009cAsym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer_agg.
+221209-03:02:15,956 nipype.workflow INFO:
+	 No single-band-reference found for sub-ctrl18_ses-a_task-rest_run-001_bold.nii.gz.
+221209-03:02:16,55 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.721s.
+221209-03:02:16,286 nipype.workflow INFO:
+	 No single-band-reference found for sub-ctrl18_ses-a_task-rest_run-002_bold.nii.gz.
+221209-03:02:16,378 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.981s.
+221209-03:02:19,359 nipype.workflow INFO:
+	 fMRIPrep workflow graph with 583 nodes built successfully.
+221209-03:02:31,556 nipype.workflow IMPORTANT:
+	 fMRIPrep started!
+221209-03:02:32,130 nipype.workflow WARNING:
+	 Storing result file without outputs
+221209-03:02:32,133 nipype.workflow WARNING:
+	 [Node] Error on "fmriprep_22_0_wf.fsdir_run_20221209_030201_0da49aef_3a2e_48f0_a4f4_291c77260e07" (/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_22_0_wf/fsdir_run_20221209_030201_0da49aef_3a2e_48f0_a4f4_291c77260e07)
+221209-03:02:32,136 nipype.workflow ERROR:
+	 Node fsdir_run_20221209_030201_0da49aef_3a2e_48f0_a4f4_291c77260e07 failed to run on host wmc019.
+221209-03:02:32,141 nipype.workflow ERROR:
+	 Saving crash info to /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/fmriprep/logs/crash-20221209-030232-jmcg465-fsdir_run_20221209_030201_0da49aef_3a2e_48f0_a4f4_291c77260e07-46e9a071-e961-4fdf-a828-fc0d0120b5bc.txt
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/plugins/multiproc.py", line 344, in _send_procs_to_workers
+    self.procs[jobid].run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 527, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 645, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 771, in _run_command
+    raise NodeExecutionError(msg)
+nipype.pipeline.engine.nodes.NodeExecutionError: Exception raised while executing Node fsdir_run_20221209_030201_0da49aef_3a2e_48f0_a4f4_291c77260e07.
+
+Traceback:
+	Traceback (most recent call last):
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 398, in run
+	    runtime = self._run_interface(runtime)
+	  File "/opt/conda/lib/python3.9/site-packages/niworkflows/interfaces/bids.py", line 923, in _run_interface
+	    shutil.rmtree(dest)
+	  File "/opt/conda/lib/python3.9/shutil.py", line 732, in rmtree
+	    _rmtree_safe_fd(fd, path, onerror)
+	  File "/opt/conda/lib/python3.9/shutil.py", line 671, in _rmtree_safe_fd
+	    onerror(os.rmdir, fullname, sys.exc_info())
+	  File "/opt/conda/lib/python3.9/shutil.py", line 669, in _rmtree_safe_fd
+	    os.rmdir(entry.name, dir_fd=topfd)
+	OSError: [Errno 39] Directory not empty: 'label'
+
+
+221209-03:02:32,154 nipype.workflow CRITICAL:
+	 fMRIPrep failed: Traceback (most recent call last):
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/plugins/multiproc.py", line 344, in _send_procs_to_workers
+    self.procs[jobid].run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 527, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 645, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.9/site-packages/nipype/pipeline/engine/nodes.py", line 771, in _run_command
+    raise NodeExecutionError(msg)
+nipype.pipeline.engine.nodes.NodeExecutionError: Exception raised while executing Node fsdir_run_20221209_030201_0da49aef_3a2e_48f0_a4f4_291c77260e07.
+
+Traceback:
+	Traceback (most recent call last):
+	  File "/opt/conda/lib/python3.9/site-packages/nipype/interfaces/base/core.py", line 398, in run
+	    runtime = self._run_interface(runtime)
+	  File "/opt/conda/lib/python3.9/site-packages/niworkflows/interfaces/bids.py", line 923, in _run_interface
+	    shutil.rmtree(dest)
+	  File "/opt/conda/lib/python3.9/shutil.py", line 732, in rmtree
+	    _rmtree_safe_fd(fd, path, onerror)
+	  File "/opt/conda/lib/python3.9/shutil.py", line 671, in _rmtree_safe_fd
+	    onerror(os.rmdir, fullname, sys.exc_info())
+	  File "/opt/conda/lib/python3.9/shutil.py", line 669, in _rmtree_safe_fd
+	    os.rmdir(entry.name, dir_fd=topfd)
+	OSError: [Errno 39] Directory not empty: 'label'
+
+
+Sentry is attempting to send 3 pending error messages
+Waiting up to 2 seconds
+Press Ctrl-C to quit
+[Fri Dec  9 16:02:33 2022]
+Error in rule fmriprep:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/fmriprep/sub-ctrl18
+    shell:
+        fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/fmriprep participant --participant-label ctrl18 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --fs-subjects-dir /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer_agg --output-spaces MNI152NLin2009cAsym:res-2 --stop-on-first-crash --low-mem --mem-mb 20000 --nprocs 16 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job fmriprep since they might be corrupted:
+/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/fmriprep/sub-ctrl18
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

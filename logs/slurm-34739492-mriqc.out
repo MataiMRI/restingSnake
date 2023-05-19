@@ -1,0 +1,96 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, cpus=8, time_min=120, gpu=0, mem_gb=16
+Select jobs to execute...
+
+[Sun Apr 23 15:19:35 2023]
+rule mriqc:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-rugby1/ses-b
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc/sub-rugby1
+    log: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/fmriprep/sub-rugby1.html
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc/sub-rugby1
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross, subject=rugby1
+    threads: 8
+    resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/34739492, cpus=8, time_min=120, gpu=0, mem_gb=16
+
+mriqc /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc participant --participant-label rugby1 --mem 16 --nprocs 8 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/work 
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/62b788ffbe002df7aabb5b5b0b010147.simg
+230423-03:19:54,598 cli IMPORTANT:
+	 
+    Running MRIQC version 23.0.1:
+      * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids.
+      * Output folder: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc.
+      * Analysis levels: ['participant'].
+
+Downloading https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_desc-head_mask.nii.gz
+  0%|          | 0.00/976k [00:00<?, ?B/s]  2%|▏         | 16.4k/976k [00:00<00:09, 101kB/s]  5%|▌         | 51.2k/976k [00:00<00:06, 144kB/s] 14%|█▍        | 138k/976k [00:00<00:02, 287kB/s]  27%|██▋       | 260k/976k [00:00<00:01, 411kB/s] 52%|█████▏    | 504k/976k [00:00<00:00, 695kB/s]100%|██████████| 976k/976k [00:01<00:00, 972kB/s]
+Downloading https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_label-CSF_probseg.nii.gz
+  0%|          | 0.00/5.49M [00:00<?, ?B/s]  0%|          | 17.4k/5.49M [00:00<01:04, 84.4kB/s]  1%|          | 43.0k/5.49M [00:00<00:50, 107kB/s]   1%|▏         | 77.8k/5.49M [00:00<00:40, 135kB/s]  2%|▏         | 95.2k/5.49M [00:00<00:47, 115kB/s]  2%|▏         | 135k/5.49M [00:01<00:37, 143kB/s]   3%|▎         | 162k/5.49M [00:01<00:38, 138kB/s]  4%|▍         | 207k/5.49M [00:01<00:32, 163kB/s]  4%|▍         | 243k/5.49M [00:01<00:31, 166kB/s]  5%|▌         | 278k/5.49M [00:01<00:31, 167kB/s]  6%|▌         | 330k/5.49M [00:02<00:26, 193kB/s]  7%|▋         | 360k/5.49M [00:02<00:26, 192kB/s]  8%|▊         | 414k/5.49M [00:02<00:25, 198kB/s]  8%|▊         | 466k/5.49M [00:02<00:23, 214kB/s]  9%|▉         | 504k/5.49M [00:02<00:22, 219kB/s] 10%|█         | 566k/5.49M [00:03<00:21, 229kB/s] 11%|█▏        | 630k/5.49M [00:03<00:19, 251kB/s] 12%|█▏        | 675k/5.49M [00:03<00:18, 257kB/s] 13%|█▎        | 737k/5.49M [00:03<00:15, 309kB/s] 14%|█▍        | 771k/5.49M [00:03<00:15, 299kB/s] 15%|█▍        | 809k/5.49M [00:03<00:18, 258kB/s] 16%|█▌        | 879k/5.49M [00:04<00:16, 283kB/s] 17%|█▋        | 936k/5.49M [00:04<00:14, 324kB/s] 18%|█▊        | 1.01M/5.49M [00:04<00:11, 384kB/s] 19%|█▉        | 1.05M/5.49M [00:04<00:13, 341kB/s] 20%|██        | 1.11M/5.49M [00:04<00:13, 318kB/s] 22%|██▏       | 1.19M/5.49M [00:04<00:10, 398kB/s] 23%|██▎       | 1.28M/5.49M [00:05<00:09, 443kB/s] 24%|██▍       | 1.33M/5.49M [00:05<00:09, 423kB/s] 25%|██▌       | 1.39M/5.49M [00:05<00:09, 423kB/s] 27%|██▋       | 1.50M/5.49M [00:05<00:07, 532kB/s] 28%|██▊       | 1.56M/5.49M [00:05<00:07, 506kB/s] 30%|██▉       | 1.64M/5.49M [00:05<00:07, 506kB/s] 32%|███▏      | 1.78M/5.49M [00:05<00:06, 569kB/s] 35%|███▍      | 1.92M/5.49M [00:06<00:05, 651kB/s] 38%|███▊      | 2.09M/5.49M [00:06<00:04, 715kB/s] 41%|████      | 2.27M/5.49M [00:06<00:04, 756kB/s] 45%|████▍     | 2.46M/5.49M [00:06<00:03, 810kB/s] 49%|████▉     | 2.68M/5.49M [00:06<00:02, 947kB/s] 51%|█████     | 2.78M/5.49M [00:07<00:02, 907kB/s] 53%|█████▎    | 2.91M/5.49M [00:07<00:02, 953kB/s] 57%|█████▋    | 3.15M/5.49M [00:07<00:02, 1.03MB/s] 62%|██████▏   | 3.41M/5.49M [00:07<00:01, 1.11MB/s] 68%|██████▊   | 3.71M/5.49M [00:07<00:01, 1.21MB/s] 73%|███████▎  | 4.02M/5.49M [00:08<00:01, 1.30MB/s] 79%|███████▉  | 4.35M/5.49M [00:08<00:00, 1.40MB/s] 86%|████████▌ | 4.70M/5.49M [00:08<00:00, 1.48MB/s] 93%|█████████▎| 5.09M/5.49M [00:08<00:00, 1.59MB/s]100%|██████████| 5.49M/5.49M [00:08<00:00, 629kB/s] 
+Downloading https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_label-GM_probseg.nii.gz
+  0%|          | 0.00/7.57M [00:00<?, ?B/s]  0%|          | 18.4k/7.57M [00:00<01:24, 89.2kB/s]  1%|          | 53.2k/7.57M [00:00<00:55, 135kB/s]   2%|▏         | 140k/7.57M [00:00<00:28, 265kB/s]   3%|▎         | 262k/7.57M [00:00<00:18, 391kB/s]  6%|▌         | 471k/7.57M [00:01<00:11, 612kB/s] 13%|█▎        | 958k/7.57M [00:01<00:05, 1.20MB/s] 26%|██▌       | 1.93M/7.57M [00:01<00:02, 2.34MB/s] 38%|███▊      | 2.86M/7.57M [00:01<00:02, 2.25MB/s] 75%|███████▌  | 5.70M/7.57M [00:02<00:00, 5.14MB/s] 87%|████████▋ | 6.56M/7.57M [00:02<00:00, 4.83MB/s]100%|██████████| 7.57M/7.57M [00:02<00:00, 3.23MB/s]
+Downloading https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_label-WM_probseg.nii.gz
+  0%|          | 0.00/6.91M [00:00<?, ?B/s]  0%|          | 2.05k/6.91M [00:00<11:36, 9.91kB/s]  1%|          | 52.2k/6.91M [00:00<00:46, 146kB/s]   2%|▏         | 121k/6.91M [00:00<00:29, 230kB/s]   3%|▎         | 179k/6.91M [00:00<00:26, 250kB/s]  4%|▎         | 250k/6.91M [00:01<00:23, 282kB/s]  5%|▍         | 324k/6.91M [00:01<00:21, 307kB/s]  6%|▌         | 410k/6.91M [00:01<00:19, 342kB/s]  7%|▋         | 486k/6.91M [00:01<00:18, 349kB/s]  8%|▊         | 564k/6.91M [00:01<00:17, 357kB/s]  9%|▉         | 656k/6.91M [00:02<00:16, 383kB/s] 11%|█         | 746k/6.91M [00:02<00:15, 398kB/s] 12%|█▏        | 855k/6.91M [00:02<00:13, 436kB/s] 14%|█▎        | 950k/6.91M [00:02<00:13, 442kB/s] 15%|█▌        | 1.06M/6.91M [00:02<00:12, 471kB/s] 17%|█▋        | 1.18M/6.91M [00:03<00:11, 498kB/s] 19%|█▉        | 1.30M/6.91M [00:03<00:10, 518kB/s] 21%|██        | 1.42M/6.91M [00:03<00:10, 541kB/s] 22%|██▏       | 1.54M/6.91M [00:03<00:09, 592kB/s] 24%|██▍       | 1.68M/6.91M [00:03<00:08, 616kB/s] 26%|██▋       | 1.82M/6.91M [00:04<00:07, 721kB/s] 27%|██▋       | 1.90M/6.91M [00:04<00:07, 692kB/s] 29%|██▊       | 1.98M/6.91M [00:04<00:07, 632kB/s] 31%|███       | 2.13M/6.91M [00:04<00:06, 785kB/s] 32%|███▏      | 2.22M/6.91M [00:04<00:06, 748kB/s] 33%|███▎      | 2.31M/6.91M [00:04<00:06, 687kB/s] 36%|███▌      | 2.48M/6.91M [00:04<00:05, 743kB/s] 39%|███▊      | 2.67M/6.91M [00:05<00:05, 750kB/s] 41%|████▏     | 2.87M/6.91M [00:05<00:04, 860kB/s] 44%|████▍     | 3.07M/6.91M [00:05<00:04, 849kB/s] 47%|████▋     | 3.28M/6.91M [00:05<00:03, 956kB/s] 51%|█████     | 3.51M/6.91M [00:05<00:03, 998kB/s] 54%|█████▍    | 3.74M/6.91M [00:06<00:02, 1.09MB/s] 57%|█████▋    | 3.94M/6.91M [00:06<00:02, 1.22MB/s] 59%|█████▉    | 4.07M/6.91M [00:06<00:02, 1.08MB/s] 62%|██████▏   | 4.26M/6.91M [00:06<00:02, 1.02MB/s] 65%|██████▌   | 4.52M/6.91M [00:06<00:01, 1.27MB/s] 69%|██████▊   | 4.75M/6.91M [00:06<00:01, 1.40MB/s] 71%|███████   | 4.90M/6.91M [00:07<00:01, 1.24MB/s] 74%|███████▍  | 5.11M/6.91M [00:07<00:01, 1.26MB/s] 78%|███████▊  | 5.42M/6.91M [00:07<00:01, 1.35MB/s] 83%|████████▎ | 5.75M/6.91M [00:07<00:00, 1.53MB/s] 87%|████████▋ | 6.03M/6.91M [00:07<00:00, 1.70MB/s] 90%|████████▉ | 6.21M/6.91M [00:07<00:00, 1.49MB/s] 94%|█████████▎| 6.47M/6.91M [00:08<00:00, 1.64MB/s] 98%|█████████▊| 6.78M/6.91M [00:08<00:00, 1.88MB/s]100%|██████████| 6.91M/6.91M [00:08<00:00, 830kB/s] 
+230423-03:20:40,732 cli WARNING:
+	 IMPORTANT: Anonymized quality metrics (IQMs) will be submitted to MRIQC's metrics repository. Submission of IQMs can be disabled using the ``--no-sub`` argument. Please visit https://mriqc.readthedocs.io/en/latest/dsa.html to revise MRIQC's Data Sharing Agreement.
+exception calling callback for <Future at 0x155541ca7370 state=finished raised BrokenProcessPool>
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 330, in _invoke_callbacks
+    callback(self)
+  File "/opt/conda/lib/python3.9/site-packages/mriqc/engine/plugin.py", line 451, in _async_callback
+    result = args.result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 439, in result
+    return self.__get_result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 391, in __get_result
+    raise self._exception
+concurrent.futures.process.BrokenProcessPool: A process in the process pool was terminated abruptly while the future was running or pending.
+exception calling callback for <Future at 0x155541cae6d0 state=finished raised BrokenProcessPool>
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 330, in _invoke_callbacks
+    callback(self)
+  File "/opt/conda/lib/python3.9/site-packages/mriqc/engine/plugin.py", line 451, in _async_callback
+    result = args.result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 439, in result
+    return self.__get_result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 391, in __get_result
+    raise self._exception
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 330, in _invoke_callbacks
+    callback(self)
+  File "/opt/conda/lib/python3.9/site-packages/mriqc/engine/plugin.py", line 451, in _async_callback
+    result = args.result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 439, in result
+    return self.__get_result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 391, in __get_result
+    raise self._exception
+concurrent.futures.process.BrokenProcessPool: A process in the process pool was terminated abruptly while the future was running or pending.
+exception calling callback for <Future at 0x155541caee50 state=finished raised BrokenProcessPool>
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 330, in _invoke_callbacks
+    callback(self)
+  File "/opt/conda/lib/python3.9/site-packages/mriqc/engine/plugin.py", line 451, in _async_callback
+    result = args.result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 439, in result
+    return self.__get_result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 391, in __get_result
+    raise self._exception
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 330, in _invoke_callbacks
+    callback(self)
+  File "/opt/conda/lib/python3.9/site-packages/mriqc/engine/plugin.py", line 451, in _async_callback
+    result = args.result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 439, in result
+    return self.__get_result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 391, in __get_result
+    raise self._exception
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 330, in _invoke_callbacks
+    callback(self)
+  File "/opt/conda/lib/python3.9/site-packages/mriqc/engine/plugin.py", line 451, in _async_callback
+    result = args.result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 439, in result
+    return self.__get_result()
+  File "/opt/conda/lib/python3.9/concurrent/futures/_base.py", line 391, in __get_result
+    raise self._exception
+concurrent.futures.process.BrokenProcessPool: A process in the process pool was terminated abruptly while the future was running or pending.
+slurmstepd: error: *** JOB 34739492 ON wmc011 CANCELLED AT 2023-04-23T03:22:45 ***
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=34739492.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.

@@ -1,0 +1,217 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Fri Feb 24 09:26:28 2023]
+rule freesurfer_long_template:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1, subject=rugby1
+    threads: 8
+    resources: mem_mb=4000, disk_mb=1000, tmpdir=/dev/shm/jobs/33129888, cpus=8, time_min=540, gpu=0
+
+export FS_LICENSE=$(realpath ./license.txt) && recon-all -base rugby1.template -tp sub-rugby1_ses-a -tp sub-rugby1_ses-b -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer -all -qcache -3T -openmp 8 
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/c66156cbff3a6cc1d877931475183419.simg
+Subject Stamp: freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.1-f53a55a
+Current Stamp: freesurfer-Linux-centos6_x86_64-stable-pub-v6.0.1-f53a55a
+INFO: SUBJECTS_DIR is /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer
+Actual FREESURFER_HOME /opt/freesurfer
+Linux wmc006 4.18.0-348.23.1.el8_5.x86_64 #1 SMP Wed Apr 27 15:32:52 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+'/opt/freesurfer/bin/recon-all' -> '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/scripts/recon-all.local-copy'
+#--------------------------------------------
+#@# Longitudinal Base Subject Creation Thu Feb 23 20:26:47  2023
+/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template
+
+ mri_diff --notallow-pix --notallow-geo /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/rawavg.mgz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/rawavg.mgz 
+
+Volumes differ in dimension
+v1dim 512 512 300 1
+v2dim 512 512 199 1
+
+*******************************************************************************
+WARNING: Image parameters differ across time, maybe due to aquisition changes?
+         Consistent changes in, e.g., resolution can potentially bias a 
+         longitudinal study! You can check image parameters by running mri_info
+         on each input image. Will continue in 10 seconds ...
+*******************************************************************************
+
+
+ mri_robust_template --mov /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/norm.mgz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/norm.mgz --lta /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/transforms/sub-rugby1_ses-a_to_rugby1.template.lta /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/transforms/sub-rugby1_ses-b_to_rugby1.template.lta --template /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/norm_template.mgz --average 1 --sat 4.685 
+
+$Id: mri_robust_template.cpp,v 1.54 2016/05/05 21:17:08 mreuter Exp $
+
+--mov: Using /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/norm.mgz as movable/source volume.
+--mov: Using /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/norm.mgz as movable/source volume.
+    Total: 2 input volumes
+--lta: Will output LTA transforms
+--template: Using /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/norm_template.mgz as template output volume.
+--average: Using method 1 for template computation.
+--sat: Using saturation 4.685 in M-estimator!
+reading source '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/norm.mgz'...
+converting source '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/norm.mgz' to bspline ...
+MRItoBSpline degree 3
+reading source '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/norm.mgz'...
+converting source '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/norm.mgz' to bspline ...
+MRItoBSpline degree 3
+Will use TP 1 as random initial target (seed 14657 ).
+
+MultiRegistration::initializing Xforms (init 1 , maxres 0 , iterate 5 , epsit 0.01 ) : 
+
+[init] ========================= TP 2 to TP 1 ==============================
+         Register TP 2 ( /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/norm.mgz )
+          to      TP 1 ( /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/norm.mgz )
+
+
+Input rotation's max deviation from rotation is: 5.32652e-07
+  computing mean coord of TP 1 ( /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/norm.mgz ) 
+   mapping back to rot, err = 4.00297e-16
+  computing mean coord of TP 2 ( /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/norm.mgz ) 
+   mapping back to rot, err = 2.66326e-07
+mapping movs and creating initial template...
+ using median 
+Writing final template: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/norm_template.mgz
+Writing final transforms (warps etc.)...
+ Determinant( lta[ 0 ]) : 1
+
+ Determinant( lta[ 1 ]) : 1
+
+registration took 0 minutes and 22 seconds.
+
+ Thank you for using RobustTemplate! 
+ If you find it useful and use it for a publication, please cite: 
+
+ Within-Subject Template Estimation for Unbiased Longitudinal Image Analysis
+ M. Reuter, N.J. Schmansky, H.D. Rosas, B. Fischl. NeuroImage 2012.
+ http://dx.doi.org/10.1016/j.neuroimage.2012.02.084
+ http://reuter.mit.edu/papers/reuter-long12.pdf
+
+
+ mri_robust_template --mov /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/orig.mgz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/orig.mgz --average 1 --ixforms /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/transforms/sub-rugby1_ses-a_to_rugby1.template.lta /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/transforms/sub-rugby1_ses-b_to_rugby1.template.lta --noit --template /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/orig.mgz 
+
+$Id: mri_robust_template.cpp,v 1.54 2016/05/05 21:17:08 mreuter Exp $
+
+--mov: Using /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/orig.mgz as movable/source volume.
+--mov: Using /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/orig.mgz as movable/source volume.
+    Total: 2 input volumes
+--average: Using method 1 for template computation.
+--ixforms: Will use init XFORMS.
+--noit: Will output only first template (no iterations)!
+--template: Using /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/orig.mgz as template output volume.
+reading source '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/orig.mgz'...
+converting source '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-a/mri/orig.mgz' to bspline ...
+MRItoBSpline degree 3
+reading source '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/orig.mgz'...
+converting source '/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/sub-rugby1_ses-b/mri/orig.mgz' to bspline ...
+MRItoBSpline degree 3
+mapping movs and creating initial template...
+ using median 
+Writing final template: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/orig.mgz
+Writing final transforms (warps etc.)...
+registration took 0 minutes and 4 seconds.
+
+ Thank you for using RobustTemplate! 
+ If you find it useful and use it for a publication, please cite: 
+
+ Within-Subject Template Estimation for Unbiased Longitudinal Image Analysis
+ M. Reuter, N.J. Schmansky, H.D. Rosas, B. Fischl. NeuroImage 2012.
+ http://dx.doi.org/10.1016/j.neuroimage.2012.02.084
+ http://reuter.mit.edu/papers/reuter-long12.pdf
+
+/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/transforms
+
+ mri_concatenate_lta -invert1 sub-rugby1_ses-a_to_rugby1.template.lta identity.nofile rugby1.template_to_sub-rugby1_ses-a.lta 
+
+invert the first LTA before applying it 
+Read individual LTAs
+Writing  LTA to file rugby1.template_to_sub-rugby1_ses-a.lta...
+mri_concatenate_lta.bin successful.
+
+ mri_concatenate_lta -invert1 sub-rugby1_ses-b_to_rugby1.template.lta identity.nofile rugby1.template_to_sub-rugby1_ses-b.lta 
+
+invert the first LTA before applying it 
+Read individual LTAs
+Writing  LTA to file rugby1.template_to_sub-rugby1_ses-b.lta...
+mri_concatenate_lta.bin successful.
+#--------------------------------------------
+#@# MotionCor Thu Feb 23 20:27:26  2023
+
+ mri_add_xform_to_header -c /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/transforms/talairach.xfm /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/orig.mgz /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/orig.mgz 
+
+INFO: extension is mgz
+#--------------------------------------------
+#@# Talairach Thu Feb 23 20:27:27  2023
+/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri
+
+ mri_nu_correct.mni --no-rescale --i orig.mgz --o orig_nu.mgz --n 1 --proto-iters 1000 --distance 50 
+
+/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri
+/opt/freesurfer/bin/mri_nu_correct.mni
+--no-rescale --i orig.mgz --o orig_nu.mgz --n 1 --proto-iters 1000 --distance 50
+nIters 1
+$Id: mri_nu_correct.mni,v 1.27 2016/02/26 16:19:49 mreuter Exp $
+Linux wmc006 4.18.0-348.23.1.el8_5.x86_64 #1 SMP Wed Apr 27 15:32:52 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+Thu Feb 23 20:27:27  2023
+Program nu_correct, built from:
+Package MNI N3, version 1.12.0, compiled by nicks@terrier (x86_64-unknown-linux-gnu) on 2015-06-19 at 01:25:34
+/usr/bin/bc
+tmpdir is ./tmp.mri_nu_correct.mni.3811408
+/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri
+mri_convert orig.mgz ./tmp.mri_nu_correct.mni.3811408/nu0.mnc -odt float
+mri_convert.bin orig.mgz ./tmp.mri_nu_correct.mni.3811408/nu0.mnc -odt float 
+$Id: mri_convert.c,v 1.226 2016/02/26 16:15:24 mreuter Exp $
+reading from orig.mgz...
+TR=6.56, TE=0.00, TI=0.00, flip angle=0.00
+i_ras = (-1, -5.82077e-11, 7.80626e-18)
+j_ras = (6.83047e-18, -1.62981e-09, -1)
+k_ras = (-5.82076e-11, 1, -1.62981e-09)
+changing data type from uchar to float (noscale = 0)...
+writing to ./tmp.mri_nu_correct.mni.3811408/nu0.mnc...
+ 
+--------------------------------------------------------
+Iteration 1 Thu Feb 23 20:27:28  2023
+nu_correct -clobber ./tmp.mri_nu_correct.mni.3811408/nu0.mnc ./tmp.mri_nu_correct.mni.3811408/nu1.mnc -tmpdir ./tmp.mri_nu_correct.mni.3811408/0/ -iterations 1000 -distance 50
+[jmcg465@wmc006:/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_long1/bids/derivatives/freesurfer/rugby1.template/mri/] [2023-02-23 20:27:28] running:
+  /opt/freesurfer/mni/bin/nu_estimate_np_and_em -parzen -log -sharpen 0.15 0.01 -iterations 1000 -stop 0.001 -shrink 4 -auto_mask -nonotify -b_spline 1.0e-7 -distance 50 -quiet -execute -clobber -nokeeptmp -tmpdir ./tmp.mri_nu_correct.mni.3811408/0/ ./tmp.mri_nu_correct.mni.3811408/nu0.mnc ./tmp.mri_nu_correct.mni.3811408/nu1.imp
+
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+Processing:.................................................................Done
+slurmstepd: error: *** JOB 33129888 ON wmc006 CANCELLED AT 2023-02-23T20:27:47 ***

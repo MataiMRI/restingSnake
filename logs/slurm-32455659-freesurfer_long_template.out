@@ -1,0 +1,37 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Fri Jan 20 21:16:55 2023]
+rule freesurfer_long_template:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer/sub-rugby1_ses-b, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer/sub-rugby1_ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer/sub-rugby1.sst/surf/lh.w-g.pct.mgh, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_joshbids/derivatives/freesurfer/sub-rugby1.sst/scripts/recon-all.log
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh, subject=rugby1
+    threads: 8
+    resources: mem_mb=4000, disk_mb=1000, tmpdir=/dev/shm/jobs/32455659, cpus=8, time_min=540, gpu=0
+
+export FS_LICENSE=$(realpath ./license.txt) && recon-all -base sub-rugby1.sst -tp sub-rugby1_ses-a -tp sub-rugby1_ses-b -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer -all -qcache -3T -openmp 8 
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/c66156cbff3a6cc1d877931475183419.simg
+
+ERROR: It appears that the -base templateID that you passed:
+       -base sub-rugby1.sst
+       is an existing regular (cross sectional) run!
+       Please make sure you pass a new name (not one of
+       the time points) for the template with -base.
+       For example, if you are trying to create a -base:
+
+       \' -base BertTemplate -tp Bert1 -tp Bert2 ... \'
+
+[Fri Jan 20 21:17:14 2023]
+Error in rule freesurfer_long_template:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer/sub-rugby1.sst/surf/lh.w-g.pct.mgh, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_joshbids/derivatives/freesurfer/sub-rugby1.sst/scripts/recon-all.log
+    shell:
+        export FS_LICENSE=$(realpath ./license.txt) && recon-all -base sub-rugby1.sst -tp sub-rugby1_ses-a -tp sub-rugby1_ses-b -sd /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer -all -qcache -3T -openmp 8 
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

@@ -1,0 +1,331 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Wed Nov 23 14:01:15 2022]
+rule fmriprep:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-ctrl18/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer/sub-ctrl18_ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sub-ctrl18/ses-a
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test, subject=ctrl18, session=a
+    threads: 8
+    resources: mem_mb=20000, disk_mb=1000, tmpdir=/dev/shm/jobs/31491035, cpus=8, time_min=240, gpu=0
+
+fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives participant --participant-label ctrl18 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --fs-subjects-dir ./bids/derivatives/freesurfer  --output-spaces MNI152NLin2009cAsym:res-2 --nthreads 8 --stop-on-first-crash --low-mem --mem_mb 20000 --nprocs 8 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/acc9d3918a4ab8d0f562f9b72a87bc1b.simg
+/opt/conda/lib/python3.8/site-packages/bids/config.py:39: FutureWarning: Setting 'extension_initial_dot' will be removed in pybids 0.16.
+  warnings.warn("Setting 'extension_initial_dot' will be removed in pybids 0.16.",
+You are using fMRIPrep-21.0.0, and a newer version of fMRIPrep is available: 22.0.2.
+Please check out our documentation about how and when to upgrade:
+https://fmriprep.readthedocs.io/en/latest/faq.html#upgrading
+221123-01:01:35,357 nipype.workflow IMPORTANT:
+	 Running fMRIPrep version 21.0.0
+
+         License NOTICE ##################################################
+         fMRIPrep 21.0.0
+         Copyright 2021 The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software redistributes the versioneer Python package, which is
+         Public domain source code.
+         
+         This software is also distributed as a Docker container image.
+         The bootstraping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+221123-01:01:35,413 nipype.workflow IMPORTANT:
+	 Building fMRIPrep's workflow:
+           * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids.
+           * Participant list: ['ctrl18'].
+           * Run identifier: 20221123-010125_bf501531-cf69-4623-a415-3f6d7cc32a08.
+           * Output spaces: MNI152NLin2009cAsym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/bids/derivatives/freesurfer.
+221123-01:01:37,934 nipype.workflow INFO:
+	 No single-band-reference found for sub-ctrl18_ses-a_task-rest_run-001_bold.nii.gz.
+221123-01:01:38,98 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.721s.
+221123-01:01:38,319 nipype.workflow INFO:
+	 No single-band-reference found for sub-ctrl18_ses-a_task-rest_run-002_bold.nii.gz.
+221123-01:01:38,433 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.981s.
+221123-01:01:41,660 nipype.workflow INFO:
+	 fMRIPrep workflow graph with 585 nodes built successfully.
+221123-01:01:51,149 nipype.workflow IMPORTANT:
+	 fMRIPrep started!
+221123-01:01:55,419 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.brain_extraction_wf.full_wm" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/anat_preproc_wf/brain_extraction_wf/full_wm".
+221123-01:01:55,428 nipype.workflow INFO:
+	 [Node] Running "full_wm" ("nipype.interfaces.utility.wrappers.Function")
+221123-01:01:55,455 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_source" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_source".
+221123-01:01:55,462 nipype.workflow INFO:
+	 [Node] Running "bold_source" ("nipype.interfaces.utility.base.Select")
+221123-01:01:55,470 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.func_derivatives_wf.raw_sources" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/func_derivatives_wf/raw_sources".
+221123-01:01:55,481 nipype.workflow INFO:
+	 [Node] Running "raw_sources" ("nipype.interfaces.utility.wrappers.Function")
+221123-01:01:55,536 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_source".
+221123-01:01:55,553 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.func_derivatives_wf.raw_sources".
+221123-01:01:55,694 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.brain_extraction_wf.lap_tmpl" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/anat_preproc_wf/brain_extraction_wf/lap_tmpl".
+221123-01:01:55,700 nipype.workflow INFO:
+	 [Node] Running "lap_tmpl" ("nipype.interfaces.ants.utils.ImageMath"), a CommandLine Interface with command:
+ImageMath 3 tpl-OASIS30ANTs_res-01_T1w_maths.nii.gz Laplacian /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.cache/templateflow/tpl-OASIS30ANTs/tpl-OASIS30ANTs_res-01_T1w.nii.gz 1.5 1
+221123-01:01:55,878 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.brain_extraction_wf.res_tmpl" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/anat_preproc_wf/brain_extraction_wf/res_tmpl".
+221123-01:01:55,884 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.func_derivatives_wf.raw_sources" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/func_derivatives_wf/raw_sources".
+221123-01:01:55,885 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.bold_source" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/bold_source".
+221123-01:01:55,885 nipype.workflow INFO:
+	 [Node] Running "res_tmpl" ("niworkflows.interfaces.nibabel.RegridToZooms")
+221123-01:01:55,890 nipype.workflow INFO:
+	 [Node] Running "raw_sources" ("nipype.interfaces.utility.wrappers.Function")
+221123-01:01:55,892 nipype.workflow INFO:
+	 [Node] Running "bold_source" ("nipype.interfaces.utility.base.Select")
+221123-01:01:55,900 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.func_derivatives_wf.raw_sources".
+221123-01:01:55,979 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.bold_source".
+221123-01:01:56,23 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.get_dummy" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/get_dummy".
+221123-01:01:56,28 nipype.workflow INFO:
+	 [Node] Running "get_dummy" ("niworkflows.interfaces.bold.NonsteadyStatesDetector")
+221123-01:01:56,50 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.val_bold" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/val_bold".
+221123-01:01:56,60 nipype.workflow INFO:
+	 [Node] Setting-up "_val_bold0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/val_bold/mapflow/_val_bold0".
+221123-01:01:56,67 nipype.workflow INFO:
+	 [Node] Running "_val_bold0" ("niworkflows.interfaces.header.ValidateImage")
+221123-01:01:56,180 nipype.workflow INFO:
+	 [Node] Finished "_val_bold0".
+221123-01:01:56,200 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.val_bold".
+221123-01:01:56,477 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.brain_extraction_wf.full_wm".
+221123-01:01:56,801 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.bidssrc" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/bidssrc".
+221123-01:01:56,808 nipype.workflow INFO:
+	 [Node] Running "bidssrc" ("niworkflows.interfaces.bids.BIDSDataGrabber")
+221123-01:01:56,844 nipype.interface INFO:
+	 No "t2w" images found for sub-ctrl18
+221123-01:01:56,844 nipype.interface INFO:
+	 No "flair" images found for sub-ctrl18
+221123-01:01:56,844 nipype.interface INFO:
+	 No "fmap" images found for sub-ctrl18
+221123-01:01:56,844 nipype.interface INFO:
+	 No "sbref" images found for sub-ctrl18
+221123-01:01:56,844 nipype.interface INFO:
+	 No "roi" images found for sub-ctrl18
+221123-01:01:56,854 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.bidssrc".
+221123-01:01:57,34 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.get_dummy".
+221123-01:01:57,751 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.brain_extraction_wf.res_tmpl".
+221123-01:01:58,210 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.initial_boldref_wf.get_dummy" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/initial_boldref_wf/get_dummy".
+221123-01:01:58,215 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.initial_boldref_wf.val_bold" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/initial_boldref_wf/val_bold".
+221123-01:01:58,217 nipype.workflow INFO:
+	 [Node] Running "get_dummy" ("niworkflows.interfaces.bold.NonsteadyStatesDetector")
+221123-01:01:58,222 nipype.workflow INFO:
+	 [Node] Setting-up "_val_bold0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/initial_boldref_wf/val_bold/mapflow/_val_bold0".
+221123-01:01:58,229 nipype.workflow INFO:
+	 [Node] Running "_val_bold0" ("niworkflows.interfaces.header.ValidateImage")
+221123-01:01:58,258 nipype.workflow INFO:
+	 [Node] Finished "_val_bold0".
+221123-01:01:58,263 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.initial_boldref_wf.val_bold".
+221123-01:01:58,793 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.initial_boldref_wf.get_dummy".
+221123-01:01:59,122 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.anat_template_wf.t1w_ref_dimensions" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/anat_preproc_wf/anat_template_wf/t1w_ref_dimensions".
+221123-01:01:59,195 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.select_bold" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/select_bold".
+221123-01:01:59,211 nipype.workflow INFO:
+	 [Node] Running "select_bold" ("nipype.interfaces.utility.base.Select")
+221123-01:01:59,224 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.select_bold".
+221123-01:01:59,449 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.initial_boldref_wf.gen_avg" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/gen_avg".
+221123-01:01:59,465 nipype.workflow INFO:
+	 [Node] Running "gen_avg" ("niworkflows.interfaces.images.RobustAverage")
+221123-01:01:59,840 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.bids_info" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/bids_info".
+221123-01:01:59,847 nipype.workflow INFO:
+	 [Node] Running "bids_info" ("niworkflows.interfaces.bids.BIDSInfo")
+221123-01:01:59,863 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.bids_info".
+221123-01:01:59,883 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.select_bold" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/select_bold".
+221123-01:01:59,897 nipype.workflow INFO:
+	 [Node] Running "select_bold" ("nipype.interfaces.utility.base.Select")
+221123-01:01:59,904 nipype.workflow INFO:
+	 [Node] Running "t1w_ref_dimensions" ("niworkflows.interfaces.images.TemplateDimensions")
+221123-01:01:59,911 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.select_bold".
+221123-01:02:00,25 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.anat_template_wf.t1w_ref_dimensions".
+221123-01:02:00,131 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.initial_boldref_wf.gen_avg" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/initial_boldref_wf/gen_avg".
+221123-01:02:00,141 nipype.workflow INFO:
+	 [Node] Running "gen_avg" ("niworkflows.interfaces.images.RobustAverage")
+221123-01:02:00,874 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:00.874051:++ 3dvolreg: AFNI version=AFNI_21.3.11 (Dec  9 2021) [64-bit]
+221123-01:02:00,874 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:00.874051:++ Authored by: RW Cox
+221123-01:02:00,879 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:00.879693:** AFNI converts NIFTI_datatype=4 (INT16) in file /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/initial_boldref_wf/gen_avg/sub-ctrl18_ses-a_task-rest_run-001_bold_sliced.nii.gz to FLOAT32
+221123-01:02:00,879 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:00.879845:     Warnings of this type will be muted for this session.
+221123-01:02:00,879 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:00.879845:     Set AFNI_NIFTI_TYPE_WARN to YES to see them all, NO to see none.
+221123-01:02:00,885 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:00.885710:++ Coarse del was 10, replaced with 5
+221123-01:02:01,22 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:01.022420:++ 3dvolreg: AFNI version=AFNI_21.3.11 (Dec  9 2021) [64-bit]
+221123-01:02:01,22 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:01.022420:++ Authored by: RW Cox
+221123-01:02:01,23 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:01.023738:** AFNI converts NIFTI_datatype=4 (INT16) in file /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/initial_boldref_wf/gen_avg/sub-ctrl18_ses-a_task-rest_run-002_bold_sliced.nii.gz to FLOAT32
+221123-01:02:01,23 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:01.023883:     Warnings of this type will be muted for this session.
+221123-01:02:01,23 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:01.023883:     Set AFNI_NIFTI_TYPE_WARN to YES to see them all, NO to see none.
+221123-01:02:01,24 nipype.interface INFO:
+	 stderr 2022-11-23T01:02:01.024622:++ Coarse del was 10, replaced with 5
+221123-01:02:01,849 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_001_wf.bold_stc_wf.slice_timing_correction" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_stc_wf/slice_timing_correction".
+221123-01:02:01,865 nipype.workflow INFO:
+	 [Node] Running "slice_timing_correction" ("fmriprep.workflows.bold.stc.TShift"), a CommandLine Interface with command:
+3dTshift -ignore 0 -prefix sub-ctrl18_ses-a_task-rest_run-001_bold_tshift.nii.gz -tpattern @slice_timing.1D -TR 1.5s -tzero 0.721 /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_001_wf/bold_stc_wf/slice_timing_correction/sub-ctrl18_ses-a_task-rest_run-001_bold.nii.gz
+221123-01:02:02,30 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.fs_isrunning" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/anat_preproc_wf/fs_isrunning".
+221123-01:02:02,41 nipype.workflow INFO:
+	 [Node] Running "fs_isrunning" ("nipype.interfaces.utility.wrappers.Function")
+221123-01:02:02,41 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.anat_template_wf.t1w_conform" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/anat_preproc_wf/anat_template_wf/t1w_conform".
+221123-01:02:02,49 nipype.workflow INFO:
+	 [Node] Setting-up "_t1w_conform0" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/anat_preproc_wf/anat_template_wf/t1w_conform/mapflow/_t1w_conform0".
+221123-01:02:02,51 nipype.workflow WARNING:
+	 Storing result file without outputs
+221123-01:02:02,55 nipype.workflow WARNING:
+	 [Node] Error on "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.fs_isrunning" (/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/anat_preproc_wf/fs_isrunning)
+221123-01:02:02,55 nipype.workflow INFO:
+	 [Node] Running "_t1w_conform0" ("niworkflows.interfaces.images.Conform")
+221123-01:02:02,99 nipype.workflow INFO:
+	 [Node] Finished "_t1w_conform0".
+221123-01:02:02,131 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.anat_template_wf.t1w_conform".
+221123-01:02:02,169 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.anat_derivatives_wf.raw_sources" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/anat_preproc_wf/anat_derivatives_wf/raw_sources".
+221123-01:02:02,181 nipype.workflow INFO:
+	 [Node] Running "raw_sources" ("nipype.interfaces.utility.wrappers.Function")
+221123-01:02:02,189 nipype.workflow INFO:
+	 [Node] Finished "fmriprep_wf.single_subject_ctrl18_wf.anat_preproc_wf.anat_derivatives_wf.raw_sources".
+221123-01:02:02,805 nipype.workflow INFO:
+	 [Node] Setting-up "fmriprep_wf.single_subject_ctrl18_wf.func_preproc_ses_a_task_rest_run_002_wf.bold_stc_wf.slice_timing_correction" in "/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/bold_stc_wf/slice_timing_correction".
+221123-01:02:02,821 nipype.workflow INFO:
+	 [Node] Running "slice_timing_correction" ("fmriprep.workflows.bold.stc.TShift"), a CommandLine Interface with command:
+3dTshift -ignore 0 -prefix sub-ctrl18_ses-a_task-rest_run-002_bold_tshift.nii.gz -tpattern @slice_timing.1D -TR 2s -tzero 0.981 /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/single_subject_ctrl18_wf/func_preproc_ses_a_task_rest_run_002_wf/bold_stc_wf/slice_timing_correction/sub-ctrl18_ses-a_task-rest_run-002_bold.nii.gz
+221123-01:02:03,765 nipype.workflow ERROR:
+	 Node fs_isrunning failed to run on host wbn054.
+221123-01:02:03,788 nipype.workflow ERROR:
+	 Saving crash info to /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sub-ctrl18/log/20221123-010125_bf501531-cf69-4623-a415-3f6d7cc32a08/crash-20221123-010203-jmcg465-fs_isrunning-a159e572-d0b5-4ae0-86cd-37d5c16768a6.txt
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/multiproc.py", line 67, in run_node
+    result["result"] = node.run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 516, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 635, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 741, in _run_command
+    result = self._interface.run(cwd=outdir)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/base/core.py", line 428, in run
+    runtime = self._run_interface(runtime)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/utility/wrappers.py", line 142, in _run_interface
+    out = function_handle(**args)
+  File "<string>", line 36, in fs_isRunning
+RuntimeError: The FreeSurfer's subject folder </scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/bids/derivatives/freesurfer/sub-ctrl18> contains IsRunning files that may pertain to a current or past execution: (PosixPath('/scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/bids/derivatives/freesurfer/sub-ctrl18/scripts/IsRunning.lh+rh'),).
+FreeSurfer cannot run if these are present, to avoid interfering with a running process. Please, make sure no other process is running ``recon-all`` on this subject and proceed to delete the files listed above.
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/cli/run.py", line 114, in main
+    fmriprep_wf.run(**config.nipype.get_plugin())
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/workflows.py", line 638, in run
+    runner.run(execgraph, updatehash=updatehash, config=self.config)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/base.py", line 164, in run
+    self._clean_queue(jobid, graph, result=result)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/base.py", line 227, in _clean_queue
+    raise RuntimeError("".join(result["traceback"]))
+RuntimeError: Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/multiproc.py", line 67, in run_node
+    result["result"] = node.run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 516, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 635, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 741, in _run_command
+    result = self._interface.run(cwd=outdir)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/base/core.py", line 428, in run
+    runtime = self._run_interface(runtime)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/utility/wrappers.py", line 142, in _run_interface
+    out = function_handle(**args)
+  File "<string>", line 36, in fs_isRunning
+RuntimeError: The FreeSurfer's subject folder </scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/bids/derivatives/freesurfer/sub-ctrl18> contains IsRunning files that may pertain to a current or past execution: (PosixPath('/scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/bids/derivatives/freesurfer/sub-ctrl18/scripts/IsRunning.lh+rh'),).
+FreeSurfer cannot run if these are present, to avoid interfering with a running process. Please, make sure no other process is running ``recon-all`` on this subject and proceed to delete the files listed above.
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/cli/run.py", line 128, in main
+    process_crashfile(crashfile)
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/utils/sentry.py", line 85, in process_crashfile
+    crash_info = read_crashfile(str(crashfile))
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/utils/misc.py", line 138, in read_crashfile
+    return _read_txt(path)
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/utils/misc.py", line 195, in _read_txt
+    cur_key, cur_val = tuple(line.split(" = ", 1))
+ValueError: not enough values to unpack (expected 2, got 1)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/bin/fmriprep", line 8, in <module>
+    sys.exit(main())
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/cli/run.py", line 175, in main
+    failed_reports = generate_reports(
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/reports/core.py", line 105, in generate_reports
+    report_errors = [
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/reports/core.py", line 106, in <listcomp>
+    run_reports(
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/reports/core.py", line 88, in run_reports
+    return Report(
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/reports/core.py", line 291, in __init__
+    self._load_config(Path(config or pkgrf("niworkflows", "reports/default.yml")))
+  File "/opt/conda/lib/python3.8/site-packages/fmriprep/reports/core.py", line 47, in _load_config
+    self.index(settings["sections"])
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/reports/core.py", line 378, in index
+    self.errors = [read_crashfile(str(f)) for f in error_dir.glob("crash*.*")]
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/reports/core.py", line 378, in <listcomp>
+    self.errors = [read_crashfile(str(f)) for f in error_dir.glob("crash*.*")]
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/utils/misc.py", line 138, in read_crashfile
+    return _read_txt(path)
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/utils/misc.py", line 195, in _read_txt
+    cur_key, cur_val = tuple(line.split(" = ", 1))
+ValueError: not enough values to unpack (expected 2, got 1)
+slurmstepd: error: *** JOB 31491035 ON wbn054 CANCELLED AT 2022-11-23T01:02:05 ***

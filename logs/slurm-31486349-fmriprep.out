@@ -1,0 +1,156 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Wed Nov 23 07:10:30 2022]
+rule fmriprep:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/sub-ctrl18/ses-a, /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/freesurfer/sub-ctrl18_ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sub-ctrl18/ses-a
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test, subject=ctrl18, session=a
+    threads: 8
+    resources: mem_mb=20000, disk_mb=1000, tmpdir=/dev/shm/jobs/31486349, cpus=8, time_min=240, gpu=0
+
+fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives participant --participant-label ctrl18 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --fs-subjects /bids/derivatives/freesurfer  --output-spaces MNI152NLin2009cAsym:res-2 --nthreads 8 --stop-on-first-crash --low-mem --mem_mb 20000 --nprocs 8 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/acc9d3918a4ab8d0f562f9b72a87bc1b.simg
+/opt/conda/lib/python3.8/site-packages/bids/config.py:39: FutureWarning: Setting 'extension_initial_dot' will be removed in pybids 0.16.
+  warnings.warn("Setting 'extension_initial_dot' will be removed in pybids 0.16.",
+You are using fMRIPrep-21.0.0, and a newer version of fMRIPrep is available: 22.0.2.
+Please check out our documentation about how and when to upgrade:
+https://fmriprep.readthedocs.io/en/latest/faq.html#upgrading
+221122-18:10:43,608 nipype.workflow IMPORTANT:
+	 Running fMRIPrep version 21.0.0
+
+         License NOTICE ##################################################
+         fMRIPrep 21.0.0
+         Copyright 2021 The NiPreps Developers.
+         
+         This product includes software developed by
+         the NiPreps Community (https://nipreps.org/).
+         
+         Portions of this software were developed at the Department of
+         Psychology at Stanford University, Stanford, CA, US.
+         
+         This software redistributes the versioneer Python package, which is
+         Public domain source code.
+         
+         This software is also distributed as a Docker container image.
+         The bootstraping file for the image ("Dockerfile") is licensed
+         under the MIT License.
+         
+         This software may be distributed through an add-on package called
+         "Docker Wrapper" that is under the BSD 3-clause License.
+         #################################################################
+221122-18:10:43,666 nipype.workflow IMPORTANT:
+	 Building fMRIPrep's workflow:
+           * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids.
+           * Participant list: ['ctrl18'].
+           * Run identifier: 20221122-181033_01d5acb6-1111-49a1-802e-dcac118e0e18.
+           * Output spaces: MNI152NLin2009cAsym:res-2.
+           * Pre-run FreeSurfer's SUBJECTS_DIR: /bids/derivatives/freesurfer.
+221122-18:10:46,87 nipype.workflow INFO:
+	 No single-band-reference found for sub-ctrl18_ses-a_task-rest_run-001_bold.nii.gz.
+221122-18:10:46,236 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.721s.
+221122-18:10:46,500 nipype.workflow INFO:
+	 No single-band-reference found for sub-ctrl18_ses-a_task-rest_run-002_bold.nii.gz.
+221122-18:10:46,643 nipype.workflow IMPORTANT:
+	 BOLD series will be slice-timing corrected to an offset of 0.981s.
+221122-18:10:50,270 nipype.workflow INFO:
+	 fMRIPrep workflow graph with 585 nodes built successfully.
+221122-18:11:01,552 nipype.workflow IMPORTANT:
+	 fMRIPrep started!
+221122-18:11:02,505 nipype.workflow WARNING:
+	 Storing result file without outputs
+221122-18:11:02,510 nipype.workflow WARNING:
+	 [Node] Error on "fmriprep_wf.fsdir_run_20221122_181033_01d5acb6_1111_49a1_802e_dcac118e0e18" (/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work/fmriprep_wf/fsdir_run_20221122_181033_01d5acb6_1111_49a1_802e_dcac118e0e18)
+221122-18:11:02,514 nipype.workflow ERROR:
+	 Node fsdir_run_20221122_181033_01d5acb6_1111_49a1_802e_dcac118e0e18 failed to run on host wbn178.
+221122-18:11:02,520 nipype.workflow ERROR:
+	 Saving crash info to /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/logs/crash-20221122-181102-jmcg465-fsdir_run_20221122_181033_01d5acb6_1111_49a1_802e_dcac118e0e18-5d930cd8-cbae-4387-a0e5-cec01d065bd3.txt
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1288, in mkdir
+    self._accessor.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/bids/derivatives/freesurfer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1288, in mkdir
+    self._accessor.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/bids/derivatives'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/multiproc.py", line 344, in _send_procs_to_workers
+    self.procs[jobid].run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 516, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 635, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 741, in _run_command
+    result = self._interface.run(cwd=outdir)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/base/core.py", line 428, in run
+    runtime = self._run_interface(runtime)
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/interfaces/bids.py", line 862, in _run_interface
+    subjects_dir.mkdir(parents=True, exist_ok=True)
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1292, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1292, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1288, in mkdir
+    self._accessor.mkdir(self, mode)
+OSError: [Errno 30] Read-only file system: '/bids'
+
+221122-18:11:02,541 nipype.workflow CRITICAL:
+	 fMRIPrep failed: Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1288, in mkdir
+    self._accessor.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/bids/derivatives/freesurfer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1288, in mkdir
+    self._accessor.mkdir(self, mode)
+FileNotFoundError: [Errno 2] No such file or directory: '/bids/derivatives'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/plugins/multiproc.py", line 344, in _send_procs_to_workers
+    self.procs[jobid].run(updatehash=updatehash)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 516, in run
+    result = self._run_interface(execute=True)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 635, in _run_interface
+    return self._run_command(execute)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/pipeline/engine/nodes.py", line 741, in _run_command
+    result = self._interface.run(cwd=outdir)
+  File "/opt/conda/lib/python3.8/site-packages/nipype/interfaces/base/core.py", line 428, in run
+    runtime = self._run_interface(runtime)
+  File "/opt/conda/lib/python3.8/site-packages/niworkflows/interfaces/bids.py", line 862, in _run_interface
+    subjects_dir.mkdir(parents=True, exist_ok=True)
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1292, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1292, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/opt/conda/lib/python3.8/pathlib.py", line 1288, in mkdir
+    self._accessor.mkdir(self, mode)
+OSError: [Errno 30] Read-only file system: '/bids'
+
+Sentry is attempting to send 1 pending error messages
+Waiting up to 2 seconds
+Press Ctrl-C to quit
+[Wed Nov 23 07:11:03 2022]
+Error in rule fmriprep:
+    jobid: 0
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives/sub-ctrl18/ses-a
+    shell:
+        fmriprep /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/bids/derivatives participant --participant-label ctrl18 --skip-bids-validation --md-only-boilerplate --fs-license-file license.txt --fs-subjects /bids/derivatives/freesurfer  --output-spaces MNI152NLin2009cAsym:res-2 --nthreads 8 --stop-on-first-crash --low-mem --mem_mb 20000 --nprocs 8 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test/work
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

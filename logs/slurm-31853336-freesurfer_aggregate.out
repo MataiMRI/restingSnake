@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Sat Dec 10 01:25:06 2022]
+rule freesurfer_aggregate:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer/sub-control17_ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer_agg/sub-control17
+    jobid: 0
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh, subject=control17
+    threads: 8
+    resources: mem_mb=20000, disk_mb=1000, tmpdir=/dev/shm/jobs/31853336, cpus=8, time_min=1440, gpu=0
+
+cp -r /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer/sub-control17_ses-a /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_josh/bids/derivatives/freesurfer_agg/sub-control17
+Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/c66156cbff3a6cc1d877931475183419.simg
+[Sat Dec 10 01:25:26 2022]
+Finished job 0.
+1 of 1 steps (100%) done

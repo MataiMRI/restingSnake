@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 2
+Rules claiming more threads will be scaled down.
+Provided resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, cpus=1, time_min=5, gpu=0
+Select jobs to execute...
+
+[Sun Apr  9 23:03:59 2023]
+rule freesurfer_aggregate:
+    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/freesurfer/sub-gil1_ses-a
+    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/freesurfer_agg/sub-gil1
+    jobid: 0
+    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/freesurfer_agg/sub-gil1
+    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil, subject=gil1
+    resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/34091212, cpus=1, time_min=5, gpu=0
+
+cp -r /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/freesurfer/sub-gil1_ses-a /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_gil/bids/derivatives/freesurfer_agg/sub-gil1
+[Sun Apr  9 23:04:06 2023]
+Finished job 0.
+1 of 1 steps (100%) done
