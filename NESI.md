@@ -37,8 +37,10 @@ Then, instead of using `snakemake` command directly, we will use the `nesi/snake
 First, always do a dry-run and see which files will be (re-)created using:
 
 ```
-srun nesi/snakemake.sl -n
+srun --account=PROJECTID --qos=debug nesi/snakemake.sl -n
 ```
+
+*Note: The option `--qos=debug` gives a higher priority but can only be used for short-running jobs (max 15 minutes). It's ideal for dry-runs.*
 
 If everything looks good, it is then time to submit the workflow as a Slurm batch job using the `sbatch` command:
 
