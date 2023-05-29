@@ -1,8 +1,16 @@
+import pandas as pd
+
 configfile: 'config.yml'
 
 def pass_qc(qc_file):
+    qc_df = pd.read_csv(qc_file)
+    qc_true = qc_df.loc[(original_df['anat_qc'] == True) & (qc_df['func_qc'] == True)]
+    subjects = qc_true['subject'].tolist()
+    sessions = qc_true['session'].tolist()
+    
+    return subjects, sessions
 
-MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
+MAPPING = pass_qc("qc_status.csv")
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
 localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter
