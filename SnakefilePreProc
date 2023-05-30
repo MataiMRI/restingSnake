@@ -11,6 +11,7 @@ def pass_qc(qc_file):
     return subjects, sessions
 
 SUBJECTS, SESSIONS = pass_qc("qc_status.csv")
+NETWORKS = [network.replace(' ', '-') for network in config["atlas_info"]["networks"]]
 
 localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter
 
@@ -24,7 +25,7 @@ rule all:
                 session=SESSIONS,
             ),
             resultsdir=config["resultsdir"],
-            network=config["atlas_info"]["networks"],
+            network=NETWORKS,
             figname=["unthresholded_fc.nii.gz", "figure.png"],
         ),
         expand("{resultsdir}/.work_completed", resultsdir=config["resultsdir"])

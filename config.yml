@@ -59,6 +59,7 @@ atlas_info:
   networks:
     - DMN
     - Salience
+    - R V Att
 
 resting_first_level:
     fdr_alpha: 0.01 ## False detection rate alpha

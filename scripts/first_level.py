@@ -231,10 +231,11 @@ if __name__ == "__main__":
     # logger.info("\nDetails about seed(s) within selected network")
     # for coord in msdl_networks[args.functional_network]:
     #    logger.info('\n', roi_labels.iloc[coord])
-
+    functional_network = args.functional_network.replace("-", " ")
+    logger.info(f"Selected network: {functional_network}")
     # Define single network
     network_nodes = image.index_img(
-        atlas_filename, msdl_networks[args.functional_network]
+        atlas_filename, msdl_networks[functional_network]
     )
     logger.info(f"Shape of network nodes from atlas image {network_nodes.shape}")
 
@@ -293,7 +294,7 @@ if __name__ == "__main__":
 
     # Plot probabilistic map from atlas and subject bold signal together
     logger.info(
-        f"Saving plot of {args.functional_network} connectivity THRESHOLDED at "
+        f"Saving plot of {functional_network} connectivity THRESHOLDED at "
         f"{args.connectivity_threshold} to {args.plotting_output}"
     )
 
@@ -303,7 +304,7 @@ if __name__ == "__main__":
         network_nodes,
         cut_coords=6,
         display_mode="z",
-        title=f"{args.functional_network} nodes according to atlas labels",
+        title=f"{functional_network} nodes according to atlas labels",
         axes=axes[0],
     )
 
@@ -312,7 +313,7 @@ if __name__ == "__main__":
         threshold=args.connectivity_threshold,
         cut_coords=[-16, 0, 16, 30, 44, 58],
         title=(
-            f"{args.functional_network} functional connectivity thresholded at "
+            f"{functional_network} functional connectivity thresholded at "
             f"{args.connectivity_threshold}"
         ),
         display_mode="z",
