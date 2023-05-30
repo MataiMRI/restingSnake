@@ -26,6 +26,29 @@ def list_scans(root_folder, prefix):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
+def gen_qc_file(wildcards):
+    # Define the path to the QC file
+    qc_file = Path("./qc_status.csv")
+    
+    if not qc_file.is_file():
+        qc_df = pd.DataFrame({'subject': SUBJECTS, 'session': SESSIONS, 'anat_qc': False, 'func_qc': False})
+        qc_df.to_csv(qc_file, index=False)  # Save the DataFrame to the QC file
+        
+    elif qc_file.is_file():
+        qc_df = pd.read_csv(qc_file)
+        
+        for subject, session in zip(SUBJECTS, SESSIONS):
+            if subject != wildcards.subject:
+                continue
+
+            subject_sessions = qc_df[qc_df['subject'] == subject]['session']
+            
+            if session not in subject_sessions.values:
+                qc_df = qc_df.append({'subject': subject, 'session': session, 'anat_qc': False, 'func_qc': False}, ignore_index=True)                
+        qc_df.to_csv(qc_file, index=False) 
+    
+    return qc_file
+
 rule all:
         input:
             expand(
@@ -36,7 +59,6 @@ rule all:
                 resultsdir=config["resultsdir"]
             )
             
-
 rule unzip:
     input:
         expand("{datadir}/{{folder}}.zip", datadir=config['datadir'])
@@ -109,21 +131,7 @@ rule mriqc:
         "--no-sub "
         "-w {wildcards.resultsdir}/work "
         
-def gen_qc_file(wildcards):
-    qc_file = "./qc_file.csv"
-    if not qc_file.is_file():
-        d = {"subject": SUBJECTS, "session": SESSIONS}
-        qc_df = pd.DataFrame(data=d)
-        qc_df.to_csv(qc_file)
-        
-    elif qc_file.is_file():
-        qc_df = pd.read_csv(qc_file)
-        for subject, session in zip(SUBJECTS, SESSIONS):
-            if subject != wildcards.subject:
-                continue
-            qc_df = qc_df.append({'subject': subject, 'session': session})
-        qc_df.to_csv(qc_file)
-    return qc_file
+
         
         
         

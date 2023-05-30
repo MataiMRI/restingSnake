@@ -1,6 +1,4 @@
-account: uoa03264
-
-use_longitudinal: True
+use_longitudinal: False
 
 ## Data import
 ethics_prefix: Conc_20Ntb14_
