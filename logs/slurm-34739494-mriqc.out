@@ -1,38 +1,0 @@
-Building DAG of jobs...
-Using shell: /usr/bin/bash
-Provided cores: 8
-Rules claiming more threads will be scaled down.
-Provided resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, cpus=8, time_min=120, gpu=0, mem_gb=16
-Select jobs to execute...
-
-[Sun Apr 23 15:19:35 2023]
-rule mriqc:
-    input: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/sub-control17/ses-a
-    output: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc/sub-control17
-    log: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/fmriprep/sub-control17.html
-    jobid: 0
-    reason: Missing output files: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc/sub-control17
-    wildcards: resultsdir=/nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross, subject=control17
-    threads: 8
-    resources: mem_mb=512, mem_mib=489, disk_mb=1000, disk_mib=954, tmpdir=/dev/shm/jobs/34739494, cpus=8, time_min=120, gpu=0, mem_gb=16
-
-mriqc /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc participant --participant-label control17 --mem 16 --nprocs 8 -w /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/work 
-Activating singularity image /scale_wlg_persistent/filesets/project/uoa03264/fmri_workflow/.snakemake/singularity/62b788ffbe002df7aabb5b5b0b010147.simg
-230423-03:19:54,571 cli IMPORTANT:
-	 
-    Running MRIQC version 23.0.1:
-      * BIDS dataset path: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids.
-      * Output folder: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross/bids/derivatives/mriqc.
-      * Analysis levels: ['participant'].
-
-Downloading https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_desc-head_mask.nii.gz
-  0%|          | 0.00/976k [00:00<?, ?B/s]  0%|          | 2.05k/976k [00:00<01:14, 13.1kB/s]  5%|▌         | 52.2k/976k [00:00<00:05, 162kB/s]  12%|█▏        | 122k/976k [00:00<00:03, 245kB/s]  30%|███       | 296k/976k [00:00<00:01, 485kB/s] 62%|██████▏   | 609k/976k [00:00<00:00, 860kB/s]100%|██████████| 976k/976k [00:00<00:00, 976kB/s]
-Downloading https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_label-CSF_probseg.nii.gz
-  0%|          | 0.00/5.49M [00:00<?, ?B/s]  0%|          | 9.22k/5.49M [00:00<02:03, 44.4kB/s]  1%|          | 60.4k/5.49M [00:00<00:33, 163kB/s]   2%|▏         | 135k/5.49M [00:00<00:21, 252kB/s]   6%|▌         | 309k/5.49M [00:00<00:10, 482kB/s] 12%|█▏        | 657k/5.49M [00:01<00:05, 911kB/s] 25%|██▍       | 1.35M/5.49M [00:01<00:02, 1.74MB/s] 45%|████▌     | 2.50M/5.49M [00:01<00:01, 2.90MB/s] 51%|█████     | 2.78M/5.49M [00:01<00:01, 2.46MB/s]100%|██████████| 5.49M/5.49M [00:01<00:00, 3.20MB/s]
-Downloading https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_label-GM_probseg.nii.gz
-  0%|          | 0.00/7.57M [00:00<?, ?B/s]  0%|          | 17.4k/7.57M [00:00<01:29, 84.6kB/s]  1%|          | 51.2k/7.57M [00:00<00:57, 131kB/s]   2%|▏         | 135k/7.57M [00:00<00:28, 257kB/s]   4%|▍         | 315k/7.57M [00:00<00:14, 500kB/s]  9%|▊         | 657k/7.57M [00:01<00:07, 917kB/s] 18%|█▊        | 1.35M/7.57M [00:01<00:03, 1.74MB/s] 27%|██▋       | 2.07M/7.57M [00:01<00:03, 1.73MB/s] 65%|██████▌   | 4.95M/7.57M [00:01<00:00, 4.87MB/s] 88%|████████▊ | 6.62M/7.57M [00:02<00:00, 5.74MB/s]100%|██████████| 7.57M/7.57M [00:02<00:00, 3.62MB/s]
-Downloading https://templateflow.s3.amazonaws.com/tpl-MNI152NLin2009cAsym/tpl-MNI152NLin2009cAsym_res-01_label-WM_probseg.nii.gz
-  0%|          | 0.00/6.91M [00:00<?, ?B/s]  0%|          | 17.4k/6.91M [00:00<01:21, 84.5kB/s]  1%|          | 52.2k/6.91M [00:00<00:51, 134kB/s]   2%|▏         | 122k/6.91M [00:00<00:29, 226kB/s]   4%|▍         | 279k/6.91M [00:00<00:15, 436kB/s]  7%|▋         | 470k/6.91M [00:01<00:10, 612kB/s] 14%|█▍        | 974k/6.91M [00:01<00:04, 1.23MB/s] 27%|██▋       | 1.86M/6.91M [00:01<00:02, 2.22MB/s] 35%|███▍      | 2.41M/6.91M [00:01<00:02, 1.77MB/s] 74%|███████▍  | 5.10M/6.91M [00:02<00:00, 4.65MB/s] 92%|█████████▏| 6.34M/6.91M [00:02<00:00, 4.92MB/s]100%|██████████| 6.91M/6.91M [00:02<00:00, 2.99MB/s]
-230423-03:20:25,883 cli WARNING:
-	 IMPORTANT: Anonymized quality metrics (IQMs) will be submitted to MRIQC's metrics repository. Submission of IQMs can be disabled using the ``--no-sub`` argument. Please visit https://mriqc.readthedocs.io/en/latest/dsa.html to revise MRIQC's Data Sharing Agreement.
-slurmstepd: error: *** JOB 34739494 ON wmc011 CANCELLED AT 2023-04-23T03:22:45 ***

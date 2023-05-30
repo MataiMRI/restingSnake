@@ -57,7 +57,8 @@ rule all:
                     subject=SUBJECTS,
                 ),
                 resultsdir=config["resultsdir"]
-            )
+            ),
+            gen_qc_file
             
 rule unzip:
     input:
