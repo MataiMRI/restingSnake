@@ -26,28 +26,30 @@ def list_scans(root_folder, prefix):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
-def gen_qc_file(wildcards):
-    # Define the path to the QC file
+def gen_qc_file(subject_list, session_list):
     qc_file = Path("./qc_status.csv")
     
     if not qc_file.is_file():
-        qc_df = pd.DataFrame({'subject': SUBJECTS, 'session': SESSIONS, 'anat_qc': False, 'func_qc': False})
-        qc_df.to_csv(qc_file, index=False)  # Save the DataFrame to the QC file
+        qc_df = pd.DataFrame({'subject': subject_list, 'session': session_list, 'anat_qc': False, 'func_qc': False})
+        qc_df.to_csv(qc_file, index=False)
         
     elif qc_file.is_file():
         qc_df = pd.read_csv(qc_file)
+        rows_to_append = []
         
-        for subject, session in zip(SUBJECTS, SESSIONS):
-            if subject != wildcards.subject:
+        for subject, session in zip(subject_list, session_list):
+            if not qc_df.loc[(qc_df['subject'] == subject) & (qc_df['session'] == session)].empty:
                 continue
 
-            subject_sessions = qc_df[qc_df['subject'] == subject]['session']
-            
-            if session not in subject_sessions.values:
-                qc_df = qc_df.append({'subject': subject, 'session': session, 'anat_qc': False, 'func_qc': False}, ignore_index=True)                
-        qc_df.to_csv(qc_file, index=False) 
+            rows_to_append.append({'subject': subject, 'session': session, 'anat_qc': False, 'func_qc': False})
+        
+        if rows_to_append:
+            qc_df = pd.concat([qc_df, pd.DataFrame(rows_to_append)], ignore_index=True)
+            qc_df.to_csv(qc_file, index=False) 
     
     return qc_file
+
+gen_qc_file(SUBJECTS, SESSIONS)
 
 rule all:
         input:
@@ -58,7 +60,7 @@ rule all:
                 ),
                 resultsdir=config["resultsdir"]
             ),
-            gen_qc_file
+            "qc_status.csv"
             
 rule unzip:
     input:
