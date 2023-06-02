@@ -1,16 +1,18 @@
+from pathlib import Path
 import pandas as pd
 
 configfile: 'config.yml'
 
 def pass_qc(qc_file):
+    # TODO add an error message if file doesn't exist
     qc_df = pd.read_csv(qc_file)
     qc_true = qc_df.loc[(qc_df['anat_qc'] == True) & (qc_df['func_qc'] == True)]
     subjects = qc_true['subject'].tolist()
     sessions = qc_true['session'].tolist()
-    
+
     return subjects, sessions
 
-SUBJECTS, SESSIONS = pass_qc("qc_status.csv")
+SUBJECTS, SESSIONS = pass_qc(Path(config["resultsdir"]) / "qc_status.csv")
 NETWORKS = [network.replace(' ', '-') for network in config["atlas_info"]["networks"]]
 
 localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter

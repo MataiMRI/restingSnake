@@ -26,42 +26,14 @@ def list_scans(root_folder, prefix):
 MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
-def gen_qc_file(subject_list, session_list):
-    qc_file = Path("./qc_status.csv")
-    
-    if not qc_file.is_file():
-        qc_df = pd.DataFrame({'subject': subject_list, 'session': session_list, 'anat_qc': False, 'func_qc': False})
-        qc_df.to_csv(qc_file, index=False)
-        
-    elif qc_file.is_file():
-        qc_df = pd.read_csv(qc_file)
-        rows_to_append = []
-        
-        for subject, session in zip(subject_list, session_list):
-            if not qc_df.loc[(qc_df['subject'] == subject) & (qc_df['session'] == session)].empty:
-                continue
-
-            rows_to_append.append({'subject': subject, 'session': session, 'anat_qc': False, 'func_qc': False})
-        
-        if rows_to_append:
-            qc_df = pd.concat([qc_df, pd.DataFrame(rows_to_append)], ignore_index=True)
-            qc_df.to_csv(qc_file, index=False) 
-    
-    return qc_file
-
-gen_qc_file(SUBJECTS, SESSIONS)
-
 rule all:
         input:
             expand(
-                expand(
-                    "{{resultsdir}}/bids/derivatives/mriqc/sub-{subject}",
-                    subject=SUBJECTS,
-                ),
+                "{resultsdir}/bids/derivatives/mriqc/sub-{subject}",
+                subject=SUBJECTS,
                 resultsdir=config["resultsdir"]
-            ),
-            "qc_status.csv"
-            
+            )
+
 rule unzip:
     input:
         expand("{datadir}/{{folder}}.zip", datadir=config['datadir'])
@@ -104,7 +76,7 @@ rule heudiconv:
         "--converter dcm2niix "
         "--bids "
         "--overwrite"
-        
+
 def list_bids_sessions(wildcards):
     inputs = []
     for subject, session in zip(SUBJECTS, SESSIONS):
@@ -132,9 +104,6 @@ rule mriqc:
         "--mem-gb {resources.mem_mb} "
         "--nprocs {threads} "
         "--no-sub "
-        "-w {wildcards.resultsdir}/work "
-        
-
-        
-        
-        
+        "-w {wildcards.resultsdir}/work && "
+        "flock {wildcards.resultsdir}/.qc_status.csv.lock "
+        "python scripts/update_qc_list.py {wildcards.resultsdir}/qc_status.csv {output}"
