@@ -9,14 +9,13 @@ resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed_test_cross
 
 #Dicom directory structure can be flexible but MUST include {{subject}} and {{session}}
 dicom_dir_structure: /dicom/sub_{{subject}}/ses_{{session}}/*/* # GET THIS WORKING FOR HEUDICONV
-dicom_compression_ext: .zip
 
 ## Scan info
 rep_time: 1.5
 
 mriqc:
-  mem_gb: 35
-  time_min: 120
+  mem_mb: 16000
+  time_min: 60
   threads: 8
 
 freesurfer:

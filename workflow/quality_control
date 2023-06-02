@@ -91,15 +91,17 @@ rule mriqc:
         "docker://nipreps/mriqc:23.0.1"
     resources:
         cpus=lambda wildcards, threads: threads,
-        mem_mb=config["mriqc"]["mem_gb"] * 1000,
+        mem_mb=config["mriqc"]["mem_mb"],
         time_min=config["mriqc"]["time_min"]
+    params:
+        mem_gb=int(config["mriqc"]["mem_mb"] / 1000)
     threads: config["mriqc"]["threads"]
     shell:
         "mriqc {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/mriqc "
         "participant "
         "--participant-label {wildcards.subject} "
         "--session-id {wildcards.session} "
-        "--mem-gb {resources.mem_mb} "
+        "--mem-gb {params.mem_gb} "
         "--nprocs {threads} "
         "--no-sub "
         "-w {wildcards.resultsdir}/work && "
