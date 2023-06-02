@@ -14,7 +14,7 @@ dicom_dir_structure: /dicom/sub_{{subject}}/ses_{{session}}/*/* # GET THIS WORKI
 rep_time: 1.5
 
 mriqc:
-  mem_mb: 16000
+  mem_mb: 32000
   time_min: 60
   threads: 8
 
