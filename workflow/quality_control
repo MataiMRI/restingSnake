@@ -27,12 +27,16 @@ MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
 rule all:
-        input:
+    input:
+        expand(
             expand(
-                "{resultsdir}/bids/derivatives/mriqc/sub-{subject}",
+                "{{resultsdir}}/bids/derivatives/mriqc/sub-{subject}/ses-{session}",
+                zip,
                 subject=SUBJECTS,
-                resultsdir=config["resultsdir"]
-            )
+                session=SESSIONS,
+            ),
+            resultsdir=config["resultsdir"],
+        )
 
 rule unzip:
     input:
@@ -77,33 +81,28 @@ rule heudiconv:
         "--bids "
         "--overwrite"
 
-def list_bids_sessions(wildcards):
-    inputs = []
-    for subject, session in zip(SUBJECTS, SESSIONS):
-        if subject != wildcards.subject:
-            continue
-        inputs.append(f"{wildcards.resultsdir}/bids/sub-{subject}/ses-{session}")
-    return inputs
-
 rule mriqc:
     input:
-        list_bids_sessions
+        "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/mriqc/sub-{subject}")
+        # TODO list all files generated
+        directory("{resultsdir}/bids/derivatives/mriqc/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/mriqc:23.0.1"
     resources:
         cpus=lambda wildcards, threads: threads,
-        mem_mb=config["mriqc"]["mem_gb"]*1000,
+        mem_mb=config["mriqc"]["mem_gb"] * 1000,
         time_min=config["mriqc"]["time_min"]
     threads: config["mriqc"]["threads"]
     shell:
         "mriqc {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/mriqc "
         "participant "
         "--participant-label {wildcards.subject} "
+        "--session-id {wildcards.session} "
         "--mem-gb {resources.mem_mb} "
         "--nprocs {threads} "
         "--no-sub "
         "-w {wildcards.resultsdir}/work && "
         "flock {wildcards.resultsdir}/.qc_status.csv.lock "
-        "python scripts/update_qc_list.py {wildcards.resultsdir}/qc_status.csv {output}"
+        "python scripts/update_qc_list.py {wildcards.resultsdir}/qc_status.csv "
+        " {wildcards.subject} {wildcards.session}"
