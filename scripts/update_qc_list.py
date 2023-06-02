@@ -20,7 +20,7 @@ else:
     dset = pd.read_csv(qc_file)
 
 dset = dset.set_index(["subject", "session"])
-dset.loc[(subject, session), "anat_qc"] = False
-dset.loc[(subject, session), "func_qc"] = False
+dset.loc[(args.subject, args.session), "anat_qc"] = False
+dset.loc[(args.subject, args.session), "func_qc"] = False
 
 dset.to_csv(qc_file)
