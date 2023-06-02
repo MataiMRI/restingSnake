@@ -37,8 +37,10 @@ Then, instead of using `snakemake` command directly, we will use the `nesi/snake
 First, always do a dry-run and see which files will be (re-)created using:
 
 ```
-srun nesi/snakemake.sl -n
+srun --account=PROJECTID --qos=debug nesi/snakemake.sl -n
 ```
+
+*Note: The option `--qos=debug` gives a higher priority but can only be used for short-running jobs (max 15 minutes). It's ideal for dry-runs.*
 
 If everything looks good, it is then time to submit the workflow as a Slurm batch job using the `sbatch` command:
 
@@ -111,7 +113,7 @@ sacct -j JOBID
 If you need to cancel the workflow, use the `scancel` command as follows:
 
 ```
-scancel --signal INT --full -j JOBID
+scancel --signal INT --full JOBID
 ```
 
 *Note: The options `--signal INT` and `--full` are very important to ensure all jobs related to this workflow are properly cancelled, not only the main Snakemake job.*
