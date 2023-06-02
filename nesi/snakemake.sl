@@ -13,7 +13,7 @@ set -euo pipefail
 
 # load environment modules
 module purge
-module load Miniconda3/22.11.1-1 Singularity/3.11.0 snakemake/7.19.1-gimkl-2022a-Python-3.10.5
+module load Miniconda3/22.11.1-1 Apptainer/1.1.8 snakemake/7.26.0-gimkl-2022a-Python-3.11.3
 
 # ensure user's local Python packages are not overriding Python module packages
 export PYTHONNOUSERSITE=1
@@ -28,15 +28,14 @@ conda config --add pkgs_dirs "$NOBACKUPDIR/conda_pkgs"
 conda config --set channel_priority strict
 
 # deactivate any conda environment already activate (e.g. base environment)
-# TODO check if this can also solve "conda init" issues
 source $(conda info --base)/etc/profile.d/conda.sh
 conda deactivate
 
-# configure singularity build anc cache directories
-export SINGULARITY_CACHEDIR="$NOBACKUPDIR/singularity_cachedir"
-export SINGULARITY_TMPDIR="$NOBACKUPDIR/singularity_tmpdir"
-mkdir -p "$SINGULARITY_CACHEDIR" "$SINGULARITY_TMPDIR"
-setfacl -b "$SINGULARITY_TMPDIR"  # avoid Singularity issues due to ACLs set on this folder
+# configure apptainer build and cache directories
+export APPTAINER_CACHEDIR="$NOBACKUPDIR/apptainer_cachedir"
+export APPTAINER_TMPDIR="$NOBACKUPDIR/apptainer_tmpdir"
+mkdir -p "$APPTAINER_CACHEDIR" "$APPTAINER_TMPDIR"
+setfacl -b "$APPTAINER_TMPDIR"  # avoid apptainer issues due to ACLs set on this folder
 
 # run snakemake using the NeSI profile
 snakemake --profile nesi --config account="$SLURM_JOB_ACCOUNT" $@
