@@ -6,7 +6,10 @@ configfile: 'config.yml'
 def pass_qc(qc_file):
     # TODO add an error message if file doesn't exist
     qc_df = pd.read_csv(qc_file)
-    qc_true = qc_df.loc[(qc_df['anat_qc'] == True) & (qc_df['func_qc'] == True)]
+
+    valid_anat = qc_df['anat_qc'] | (qc_df['session'] != qc_df['anat_template'])
+    qc_true = qc_df.loc[valid_anat & qc_df['func_qc']]
+
     subjects = qc_true['subject'].tolist()
     sessions = qc_true['session'].tolist()
 
