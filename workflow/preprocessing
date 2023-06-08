@@ -125,7 +125,7 @@ rule freesurfer_longitudinal:
         "-all "
         "-qcache "
         "-3T "
-        "-openmp {threads}" 
+        "-openmp {threads}"
 
 def freesurfer_rename_input(wildcards):
     if config["use_longitudinal"]:
@@ -232,7 +232,7 @@ def atlas_image(wildcards):
         return f"-a_img {a_img}"
     else:
         return ""
-        
+
 def atlas_labels(wildcards):
     a_lab = config["atlas_info"].get("atlas_labels")
     if (a_lab is not None) and (len(a_lab.strip()) > 0):
