@@ -1,18 +1,24 @@
+import sys
 from pathlib import Path
 import pandas as pd
 
 configfile: 'config.yml'
 
-def pass_qc(qc_file):
-    # TODO add an error message if file doesn't exist
-    qc_df = pd.read_csv(qc_file)
-    qc_true = qc_df.loc[(qc_df['anat_qc'] == True) & (qc_df['func_qc'] == True)]
-    subjects = qc_true['subject'].tolist()
-    sessions = qc_true['session'].tolist()
+def load_qc(qc_file):
+    try:
+        qc_df = pd.read_csv(qc_file)
+    except FileNotFoundError:
+        print(f"ERROR: QC file {qc_file} not found!")
+        sys.exit(1)  # TODO find a less verbose way to exit snakemake
+    return qc_df
 
-    return subjects, sessions
+def pass_qc(qc_df):
+    valid_anat = qc_df['anat_qc'] | (qc_df['session'] != qc_df['anat_template'])
+    qc_true = qc_df.loc[valid_anat & qc_df['func_qc']]
+    return qc_true["subject"].to_list(), qc_true["session"].to_list()
 
-SUBJECTS, SESSIONS = pass_qc(Path(config["resultsdir"]) / "qc_status.csv")
+QC_DF = load_qc(Path(config["resultsdir"]) / "qc_status.csv")
+SUBJECTS, SESSIONS = pass_qc(QC_DF)
 NETWORKS = [network.replace(' ', '-') for network in config["atlas_info"]["networks"]]
 
 localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter
@@ -132,7 +138,9 @@ def freesurfer_rename_input(wildcards):
         suffix = ".long.{subject}_template"
     else:
         suffix = ""
-    return "{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}" + suffix
+    index = (wildcards.subject, wildcards.session)
+    session = QC_DF.set_index(["subject", "session"]).loc[index, "anat_template"]
+    return f"{{resultsdir}}/bids/derivatives/freesurfer/sub-{{subject}}_ses-{session}{suffix}"
 
 rule freesurfer_rename:
     input:
