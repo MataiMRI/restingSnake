@@ -4,8 +4,8 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=1GB
-#SBATCH --output nesi/logs/%j-%x.out
-#SBATCH --error nesi/logs/%j-%x.out
+#SBATCH --output=nesi/logs/%j-%x.out
+#SBATCH --error=nesi/logs/%j-%x.out
 #SBATCH --dependency=singleton
 
 # exit on errors, undefined variables and errors in pipes
