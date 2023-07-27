@@ -13,6 +13,12 @@ dicom_dir_structure: /dicom/sub_{{subject}}/ses_{{session}}/*/* # GET THIS WORKI
 ## Scan info
 rep_time: 1.5
 
+heudiconv:
+  heuristic: scripts/heuristic.py
+  mem_mb: 4000
+  time_min: 60
+  threads: 2
+
 mriqc:
   mem_mb: 16000
   time_min: 60

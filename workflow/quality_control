@@ -66,15 +66,16 @@ rule heudiconv:
         directory("{resultsdir}/bids/.heudiconv/{subject}/ses-{session}")
     container:
         "docker://ghcr.io/jennan/heudiconv:jpeg2000_ci"
+    threads: config["heudiconv"]["threads"]
     resources:
-        cpus=2,
-        mem_mb=4000,
-        time_min=60
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["heudiconv"]["mem_mb"],
+        time_min=config["heudiconv"]["time_min"]
     shell:
         "heudiconv "
         "--dicom_dir_template '{wildcards.resultsdir}/tidy/sub_{{subject}}/ses_{{session}}/*/*' "
         "--outdir {wildcards.resultsdir}/bids "
-        "--heuristic scripts/heuristic.py "
+        "--heuristic {config[heudiconv][heuristic]} "
         "--subjects {wildcards.subject} "
         "--ses {wildcards.session} "
         "--converter dcm2niix "
