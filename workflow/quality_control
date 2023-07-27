@@ -107,5 +107,5 @@ rule mriqc:
         "--no-sub "
         "-w {wildcards.resultsdir}/work && "
         "flock {wildcards.resultsdir}/.qc_status.csv.lock "
-        "python scripts/update_qc_list.py {wildcards.resultsdir}/qc_status.csv "
+        "python workflow/scripts/update_qc_list.py {wildcards.resultsdir}/qc_status.csv "
         " {wildcards.subject} {wildcards.session}"

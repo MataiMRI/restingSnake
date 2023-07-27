@@ -152,7 +152,7 @@ rule freesurfer_rename:
 
 rule fmriprep_filter:
     input:
-        "bids_filter_template.json"
+        "templates/bids_filter.json"
     output:
         temp("{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json")
     template_engine:
@@ -267,7 +267,7 @@ rule first_level:
     log:
         "{resultsdir}/first_level_results/sub-{subject}_ses-{session}_{network}.log"
     shell:
-        "python scripts/first_level.py "
+        "python workflow/scripts/first_level.py "
         "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
         "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
         "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_desc-confounds_timeseries.tsv "
