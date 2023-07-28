@@ -2,7 +2,7 @@ import shutil
 import pandas as pd
 from pathlib import Path
 
-configfile: 'config.yml'
+configfile: 'config/config.yml'
 
 def list_scans(root_folder, prefix):
     mapping = {}

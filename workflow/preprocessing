@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import pandas as pd
 
-configfile: 'config.yml'
+configfile: 'config/config.yml'
 
 def load_qc(qc_file):
     try:
@@ -19,7 +19,10 @@ def pass_qc(qc_df):
 
 QC_DF = load_qc(Path(config["resultsdir"]) / "qc_status.csv")
 SUBJECTS, SESSIONS = pass_qc(QC_DF)
-NETWORKS = [network.replace(' ', '-') for network in config["atlas_info"]["networks"]]
+NETWORKS = [
+    network.replace(' ', '-')
+    for network in config["first_level"]["atlas_info"]["networks"]
+]
 
 localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter
 
@@ -235,17 +238,19 @@ rule fmriprep_cleanup:
 #whether mask should be from anat or func folder?
 
 def atlas_image(wildcards):
-    a_img = config["atlas_info"].get("atlas_image")
+    a_img = config["first_level"]["atlas_info"].get("atlas_image")
     if (a_img is not None) and (len(a_img.strip()) > 0):
         return f"-a_img {a_img}"
     else:
+        print("AAAAARRGG")
         return ""
 
 def atlas_labels(wildcards):
-    a_lab = config["atlas_info"].get("atlas_labels")
+    a_lab = config["first_level"]["atlas_info"].get("atlas_labels")
     if (a_lab is not None) and (len(a_lab.strip()) > 0):
         return f"-a_lab {a_lab}"
     else:
+        print("BBBBBBRRGG")
         return ""
 
 rule first_level:
@@ -274,13 +279,13 @@ rule first_level:
         "{output} "
         "{params.a_img} "
         "{params.a_lab} "
-        "-tr {config[rep_time]} "
-        "-rg {config[confounds]} "
+        "-tr {config[first_level][rep_time]} "
+        "-rg {config[first_level][confounds]} "
         "-ntwk {wildcards.network} "
-        "-hp {config[preprocessing][high_pass]} "
-        "-lp {config[preprocessing][low_pass]} "
-        "-fwhm {config[preprocessing][smooth_fwhm]} "
-        "-fdr {config[resting_first_level][fdr_alpha]} "
-        "-fc {config[resting_first_level][func_conn_thresh]} "
+        "-hp {config[first_level][preprocessing][high_pass]} "
+        "-lp {config[first_level][preprocessing][low_pass]} "
+        "-fwhm {config[first_level][preprocessing][smooth_fwhm]} "
+        "-fdr {config[first_level][resting_first_level][fdr_alpha]} "
+        "-fc {config[first_level][resting_first_level][func_conn_thresh]} "
         "-v "
         "2> {log}"
