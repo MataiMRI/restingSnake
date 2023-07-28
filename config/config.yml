@@ -7,9 +7,6 @@ ethics_prefix: Conc_20Ntb14_
 datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom
 resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed
 
-#Dicom directory structure can be flexible but MUST include {{subject}} and {{session}}
-dicom_dir_structure: /dicom/sub_{{subject}}/ses_{{session}}/*/* # GET THIS WORKING FOR HEUDICONV
-
 ## Scan info
 rep_time: 1.5
 
@@ -59,7 +56,7 @@ preprocessing:
 
 ## Atlas and list of one or more resting state networks for first level analysis
 atlas_info:
-  atlas_image: "  "
+  atlas_image: "  "  # TODO test without a string, e.g. atlas_image:
   atlas_labels:
   networks:
     - DMN
