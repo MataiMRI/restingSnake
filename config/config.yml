@@ -59,7 +59,7 @@ first_level:
 
     # Atlas and list of one or more resting state networks for first level analysis
     atlas_info:
-        atlas_image: "  "  # TODO test without a string, e.g. atlas_image:
+        atlas_image:
         atlas_labels:
         networks:
             - DMN
