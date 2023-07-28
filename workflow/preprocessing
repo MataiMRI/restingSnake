@@ -54,7 +54,7 @@ rule freesurfer_cross_sectional:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=config["freesurfer"]["time_min"]
-    threads: 8
+    threads: config["freesurfer"]["threads"]
     shell:
         "export FS_LICENSE=$(realpath {config[freesurfer][license_path]}) && "
         "recon-all "
@@ -99,7 +99,7 @@ rule freesurfer_long_template:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
         time_min=config["freesurfer"]["time_min"]
-    threads: 8
+    threads: config["freesurfer"]["threads"]
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
         "recon-all "
@@ -242,7 +242,6 @@ def atlas_image(wildcards):
     if (a_img is not None) and (len(a_img.strip()) > 0):
         return f"-a_img {a_img}"
     else:
-        print("AAAAARRGG")
         return ""
 
 def atlas_labels(wildcards):
@@ -250,7 +249,6 @@ def atlas_labels(wildcards):
     if (a_lab is not None) and (len(a_lab.strip()) > 0):
         return f"-a_lab {a_lab}"
     else:
-        print("BBBBBBRRGG")
         return ""
 
 rule first_level:
