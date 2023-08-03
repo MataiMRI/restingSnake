@@ -14,11 +14,15 @@
   from snakemake.utils import min_version
   min_version("7.30")
   ```
+- try `mamba` on NeSI
+  - use module `Mamba/23.1.0-1`
+  - simplify `profiles/nesi/snakemake.sl` if possible (may no need to modify condarc as much)
 - **heudiconv rule**
   - add a rule to generate `bids/participants.tsv`
 - **fmriqc rule**
   - list all outputs, e.g. all file `bids/derivatives/mriqc/sub-{subject}_ses-{session}_{...}.html` (use checkpoint for heudiconv rule)
 - **fmriprep rule**
+  - test with 16 threads instead of 8
   - list all files generated, e.g. `/bids/derivatives/fmriprep/sub-{subject}/figures`
   - avoid generating common files to parallelise this step (and generate them after)
     - `/bids/derivatives/fmriprep/sub-{subject}.html`
