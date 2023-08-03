@@ -38,4 +38,4 @@ mkdir -p "$SINGULARITY_CACHEDIR" "$SINGULARITY_TMPDIR"
 setfacl -b "$SINGULARITY_TMPDIR"  # avoid singularity issues due to ACLs set on this folder
 
 # run snakemake using the NeSI profile
-snakemake --workflow-profile profiles/nesi --config account="$SLURM_JOB_ACCOUNT" $@
+snakemake --profile profiles/nesi --config account="$SLURM_JOB_ACCOUNT" $@
