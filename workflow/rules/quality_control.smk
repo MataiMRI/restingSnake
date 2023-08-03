@@ -1,8 +1,5 @@
-import shutil
 import pandas as pd
 from pathlib import Path
-
-configfile: 'config/config.yml'
 
 def list_scans(root_folder, prefix):
     mapping = {}
@@ -27,6 +24,7 @@ MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
 rule all:
+    localrule: True
     input:
         expand(
             expand(

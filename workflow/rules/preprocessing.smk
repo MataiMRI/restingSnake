@@ -1,32 +1,25 @@
-import sys
 from pathlib import Path
 import pandas as pd
-
-configfile: 'config/config.yml'
-
-def load_qc(qc_file):
-    try:
-        qc_df = pd.read_csv(qc_file)
-    except FileNotFoundError:
-        print(f"ERROR: QC file {qc_file} not found!")
-        sys.exit(1)  # TODO find a less verbose way to exit snakemake
-    return qc_df
 
 def pass_qc(qc_df):
     valid_anat = qc_df['anat_qc'] | (qc_df['session'] != qc_df['anat_template'])
     qc_true = qc_df.loc[valid_anat & qc_df['func_qc']]
     return qc_true["subject"].to_list(), qc_true["session"].to_list()
 
-QC_DF = load_qc(Path(config["resultsdir"]) / "qc_status.csv")
-SUBJECTS, SESSIONS = pass_qc(QC_DF)
+try:
+    QC_DF = pd.read_csv(Path(config["resultsdir"]) / "qc_status.csv")
+    SUBJECTS, SESSIONS = pass_qc(QC_DF)
+except FileNotFoundError:
+    SUBJECTS = []
+    SESSIONS = []
+
 NETWORKS = [
     network.replace(' ', '-')
     for network in config["first_level"]["atlas_info"]["networks"]
 ]
 
-localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter
-
 rule all:
+    localrule: True
     input:
         expand(
             expand(
@@ -146,6 +139,7 @@ def freesurfer_rename_input(wildcards):
     return f"{{resultsdir}}/bids/derivatives/freesurfer/sub-{{subject}}_ses-{session}{suffix}"
 
 rule freesurfer_rename:
+    localrule: True
     input:
         freesurfer_rename_input
     output:
@@ -154,8 +148,9 @@ rule freesurfer_rename:
         "mkdir -p {output} && ln -s {input} {output}/sub-{wildcards.subject}"
 
 rule fmriprep_filter:
+    localrule: True
     input:
-        "templates/bids_filter.json"
+        workflow.source_path("../templates/bids_filter.json")
     output:
         temp("{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json")
     template_engine:
@@ -221,6 +216,7 @@ rule fmriprep:
         "--bids-filter-file {input.bids_filter}"
 
 rule fmriprep_cleanup:
+    localrule: True
     input:
         expand(
             "{{resultsdir}}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
@@ -258,7 +254,7 @@ rule first_level:
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png"
     conda:
-        "envs/mri.yaml"
+        "../envs/mri.yaml"
     params:
         a_img=atlas_image,
         a_lab=atlas_labels
