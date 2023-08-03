@@ -10,7 +10,7 @@ resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed
 heudiconv:
     heuristic: ./config/heuristic.py
     mem_mb: 4000
-    time_min: 60
+    time_min: 120
     threads: 2
 
 mriqc:
