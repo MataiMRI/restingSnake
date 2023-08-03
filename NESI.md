@@ -52,6 +52,7 @@ This puts the workflow in the Slurm queue, where is should be scheduled to start
 This command print a number, the **job ID**, that will be useful to keep track of the execution of the workflow.
 Note that you don't need to stay logged in once the job as been submitted.
 
+
 ### Job time limit
 
 By default, the workflow time limit is 2 days.
@@ -178,19 +179,33 @@ Copy and paste it (including the long token string) in your web-browser of choic
 *Note: Closing your SSH session or pressing CTRL-C twice in the terminal of your SSH session will terminate the JupyterLab session.*
 
 
-## TODO
+## Miscellaneous notes
 
-- document `profiles/nesi/snakemake.sl` changing `~/.condarc` (in particular channel priority)
 
-- how to unset `conda init` or avoid it to be an issue?
+### Changes in `~/.condarc` file
 
-- how to generate a minimal reproducible conda environment (maintainer doc?)
+The script `profiles/nesi/snakemake.sl` changes your `~/.condarc` in the following way:
+
+- it ensures that the conda cache folder is on `nobackup` storage to avoid filling up home space,
+- it sets the channel priority to `strict`, otherwise the environment will not be build.
+
+
+### Conda issues on NeSI
+
+If you encounter any issue with conda on NeSI, first make sure you **did not** run `conda init`.
+This commands adds a snippet in your `~/.bashrc` file which can conflicts with the environment modules system.
+You can use `nano ~/.bashrc` (or another command line editor of your choice) from a terminal on NeSI to remove it.
+
+
+### Getting an email at the end of the workflow
+
+You can instruct Slurm to send you an email when a Slurm job changes states (start, ends, fails...).
+
+To get emails when the workflow start/ends, modify the script [`profiles/nesi/snakemake.sl`](profiles/nesi/snakemake.sl), adding the following in the header section:
 
 ```
-module purge
-module load Miniconda3/4.12.0
-export PYTHONNOUSERSITE=1
-conda env create -f envs/mri_base.yaml -p ./mri_env
-conda env export -p ./mri_env --no-builds | grep -v '^prefix:' > envs/mri.yaml
-conda env remove -p ./mri_env
+#SBATCH --mail-user=my_email@domain.tld
+#SBATCH --mail-type=ALL
 ```
+
+where `my_email@domain.tld` stands for your email address.
