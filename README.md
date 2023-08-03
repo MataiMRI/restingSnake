@@ -15,23 +15,10 @@ View steps within workflow using rulegraph:
 snakemake --forceall --rulegraph | dot -Tpdf > rulegraph.pdf
 ```
 
-Prevent Snakemake from stopping as soon as one job fails, but finish independent jobs:
-
-```
-snakemake --keep-going
-```
-
 Keep incomplete files (useful for debugging) from fail jobs, instead of wiping them:
 
 ```
 snakemake --keep-incomplete
-```
-
-If you kept some incomplete files, Snakemake will refuse to run unless you tell it what to do with the identified files.
-The easiest (and safest) option it to tell it to re-run the jobs, i.e. remove the incomplete files and run the jobs to create them:
-
-```
-snakemake --rerun-incomplete
 ```
 
 Run the pipeline until a certain file or rule, e.g. the `freesurfer` rule:
@@ -43,7 +30,7 @@ snakemake --until freesurfer
 All these options can be combined and used with a profile, for example:
 
 ```
-snakemake --keep-going --keep-incomplete --until freesurfer
+snakemake --keep-incomplete --until freesurfer
 ```
 
 
