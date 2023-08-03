@@ -15,7 +15,7 @@ heudiconv:
 
 mriqc:
     mem_mb: 16000
-    time_min: 60
+    time_min: 120
     threads: 8
 
 freesurfer:
