@@ -189,9 +189,7 @@ rule fmriprep:
         bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
         freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
     output:
-        # TODO list all files generated
-        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}"),
-        #"{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/fmriprep:21.0.4"
     resources:

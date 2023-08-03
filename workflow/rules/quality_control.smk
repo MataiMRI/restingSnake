@@ -77,14 +77,13 @@ rule heudiconv:
         "--subjects {wildcards.subject} "
         "--ses {wildcards.session} "
         "--converter dcm2niix "
-        "--bids "
+        "--bids notop "
         "--overwrite"
 
 rule mriqc:
     input:
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
-        # TODO list all files generated
         directory("{resultsdir}/bids/derivatives/mriqc/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/mriqc:23.0.1"
