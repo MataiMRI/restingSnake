@@ -80,8 +80,27 @@ rule heudiconv:
         "--bids notop "
         "--overwrite"
 
+rule bids_template:
+    input:
+        expand(
+            "{{resultsdir}}/bids/sub-{subject}/ses-{session}",
+            zip,
+            subject=SUBJECTS,
+            session=SESSIONS,
+        )
+    output:
+        "{resultsdir}/bids/dataset_description.json"
+    container:
+        "docker://ghcr.io/jennan/heudiconv:jpeg2000_ci"
+    shell:
+        "heudiconv "
+        "--files {wildcards.resultsdir}/bids "
+        "--heuristic {config[heudiconv][heuristic]} "
+        "--command populate-templates"
+
 rule mriqc:
     input:
+        "{resultsdir}/bids/dataset_description.json",
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
         directory("{resultsdir}/bids/derivatives/mriqc/sub-{subject}/ses-{session}")

@@ -15,9 +15,7 @@
   min_version("7.30")
   ```
 - **heudiconv rule**
-  - avoid race condition using `--bids notop` (see [heudiconv doc](https://heudiconv.readthedocs.io/en/latest/usage.html#batch-jobs))
-  - generate template files after using `--command populate-templates` (see [heudiconv doc](https://heudiconv.readthedocs.io/en/latest/usage.html#batch-jobs))
-  - help generate participants.tsv
+  - add a rule to generate `bids/participants.tsv`
 - **fmriqc rule**
   - list all outputs, e.g. all file `bids/derivatives/mriqc/sub-{subject}_ses-{session}_{...}.html` (use checkpoint for heudiconv rule)
 - **fmriprep rule**
