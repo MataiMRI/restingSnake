@@ -3,7 +3,7 @@ cluster:
         --parsable
         --partition {resources.partition}
         --account {config[account]}
-        --time {resources.time_min}
+        --time {resources.runtime}
         --mem {resources.mem_mb}
         --cpus-per-task {resources.cpus}
         --output logs/nesi/%j-{rule}.out
@@ -13,7 +13,7 @@ default-resources:
     - partition=milan
     - cpus=1
     - mem_mb=512
-    - time_min=5
+    - runtime=5
 cluster-status: "slurm-status.py"
 cluster-sidecar: "slurm-sidecar.py"
 cluster-cancel: "scancel"

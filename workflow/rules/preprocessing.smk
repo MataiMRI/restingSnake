@@ -46,7 +46,7 @@ rule freesurfer_cross_sectional:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
-        time_min=config["freesurfer"]["time_min"]
+        runtime=config["freesurfer"]["time_min"]
     threads: config["freesurfer"]["threads"]
     shell:
         "export FS_LICENSE=$(realpath {config[freesurfer][license_path]}) && "
@@ -91,7 +91,7 @@ rule freesurfer_long_template:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
-        time_min=config["freesurfer"]["time_min"]
+        runtime=config["freesurfer"]["time_min"]
     threads: config["freesurfer"]["threads"]
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
@@ -116,7 +116,7 @@ rule freesurfer_longitudinal:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
-        time_min=config["freesurfer"]["time_min"]
+        runtime=config["freesurfer"]["time_min"]
     threads: config["freesurfer"]["threads"]
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
@@ -197,7 +197,7 @@ rule fmriprep:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
-        time_min=config["fmriprep"]["time_min"]
+        runtime=config["fmriprep"]["time_min"]
     threads: config["fmriprep"]["threads"]
     shell:
         "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/fmriprep "
@@ -261,7 +261,7 @@ rule first_level:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["first_level"]["mem_mb"],
-        time_min=config["first_level"]["time_min"]
+        runtime=config["first_level"]["time_min"]
     threads: config["first_level"]["threads"]
     log:
         "{resultsdir}/first_level_results/sub-{subject}_ses-{session}_{network}.log"

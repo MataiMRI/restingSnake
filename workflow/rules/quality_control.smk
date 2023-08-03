@@ -68,7 +68,7 @@ rule heudiconv:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["heudiconv"]["mem_mb"],
-        time_min=config["heudiconv"]["time_min"]
+        runtime=config["heudiconv"]["time_min"]
     shell:
         "heudiconv "
         "--dicom_dir_template '{wildcards.resultsdir}/tidy/sub_{{subject}}/ses_{{session}}/*/*' "
@@ -91,7 +91,7 @@ rule mriqc:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["mriqc"]["mem_mb"],
-        time_min=config["mriqc"]["time_min"]
+        runtime=config["mriqc"]["time_min"]
     params:
         mem_gb=int(config["mriqc"]["mem_mb"] / 1000)
     threads: config["mriqc"]["threads"]
