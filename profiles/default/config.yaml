@@ -1,7 +1,7 @@
 default-resources:
     - cpus=1
     - mem_mb=512
-    - time_min=5
+    - runtime=5
 printshellcmds: True
 use-singularity: True
 printshellcmds: True
