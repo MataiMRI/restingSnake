@@ -6,8 +6,8 @@ cluster:
         --time {resources.time_min}
         --mem {resources.mem_mb}
         --cpus-per-task {resources.cpus}
-        --output nesi/logs/%j-{rule}.out
-        --error nesi/logs/%j-{rule}.out
+        --output logs/nesi/%j-{rule}.out
+        --error logs/nesi/%j-{rule}.out
         --job-name snakejob-{rule}
 default-resources:
     - partition=milan
