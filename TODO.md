@@ -7,7 +7,7 @@
   - remove project specific heudiconv script [config/heuristic.py](config/heuristic.py)
 - add a workflow (and instructions) to get vanilla heuristic file for `heudiconv`
 - add explanations about Atlas structure, using local one as an example
-- expand explanations about all parameters in [config/config.yaml](config/config.yaml)
+- expand explanations about all parameters in [config/config.yml](config/config.yml)
 - (minor) use `--workflow-profile` instead of `--profile`
   - rename `profiles/local` to `profiles/default` to make it default
   - use `--workflow-profile` in [profiles/nesi/snakemake.sl](profiles/nesi/snakemake.sl),
