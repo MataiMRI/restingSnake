@@ -77,7 +77,6 @@ def sessions_for_template(wildcards):
     tps = " ".join(f"-tp {session}" for session in inputs)
     return tps
 
-# TODO decide how to properly aggregate multi-session data
 rule freesurfer_long_template:
     input:
         list_freesurfer_sessions
@@ -156,10 +155,6 @@ rule fmriprep_filter:
     template_engine:
         "jinja2"
 
-# TODO make sure fmriprep has functionality to handle multiple runs within the same session
-# TODO add flexibility for both resting-state and task
-# TODO Experiment with --longitudinal in fMRIPREP
-
 def previous_session(wildcards):
     """find the previous fmriprep session folder for a given session"""
 
@@ -226,10 +221,6 @@ rule fmriprep_cleanup:
         touch("{resultsdir}/.work_completed")
     shell:
         "rm -rf {wildcards.resultsdir}/work"
-
-#Query with Mangor:
-### handling multiple runs within a session???
-#whether mask should be from anat or func folder?
 
 def atlas_image(wildcards):
     a_img = config["first_level"]["atlas_info"].get("atlas_image")
