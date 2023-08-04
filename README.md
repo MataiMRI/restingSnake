@@ -94,6 +94,18 @@ View steps within workflow using rulegraph:
 snakemake --forceall --rulegraph | dot -Tpdf > rulegraph.pdf
 ```
 
+Use the [*local* profile](profiles/local/config.yaml), presetting many options to run the workflow locally:
+
+```
+snakemake --profile profiles/local
+```
+
+Inform `snakemake` of the maximum amount of memory available on the workstation:
+
+```
+snakemake --resources mem=48GB
+```
+
 Keep incomplete files (useful for debugging) from fail jobs, instead of wiping them:
 
 ```
@@ -109,7 +121,7 @@ snakemake --until freesurfer
 All these options can be combined and used with a profile, for example:
 
 ```
-snakemake --keep-incomplete --until freesurfer
+snakemake --profile profiles/local --keep-incomplete --until freesurfer
 ```
 
 Unlock the folder, in case `snakemake` had to be interrupted abruptly previously:

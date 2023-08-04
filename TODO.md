@@ -22,8 +22,9 @@
   - simplify `profiles/nesi/snakemake.sl` if possible (may no need to modify condarc as much)
 - **heudiconv rule**
   - add a rule to generate `bids/participants.tsv`
-- **fmriqc rule**
+- **mriqc rule**
   - list all outputs, e.g. all file `bids/derivatives/mriqc/sub-{subject}_ses-{session}_{...}.html` (use checkpoint for heudiconv rule)
+  - avoid race condition with `bids/derivatives/mriqc/dataset_description.json` (maybe create it before or after)
 - **fmriprep rule**
   - test with 16 threads instead of 8
   - list all files generated, e.g. `/bids/derivatives/fmriprep/sub-{subject}/figures`
