@@ -138,8 +138,8 @@ tail -f logs/nesi/JOBID-fmri_workflow.out
 
 and press CTRL-C to get back the command prompt.
 
-Note that every rule also generates a Slurm log file named `nesi/logs/RULE_JOBID-RULENAME.out`.
-The corresponding job ID `RULE_JOBID` is listed in the `nesi/logs/JOBID-fmri_workflow.out` log file.
+Note that every rule also generates a Slurm log file named `logs/nesi/RULE_JOBID-RULENAME.out`.
+The corresponding job ID `RULE_JOBID` is listed in the `logs/nesi/JOBID-fmri_workflow.out` log file.
 
 
 ## Accessing JupyterLab via SSH
@@ -148,7 +148,7 @@ JupyterLab is a convenient way to explore the results of the workflow (e.g. fmri
 
 We recommend to use it via an SSH tunnel to the Mahuika login node.
 If you are using a terminal, add the `-L` option to your ssh command, for example:
-fmri_workflow.out
+
 ```
 ssh mahuika -L PORT:localhost:PORT
 ```
