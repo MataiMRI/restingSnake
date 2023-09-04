@@ -1,0 +1,12 @@
+default-resources:
+    - cpus=1
+    - mem_mb=512
+    - runtime=5
+printshellcmds: True
+use-singularity: True
+printshellcmds: True
+use-singularity: True
+singularity-args: " --cleanenv"
+use-conda: True
+keep-going: True
+rerun-incomplete: True

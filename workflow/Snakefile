@@ -1,0 +1,22 @@
+configfile: 'config/config.yml'
+
+module quality_control:
+    snakefile:
+        "rules/quality_control.smk"
+    config: config
+
+use rule * from quality_control as quality_control_*
+
+module preprocessing:
+    snakefile:
+        "rules/preprocessing.smk"
+    config: config
+
+use rule * from preprocessing as preprocessing_*
+
+rule all:
+    localrule: True
+    default_target: True
+    input:
+        rules.quality_control_all.input,
+        rules.preprocessing_all.input,

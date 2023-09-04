@@ -1,8 +1,5 @@
-import shutil
 import pandas as pd
 from pathlib import Path
-
-configfile: 'config.yml'
 
 def list_scans(root_folder, prefix):
     mapping = {}
@@ -27,6 +24,7 @@ MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
 rule all:
+    localrule: True
     input:
         expand(
             expand(
@@ -66,33 +64,52 @@ rule heudiconv:
         directory("{resultsdir}/bids/.heudiconv/{subject}/ses-{session}")
     container:
         "docker://ghcr.io/jennan/heudiconv:jpeg2000_ci"
+    threads: config["heudiconv"]["threads"]
     resources:
-        cpus=2,
-        mem_mb=4000,
-        time_min=60
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["heudiconv"]["mem_mb"],
+        runtime=config["heudiconv"]["time_min"]
     shell:
         "heudiconv "
         "--dicom_dir_template '{wildcards.resultsdir}/tidy/sub_{{subject}}/ses_{{session}}/*/*' "
         "--outdir {wildcards.resultsdir}/bids "
-        "--heuristic scripts/heuristic.py "
+        "--heuristic {config[heudiconv][heuristic]} "
         "--subjects {wildcards.subject} "
         "--ses {wildcards.session} "
         "--converter dcm2niix "
-        "--bids "
+        "--bids notop "
         "--overwrite"
+
+rule bids_template:
+    input:
+        expand(
+            "{{resultsdir}}/bids/sub-{subject}/ses-{session}",
+            zip,
+            subject=SUBJECTS,
+            session=SESSIONS,
+        )
+    output:
+        "{resultsdir}/bids/dataset_description.json"
+    container:
+        "docker://ghcr.io/jennan/heudiconv:jpeg2000_ci"
+    shell:
+        "heudiconv "
+        "--files {wildcards.resultsdir}/bids "
+        "--heuristic {config[heudiconv][heuristic]} "
+        "--command populate-templates"
 
 rule mriqc:
     input:
+        "{resultsdir}/bids/dataset_description.json",
         "{resultsdir}/bids/sub-{subject}/ses-{session}"
     output:
-        # TODO list all files generated
         directory("{resultsdir}/bids/derivatives/mriqc/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/mriqc:23.0.1"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["mriqc"]["mem_mb"],
-        time_min=config["mriqc"]["time_min"]
+        runtime=config["mriqc"]["time_min"]
     params:
         mem_gb=int(config["mriqc"]["mem_mb"] / 1000)
     threads: config["mriqc"]["threads"]
@@ -106,5 +123,5 @@ rule mriqc:
         "--no-sub "
         "-w {wildcards.resultsdir}/work && "
         "flock {wildcards.resultsdir}/.qc_status.csv.lock "
-        "python scripts/update_qc_list.py {wildcards.resultsdir}/qc_status.csv "
+        "python workflow/scripts/update_qc_list.py {wildcards.resultsdir}/qc_status.csv "
         " {wildcards.subject} {wildcards.session}"

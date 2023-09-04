@@ -1,29 +1,25 @@
-import sys
 from pathlib import Path
 import pandas as pd
-
-configfile: 'config.yml'
-
-def load_qc(qc_file):
-    try:
-        qc_df = pd.read_csv(qc_file)
-    except FileNotFoundError:
-        print(f"ERROR: QC file {qc_file} not found!")
-        sys.exit(1)  # TODO find a less verbose way to exit snakemake
-    return qc_df
 
 def pass_qc(qc_df):
     valid_anat = qc_df['anat_qc'] | (qc_df['session'] != qc_df['anat_template'])
     qc_true = qc_df.loc[valid_anat & qc_df['func_qc']]
     return qc_true["subject"].to_list(), qc_true["session"].to_list()
 
-QC_DF = load_qc(Path(config["resultsdir"]) / "qc_status.csv")
-SUBJECTS, SESSIONS = pass_qc(QC_DF)
-NETWORKS = [network.replace(' ', '-') for network in config["atlas_info"]["networks"]]
+try:
+    QC_DF = pd.read_csv(Path(config["resultsdir"]) / "qc_status.csv")
+    SUBJECTS, SESSIONS = pass_qc(QC_DF)
+except FileNotFoundError:
+    SUBJECTS = []
+    SESSIONS = []
 
-localrules: all, fmriprep_cleanup, freesurfer_rename, fmriprep_filter
+NETWORKS = [
+    network.replace(' ', '-')
+    for network in config["first_level"]["atlas_info"]["networks"]
+]
 
 rule all:
+    localrule: True
     input:
         expand(
             expand(
@@ -50,8 +46,8 @@ rule freesurfer_cross_sectional:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
-        time_min=config["freesurfer"]["time_min"]
-    threads: 8
+        runtime=config["freesurfer"]["time_min"]
+    threads: config["freesurfer"]["threads"]
     shell:
         "export FS_LICENSE=$(realpath {config[freesurfer][license_path]}) && "
         "recon-all "
@@ -81,7 +77,6 @@ def sessions_for_template(wildcards):
     tps = " ".join(f"-tp {session}" for session in inputs)
     return tps
 
-# TODO decide how to properly aggregate multi-session data
 rule freesurfer_long_template:
     input:
         list_freesurfer_sessions
@@ -95,8 +90,8 @@ rule freesurfer_long_template:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
-        time_min=config["freesurfer"]["time_min"]
-    threads: 8
+        runtime=config["freesurfer"]["time_min"]
+    threads: config["freesurfer"]["threads"]
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
         "recon-all "
@@ -120,7 +115,7 @@ rule freesurfer_longitudinal:
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
-        time_min=config["freesurfer"]["time_min"]
+        runtime=config["freesurfer"]["time_min"]
     threads: config["freesurfer"]["threads"]
     shell:
         "export FS_LICENSE=$(realpath {params.license_path}) && "
@@ -143,6 +138,7 @@ def freesurfer_rename_input(wildcards):
     return f"{{resultsdir}}/bids/derivatives/freesurfer/sub-{{subject}}_ses-{session}{suffix}"
 
 rule freesurfer_rename:
+    localrule: True
     input:
         freesurfer_rename_input
     output:
@@ -151,16 +147,13 @@ rule freesurfer_rename:
         "mkdir -p {output} && ln -s {input} {output}/sub-{wildcards.subject}"
 
 rule fmriprep_filter:
+    localrule: True
     input:
-        "bids_filter_template.json"
+        workflow.source_path("../templates/bids_filter.json")
     output:
         temp("{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json")
     template_engine:
         "jinja2"
-
-# TODO make sure fmriprep has functionality to handle multiple runs within the same session
-# TODO add flexibility for both resting-state and task
-# TODO Experiment with --longitudinal in fMRIPREP
 
 def previous_session(wildcards):
     """find the previous fmriprep session folder for a given session"""
@@ -191,15 +184,13 @@ rule fmriprep:
         bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
         freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
     output:
-        # TODO list all files generated
-        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}"),
-        #"{resultsdir}/bids/derivatives/fmriprep/sub-{subject}.html"
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}")
     container:
         "docker://nipreps/fmriprep:21.0.4"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
-        time_min=config["fmriprep"]["time_min"]
+        runtime=config["fmriprep"]["time_min"]
     threads: config["fmriprep"]["threads"]
     shell:
         "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/fmriprep "
@@ -218,6 +209,7 @@ rule fmriprep:
         "--bids-filter-file {input.bids_filter}"
 
 rule fmriprep_cleanup:
+    localrule: True
     input:
         expand(
             "{{resultsdir}}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
@@ -230,19 +222,15 @@ rule fmriprep_cleanup:
     shell:
         "rm -rf {wildcards.resultsdir}/work"
 
-#Query with Mangor:
-### handling multiple runs within a session???
-#whether mask should be from anat or func folder?
-
 def atlas_image(wildcards):
-    a_img = config["atlas_info"].get("atlas_image")
+    a_img = config["first_level"]["atlas_info"].get("atlas_image")
     if (a_img is not None) and (len(a_img.strip()) > 0):
         return f"-a_img {a_img}"
     else:
         return ""
 
 def atlas_labels(wildcards):
-    a_lab = config["atlas_info"].get("atlas_labels")
+    a_lab = config["first_level"]["atlas_info"].get("atlas_labels")
     if (a_lab is not None) and (len(a_lab.strip()) > 0):
         return f"-a_lab {a_lab}"
     else:
@@ -255,32 +243,32 @@ rule first_level:
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_unthresholded_fc.nii.gz",
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{network}_figure.png"
     conda:
-        "envs/mri.yaml"
+        "../envs/mri.yaml"
     params:
         a_img=atlas_image,
         a_lab=atlas_labels
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["first_level"]["mem_mb"],
-        time_min=config["first_level"]["time_min"]
+        runtime=config["first_level"]["time_min"]
     threads: config["first_level"]["threads"]
     log:
         "{resultsdir}/first_level_results/sub-{subject}_ses-{session}_{network}.log"
     shell:
-        "python scripts/first_level.py "
+        "python workflow/scripts/first_level.py "
         "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
         "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
         "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_desc-confounds_timeseries.tsv "
         "{output} "
         "{params.a_img} "
         "{params.a_lab} "
-        "-tr {config[rep_time]} "
-        "-rg {config[confounds]} "
+        "-tr {config[first_level][rep_time]} "
+        "-rg {config[first_level][confounds]} "
         "-ntwk {wildcards.network} "
-        "-hp {config[preprocessing][high_pass]} "
-        "-lp {config[preprocessing][low_pass]} "
-        "-fwhm {config[preprocessing][smooth_fwhm]} "
-        "-fdr {config[resting_first_level][fdr_alpha]} "
-        "-fc {config[resting_first_level][func_conn_thresh]} "
+        "-hp {config[first_level][preprocessing][high_pass]} "
+        "-lp {config[first_level][preprocessing][low_pass]} "
+        "-fwhm {config[first_level][preprocessing][smooth_fwhm]} "
+        "-fdr {config[first_level][resting_first_level][fdr_alpha]} "
+        "-fc {config[first_level][resting_first_level][func_conn_thresh]} "
         "-v "
         "2> {log}"

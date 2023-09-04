@@ -1,0 +1,73 @@
+use_longitudinal: False
+
+# Data import
+ethics_prefix: Conc_20Ntb14_
+
+# Directories
+datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom
+resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed
+
+heudiconv:
+    heuristic: ./config/heuristic.py
+    mem_mb: 4000
+    time_min: 120
+    threads: 2
+
+mriqc:
+    mem_mb: 16000
+    time_min: 120
+    threads: 8
+
+freesurfer:
+    license_path: ./config/license.txt
+    mem_mb: 4000
+    time_min: 660
+    threads: 8
+
+fmriprep:
+    mem_mb: 25000
+    time_min: 180
+    threads: 8
+
+first_level:
+    mem_mb: 12000
+    time_min: 10
+    threads: 2
+
+    # scan info
+    rep_time: 1.5
+
+    # confounding (nuisance) variables to be regressed out of signal to improve SNR
+    confounds:
+        - csf
+        - white_matter
+        - trans_x
+        - trans_y
+        - trans_z
+        - rot_x
+        - rot_y
+        - rot_z
+
+    preprocessing:
+        # framewise displacement threshold for accepting
+        frame_disp_thresh: 0.5
+        # set high and low range of bandpass filter
+        high_pass: 0.01
+        low_pass: 0.1
+        # size of smoothing kernel in mm
+        smooth_fwhm: 6
+
+    # Atlas and list of one or more resting state networks for first level analysis
+    atlas_info:
+        atlas_image:
+        atlas_labels:
+        networks:
+            - DMN
+            - Salience
+            - R V Att
+
+    resting_first_level:
+        # false detection rate alpha
+        fdr_alpha: 0.01
+        # functional connectivity threshold
+        func_conn_thresh: 0.25
