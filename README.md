@@ -24,7 +24,7 @@ git clone https://github.com/jpmcgeown/fmri_workflow.git
 
 Then edit the configuration file `config/config.yml`, setting the following entries:
 
-- the ethics prefix `ethics_prefix` for your input files,
+- the prefix `prefix` for your input files,
 - the input data folder `datadir`,
 - the results folder `resultsdir`,
 - the path to your `heudiconv` heuristic script (`heuristic` entry under `heudiconv` section),
@@ -63,7 +63,7 @@ At the end, a `qc_status.csv` file is generated in the results folder:
 - each line is different subject session
 - by default no session passes the QC, columns `func_qc` and `anat_qc` are set to `False`,
 - you need to edit these fields and set **both** to `True` to allow the preprocessing step on a session,
-- you *can* specify another session as the anatomical template, setting it in the `anat_template` field. 
+- you *can* specify another session as the anatomical template, setting it in the `anat_template` field.
 
 **Important note:** Never edit the `qc_status.csv` file *while* a workflow is running, as the workflow edits it too.
 
@@ -140,9 +140,9 @@ The workflow assumes that input scan data are:
 
 - folders or .zip files (you can mix both),
 - stored in the `datadir` folder configured [`config/config.yml`](config/config.yml),
-- they are named using the convention `<ethics_prefix>_<subject>_<session>`, where
+- they are named using the convention `<prefix>_<subject>_<session>`, where
 
-  - `<ethics_prefix>` is set in [`config/config.yml`](config/config.yml),
+  - `<prefix>` is set in [`config/config.yml`](config/config.yml),
   - `<session>` can be omitted, but will then be considered as `a`.
 
 Within a input folder (or .zip file), only the parent folder of DICOM files will be kept when tidying the data.

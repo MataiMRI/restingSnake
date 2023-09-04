@@ -1,7 +1,7 @@
 use_longitudinal: False
 
 # Data import
-ethics_prefix: Conc_20Ntb14_
+prefix: Conc_20Ntb14_
 
 # Directories
 datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom

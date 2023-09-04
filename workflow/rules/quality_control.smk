@@ -20,7 +20,7 @@ def list_scans(root_folder, prefix):
 
     return mapping
 
-MAPPING = list_scans(config["datadir"], config["ethics_prefix"])
+MAPPING = list_scans(config["datadir"], config["prefix"])
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
 rule all:
