@@ -2,8 +2,8 @@
 prefix: Conc_20Ntb14_
 
 # Directories - Define locations where Snakemake should read input data and write outputs.
-datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom
-resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed
+datadir: /home/jpmcgeown/data/snakemake/dicom
+resultsdir: /home/jpmcgeown/data/snakemake/processed
 
 # Toggle longitudinal processing steps in Freesurfer and fMRIprep
 use_longitudinal: False
