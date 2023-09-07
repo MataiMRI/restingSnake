@@ -270,6 +270,13 @@ If you set `use_longitudinal: True` in your configuration file to run a longitud
 
 # Referencing
 <a id="reference"></a>
+Please be sure to appropriately reference the BIDS format and softwares used in `restingSnake` in any publications or outputs that used this workflow:
+- `BIDS` [reference](https://www.nature.com/articles/sdata201644/)
+- `snakemake` [reference](https://snakemake.readthedocs.io/en/stable/)
+- `HeuDIConv` [reference](https://github.com/nipy/heudiconv)
+- `freesurfer` [reference](https://surfer.nmr.mgh.harvard.edu/fswiki/FreeSurferMethodsCitation)
+- `fMRIPrep` [reference](https://fmriprep.org/en/stable/index.html)
+- `nilearn` [reference](https://github.com/nilearn/nilearn)
 
 # Maintenance
 <a id="maintain"></a>
