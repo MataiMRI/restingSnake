@@ -2,6 +2,7 @@
 
 This repository provides a Snakemake workflow to organise, preprocess and perform first level analysis on resting-state (taskless) functional MRI datasets.
 
+**TO DO General description of workflow and the tools used**
 - `HeuDIConv`
 - `BIDS`
 - `MRIQC`
