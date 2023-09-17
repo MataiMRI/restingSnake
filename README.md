@@ -1,76 +1,17 @@
 # restingSnake fMRI preprocessing workflow
-
-This repository provides a Snakemake workflow to organise, preprocess and perform first level analysis on resting-state (taskless) functional MRI datasets.
-
-**TO DO General description of workflow and the tools used**
-- `HeuDIConv`
-- `BIDS`
-- `MRIQC`
-- `freesurfer`
-- `fMRIPrep`
-- `nilearn`
-
 ## Table of contents
 - [Installation](#install)
-- [Available workflow](#available)
-- [Useful Snakemake options](#snake_options)
 - [Setting up restingSnake for the first time](#setup)
 - [Configuring HeuDIConv](#heudiconv)
 - [Image Quality Control](#image_qc)
 - [Atlas and network options](#atlas)
 - [Longitudinal preprocessing](#long_link)
+- [Useful Snakemake options](#snake_options)
 - [Referencing](#reference)
 - [Maintenance](#maintain)
 
 
-
-
-## Installation
-<a id="install"></a>
-
-*If you are using the [NeSI](https://www.nesi.org.nz) platform, please follow the [NeSI related documentation](NESI.md).*
-
-To run this workflow on your workstation, you need to install the following softwares:
-
-- `mamba`, a fast cross-platform package manager (see [installation instructions](https://mamba.readthedocs.io/en/latest/installation.htm))
-- `apptainer`, a container system (see [installation instructions](https://apptainer.org/docs/admin/main/installation.html))
-- `snakemake`, the workflow management system (see [installation instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html))
-- `git`, the distributed version control system (see [download page](https://git-scm.com/downloads))
-
-**Note: TO-DO RECOMMEND CREATING A VIRTUAL MAMBA ENVIRONMENT FOR SNAKEMAKE**
-
-Also make sure to get a [Freesurfer license](https://surfer.nmr.mgh.harvard.edu/fswiki/License).
-
-Clone this repository using:
-
-```
-git clone https://github.com/jpmcgeown/fmri_workflow.git
-```
-
-Then edit the configuration file `config/config.yml`, setting the following entries:
-
-- the prefix `prefix` for your input files,
-- the input data folder `datadir`,
-- the results folder `resultsdir`,
-- the path to your `heudiconv` heuristic script (`heuristic` entry under `heudiconv` section),
-- the path to your Freesurfer license (`license_path` entry under `freesurfer` section)
-
-You may want to edit other entries, in particular:
-
-- for each software, compute resources (time, memory and threads) can be adjusted,
-- the first level analysis parameters.
-
-Once this configuration is finished, you can run `snakemake` to start the workflow.
-
-Use a dry-run to check that installation and configuration is working:
-
-```
-snakemake -n
-```
-
-
-## Available workflow
-<a id="available"></a>
+This repository provides a Snakemake workflow to organise, preprocess and perform first level analysis on resting-state (taskless) functional MRI datasets.
 
 The provided workflow is split in 2 steps:
 
@@ -104,54 +45,57 @@ This step generates in the results folder:
 
 `restingSnake` is built to allow the user to select cross-sectional or longitudinal preprocessing of anatomical and functional images. Learn more about longitudinal preprocessing [here](#long_link).
 
+- `HeuDIConv`
+- `BIDS`
+- `MRIQC`
+- `freesurfer`
+- `fMRIPrep`
+- `nilearn`
 
-## Useful Snakemake options
-<a id="snake_options"></a>
-View steps within workflow using rulegraph:
 
-```
-snakemake --forceall --rulegraph | dot -Tpdf > rulegraph.pdf
-```
+## Installation and configuration
+<a id="install"></a>
 
-Use the [*local* profile](profiles/local/config.yaml), presetting many options to run the workflow locally:
+*If you are using the [NeSI](https://www.nesi.org.nz) platform, please follow the [NeSI related documentation](NESI.md).*
 
-```
-snakemake --profile profiles/local
-```
+To run this workflow on your workstation, you need to install the following softwares:
 
-Inform `snakemake` of the maximum amount of memory available on the workstation:
+- `mamba`, a fast cross-platform package manager (see [installation instructions](https://mamba.readthedocs.io/en/latest/installation.htm))
+- `apptainer`, a container system (see [installation instructions](https://apptainer.org/docs/admin/main/installation.html))
+- `snakemake`, the workflow management system (see [installation instructions](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html))
+- `git`, the distributed version control system (see [download page](https://git-scm.com/downloads))
+- `unzip`, tool to unzip folders from the terminal
 
-```
-snakemake --resources mem=48GB
-```
+**Note: TO-DO RECOMMEND CREATING A VIRTUAL MAMBA ENVIRONMENT FOR SNAKEMAKE**
 
-Keep incomplete files (useful for debugging) from fail jobs, instead of wiping them:
+Also make sure to get a [Freesurfer license](https://surfer.nmr.mgh.harvard.edu/fswiki/License).
 
-```
-snakemake --keep-incomplete
-```
-
-Run the pipeline until a certain file or rule, e.g. the `freesurfer` rule:
+Clone this repository using:
 
 ```
-snakemake --until freesurfer
+git clone https://github.com/jpmcgeown/fmri_workflow.git
 ```
 
-All these options can be combined and used with a profile, for example:
+Then edit the configuration file `config/config.yml`, setting the following entries:
+
+- the prefix `prefix` for your input files,
+- the input data folder `datadir`,
+- the results folder `resultsdir`,
+- the path to your `heudiconv` heuristic script (`heuristic` entry under `heudiconv` section),
+- the path to your Freesurfer license (`license_path` entry under `freesurfer` section)
+
+You may want to edit other entries, in particular:
+
+- for each software, compute resources (time, memory and threads) can be adjusted,
+- the first level analysis parameters.
+
+Once this configuration is finished, you can run `snakemake` to start the workflow.
+
+Use a dry-run to check that installation and configuration is working:
 
 ```
-snakemake --profile profiles/local --keep-incomplete --until freesurfer
+snakemake -n
 ```
-
-Unlock the folder, in case `snakemake` had to be interrupted abruptly previously:
-
-```
-snakemake --unlock
-```
-
-*Note: This last hint will be mentioned to you by `snakemake` itself.
-Use it only when recommended to to so ;-).*
-
 
 # Setting up restingSnake to run on your data for the first time
 <a id="setup"></a>
@@ -205,7 +149,7 @@ To do this you will have to use `HeuDIConv` to generate a `dicominfo.tsv` file c
 We can generate `dicominfo.tsv` with the following command:
 ```
 apptainer run --bind <RESULTSDIR>:/mnt \
-<SNAKEMAKEDIR>/.snakemake/singularity/<CONTAINER>.simg \
+docker://ghcr.io/jennan/heudiconv:jpeg2000_ci \
 -d /mnt/tidy/sub_{subject}/ses_{session}/*/* \
 -o /mnt/bids \
 -f convertall \
@@ -217,21 +161,11 @@ apptainer run --bind <RESULTSDIR>:/mnt \
  Where:
 
  - `<RESULTSDIR>` is the same filepath as the `resultsdir` folder configured in `config/config.yml`,
- - `<SNAKEMAKEDIR>` is where this README.md is located,
  - `<CONTAINER>`is the name of your `HeuDIConv` image built by `snakemake`,
  - `<SUBJECT>` and `<SESSION>` is an example folder of scans located in `<RESULTSDIR>/tidy` that will be summarized in `dicominfo.tsv`.
 
 
- You can find `<CONTAINER>` by listing all the containers `snakemake` has installed so far:
- ```
- ls .snakemake/singularity
- ```
-You should see two .simg containers, but they may have names that are not human readable. To find out which one is `HeuDIConv` run this command and inspect the print out:
-```
-apptainer run .snakemake/singularity/<CONTAINER>.simg
-```
-
-Now run the full `apptainer` `HeuDIConv` command to generate `dicominfo.tsv`. If this runs without error you can now configure [`config/heuristic.py`](config/heuristic.py). This process is clearly explained in steps 2+3 in this [HeuDIConv Walkthrough](https://reproducibility.stanford.edu/bids-tutorial-series-part-2a/). Another useful reference is this [video](https://youtu.be/O1kZAuR7E00).
+Now run the full `apptainer` `HeuDIConv` command to generate `dicominfo.tsv`. This process is clearly explained in steps 2+3 in this [HeuDIConv Walkthrough](https://reproducibility.stanford.edu/bids-tutorial-series-part-2a/). Another useful reference is this [video](https://youtu.be/O1kZAuR7E00). If this runs without error you can now configure [`config/heuristic.py`](config/heuristic.py).
 
 **Note:** You should only have to populate [`config/heuristic.py`](config/heuristic.py) **once** if your sequence list/info does not change over the course of your project. Once [`config/heuristic.py`](config/heuristic.py) is properly configured`restingSnake` will handle all `dcm2niix` and `BIDS` conversions automatically. **Make sure to delete `dicominfo.tsv` once `config/heuristic.py` is complete or you may encounter issues.**
 
@@ -264,10 +198,60 @@ The only `restingSnake` rule relying on the output of `preprocessing_fmriprep` i
 
 # Atlases and networks
 <a id="atlas"></a>
-
+**WORK IN PROGRESS**
 # Longitudinal processing
 <a id="long_link"></a>
+**WORK IN PROGRESS**
+
 If you set `use_longitudinal: True` in your configuration file to run a longitudinal analysis, creating a longitudinal template using freesurfer.
+
+# Useful Snakemake options
+<a id="snake_options"></a>
+View steps within workflow using rulegraph:
+
+```
+snakemake --forceall --rulegraph | dot -Tpdf > rulegraph.pdf
+```
+
+Use the [*local* profile](profiles/local/config.yaml), presetting many options to run the workflow locally:
+
+```
+snakemake --profile profiles/local
+```
+
+Inform `snakemake` of the maximum amount of memory available on the workstation:
+
+```
+snakemake --resources mem=48GB
+```
+
+Keep incomplete files (useful for debugging) from fail jobs, instead of wiping them:
+
+```
+snakemake --keep-incomplete
+```
+
+Run the pipeline until a certain file or rule, e.g. the `freesurfer` rule:
+
+```
+snakemake --until freesurfer
+```
+
+All these options can be combined and used with a profile, for example:
+
+```
+snakemake --profile profiles/local --keep-incomplete --until freesurfer
+```
+
+Unlock the folder, in case `snakemake` had to be interrupted abruptly previously:
+
+```
+snakemake --unlock
+```
+
+*Note: This last hint will be mentioned to you by `snakemake` itself.
+Use it only when recommended to to so ;-).*
+
 
 # Referencing
 <a id="reference"></a>
