@@ -73,7 +73,7 @@ Also make sure to get a [Freesurfer license](https://surfer.nmr.mgh.harvard.edu/
 Clone this repository using:
 
 ```
-git clone https://github.com/jpmcgeown/fmri_workflow.git
+git clone https://github.com/jpmcgeown/restingSnake.git
 ```
 
 Then edit the configuration file `config/config.yml`, setting the following entries:

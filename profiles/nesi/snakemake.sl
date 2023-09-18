@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=fmri_workflow
+#SBATCH --job-name=restingSnake
 #SBATCH --time=02-00:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
