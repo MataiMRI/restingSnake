@@ -4,8 +4,9 @@ use_longitudinal: False
 ethics_prefix: Conc_20Ntb14_
 
 # Directories
-datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom
-resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed
+datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/restingSnake_dicom
+resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/restingSnake_processed_fmriprep
+workdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/work
 
 heudiconv:
     heuristic: ./config/heuristic.py

@@ -41,6 +41,8 @@ rule unzip:
         expand("{datadir}/{{folder}}.zip", datadir=config['datadir'])
     output:
         directory(expand("{datadir}/{{folder}}", datadir=config['datadir']))
+    resources:
+        runtime=20
     shell:
         "unzip -q -d {output} {input}"
 
@@ -121,6 +123,7 @@ rule mriqc:
         "--mem-gb {params.mem_gb} "
         "--nprocs {threads} "
         "--no-sub "
+        "-vv "
         "-w {wildcards.resultsdir}/work && "
         "flock {wildcards.resultsdir}/.qc_status.csv.lock "
         "python workflow/scripts/update_qc_list.py {wildcards.resultsdir}/qc_status.csv "
