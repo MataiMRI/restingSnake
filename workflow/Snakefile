@@ -1,12 +1,5 @@
 configfile: 'config/config.yml'
 
-module quality_control:
-    snakefile:
-        "rules/quality_control.smk"
-    config: config
-
-use rule * from quality_control as quality_control_*
-
 module preprocessing:
     snakefile:
         "rules/preprocessing.smk"
@@ -14,9 +7,16 @@ module preprocessing:
 
 use rule * from preprocessing as preprocessing_*
 
+module tidy_snake:
+    snakefile:
+        github("MataiMRI/tidySnake", path="workflow/Snakefile", commit="1726b4d")  # TODO use tag
+    config: config
+
+use rule * from tidy_snake as tidy_snake_*
+
 rule all:
     localrule: True
     default_target: True
     input:
-        rules.quality_control_all.input,
-        rules.preprocessing_all.input,
+        rules.tidy_snake_all.input,
+        # rules.preprocessing_all.input,
