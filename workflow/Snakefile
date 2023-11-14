@@ -1,9 +1,23 @@
 from pathlib import Path
 from collections import defaultdict
+from dataclasses import dataclass
 
 import yaml
 
 configfile: 'config/config.yml'
+
+@dataclass
+class RunList:
+    """Store information about runs as a structure of arrays"""
+
+    subjects: list[str]
+    sessions: list[str]
+    entities: list[str]
+
+    def append(self, subject, session, entity):
+        self.subjects.append(subject)
+        self.sessions.append(session)
+        self.entities.append(entity)
 
 def is_functional(entry):
     """identify if an entry of the QC file is a functional run"""
@@ -12,16 +26,15 @@ def is_functional(entry):
 def list_valid_runs(resultsdir):
     """list all valid functional runs from every subjects, based on QC status files"""
 
-    subjects = []
-    sessions = []
-    runs = []
-    templates = defaultdict(dict)
-
     qc_file_pattern = (
         f"{resultsdir}/bids/derivatives/mriqc/sub-{{subject}}_ses-{{session}}_qc.yaml"
     )
+    subjects, sessions = glob_wildcards(qc_file_pattern)
 
-    for subject, session in zip(*glob_wildcards(qc_file_pattern)):
+    runs = RunList([], [], [])
+    templates = defaultdict(dict)
+
+    for subject, session in zip(subjects, sessions):
         qc_file = Path(qc_file_pattern.format(subject=subject, session=session))
         qc_data = yaml.safe_load(qc_file.read_text())
 
@@ -43,15 +56,12 @@ def list_valid_runs(resultsdir):
             if not is_functional(entry) or not qc_data[entry]:
                 continue
 
-            run, _ = entry.rsplit("_", maxsplit=1)
+            entity, _ = entry.rsplit("_", maxsplit=1)
+            runs.append(subject, session, entity)
 
-            subjects.append(subject)
-            sessions.append(session)
-            runs.append(run)
+    return runs, templates
 
-    return (subjects, sessions, runs), templates
-
-(SUBJECTS, SESSIONS, RUNS), TEMPLATES = list_valid_runs(config["resultsdir"])
+RUNS, TEMPLATES = list_valid_runs(config["resultsdir"])
 
 NETWORKS = [
     network.replace(' ', '-')
@@ -75,9 +85,9 @@ rule all:
                 "{{resultsdir}}/first_level_results/sub-{subject}/ses-{session}/"
                 "sub-{subject}_ses-{session}_{entity}_network-{{network}}_{{suffix}}",
                 zip,
-                subject=SUBJECTS,
-                session=SESSIONS,
-                entity=RUNS,
+                subject=RUNS.subjects,
+                session=RUNS.sessions,
+                entity=RUNS.entities,
             ),
             resultsdir=config["resultsdir"],
             network=NETWORKS,
@@ -217,9 +227,7 @@ def previous_session(wildcards):
 
     last_session = None
 
-    for subject, session in zip(SUBJECTS, SESSIONS):
-        if subject != wildcards.subject:
-            continue
+    for session in TEMPLATES[wildcards.subject]:
         if session != wildcards.session:
             last_session = session
         else:
@@ -271,8 +279,8 @@ rule fmriprep_cleanup:
         expand(
             "{{resultsdir}}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
             zip,
-            subject=SUBJECTS,
-            session=SESSIONS
+            subject=RUNS.subjects,
+            session=RUNS.sessions
         ),
     output:
         touch("{resultsdir}/.fmriprep_completed")
