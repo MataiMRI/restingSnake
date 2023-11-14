@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import yaml
 
 configfile: 'config/config.yml'
@@ -6,45 +8,63 @@ def is_functional(entry):
     """identify if an entry of the QC file is a functional run"""
     return entry.endswith("_bold") or entry.endswith("_dwi")
 
-def list_valid_runs(resultsdir):
-    """list all valid functional runs from every subjects, based on QC status files"""
+def parse_qc_file(qc_file):
+    """list valid functional runs and associated anatomical template from a QC file"""
 
-    qc_file_pattern = (
-        f"{resultsdir}/bids/derivatives/mriqc/sub-{{subject}}_ses-{{session}}_qc.yaml"
-    )
-    subjects, sessions = glob_wildcards(qc_file_pattern)
+    qc_data = yaml.safe_load(Path(qc_file).read_text())
 
+    # skip if there is no anatomical template
+    if "anat_template" not in qc_data:
+        return []
+
+    # check that anatomy is valid, if from the same subject/session
+    anat_template = qc_data["anat_template"]
+    if anat_template.startswith(f"sub-{subject}_ses-{session}"):
+        anat_entry = anat_template.removeprefix(f"sub-{subject}_ses-{session}_")
+        if not qc_data[anat_entry + "_T1w"]:
+            return []
+
+    # list all valid functional runs
     valid_runs = []
-    for subject, session in zip(subjects, sessions):
-        qc_file = Path(qc_file_pattern.format(subject=subject, session=session))
-        qc_data = yaml.safe_load(qc_file.read_text())
-
-        # skip if there is no anatomical template
-        if "anat_template" not in qc_data:
+    for entry in qc_data:
+        if not is_functional(entry) or not qc_data[entry]:
             continue
+        run, _ = entry.rsplit("_", maxsplit=1)
+        valid_runs.append((subject, session, run, anat_template))
 
-        # check that anatomy is valid, if from the same subject/session
-        anat_template = qc_data["anat_template"]
-        if anat_template.startswith(f"sub-{subject}_ses-{session}"):
-            anat_entry = anat_template.removeprefix(f"sub-{subject}_ses-{session}_")
-            if not qc_data[anat_entry + "_T1w"]:
-                continue
+    return valid_runs
 
-        # list all valid functional runs
-        for entry in qc_data:
-            if not is_functional(entry) or not qc_data[entry]:
-                continue
-            run, _ = entry.rsplit("_", maxsplit=1)
-            valid_runs.append((subject, session, run, anat_template))
+class QCFileParser:
+    """Parse QC file and expose available subjects, session, runs and templates"""
 
-    if not valid_runs:
-        subjects, sessions, runs, templates = [], [], [], []
-    else:
-        subjects, sessions, runs, templates = zip(*valid_runs)
+    def __init__(self, resultsdir):
+        qc_file_pattern = (
+            f"{resultsdir}/bids/derivatives/mriqc/"
+            "sub-{subject}_ses-{session}_qc.yaml"
+        )
+        subjects, sessions = glob_wildcards(qc_file_pattern)
 
-    return subjects, sessions, runs, templates
+        valid_runs = []
+        for subject, session in zip(subjects, sessions):
+            qc_file = qc_file_pattern.format(subject=subject, session=session)
+            valid_runs.append(parse_qc_file(qc_file))
 
-SUBJECTS, SESSIONS, RUNS, TEMPLATES = list_valid_runs(config["resultsdir"])
+        if not valid_runs:
+            self.subjects, self.sessions, self.runs, self.templates = [], [], [], []
+        else:
+            self.subjects, self.sessions, self.runs, self.templates = zip(*valid_runs)
+
+    def get_template(self, subject, session):
+        pass
+
+    def list_subject_templates(self, subject):
+        pass  # TODO deduplicate and sort them
+
+    def list_subject_sessions(self, subject):
+        pass  # TODO deduplicate and sort them
+
+# SUBJECTS, SESSIONS, RUNS, TEMPLATES = list_valid_runs(config["resultsdir"])
+QC_INFOS = QCFileParser(config["resultsdir"])
 
 NETWORKS = [
     network.replace(' ', '-')
@@ -68,9 +88,9 @@ rule all:
                 "{{resultsdir}}/first_level_results/sub-{subject}/ses-{session}/"
                 "sub-{subject}_ses-{session}_{entity}_network-{{network}}_{{suffix}}",
                 zip,
-                subject=SUBJECTS,
-                session=SESSIONS,
-                entity=RUNS,
+                subject=QC_INFOS.subjects,
+                session=QC_INFOS.sessions,
+                entity=QC_INFOS.runs,
             ),
             resultsdir=config["resultsdir"],
             network=NETWORKS,
@@ -112,18 +132,12 @@ rule freesurfer_cross_sectional:
 def list_freesurfer_templates(wildcards):
     inputs = [
         f"{wildcards.resultsdir}/bids/derivatives/freesurfer/{template}"
-        for subject, template in zip(SUBJECTS, TEMPLATES)
-        if subject == wildcards.subject
+        for template in QC_INFOS.list_subject_templates(wildcards.subject)
     ]
-    inputs = list(set(inputs))  # remove duplicates
     return inputs
 
 def list_freesurfer_timepoints(wildcards):
-    inputs = [
-        template for subject, template in zip(SUBJECTS, TEMPLATES)
-        if subject == wildcards.subject
-    ]
-    inputs = sorted(set(inputs))  # remove duplicates
+    inputs = QC_INFOS.list_subject_templates(wildcards.subject)
     tps = " ".join(f"-tp {template}" for template in inputs)
     return tps
 
@@ -186,9 +200,7 @@ def freesurfer_rename_input(wildcards):
     else:
         suffix = ""
 
-    for subject, session, template in zip(SUBJECTS, SESSIONS, TEMPLATES):
-        if subject == wildcards.subject and session == wildcards.session:
-            anat_template = template
+    QC_INFOS.get_template(wildcards.subject, wildcards.sessions)
 
     return f"{{resultsdir}}/bids/derivatives/freesurfer/{anat_template}{suffix}"
 
@@ -216,9 +228,7 @@ def previous_session(wildcards):
 
     last_session = None
 
-    for subject, session in zip(SUBJECTS, SESSIONS):
-        if subject != wildcards.subject:
-            continue
+    for session in QC_INFOS.list_subject_sessions(wildcards.subject):
         if session != wildcards.session:
             last_session = session
         else:
@@ -270,8 +280,8 @@ rule fmriprep_cleanup:
         expand(
             "{{resultsdir}}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
             zip,
-            subject=SUBJECTS,
-            session=SESSIONS
+            subject=QC_INFOS.subjects,
+            session=QC_INFOS.sessions
         ),
     output:
         touch("{resultsdir}/.fmriprep_completed")
