@@ -1,3 +1,6 @@
+from pathlib import Path
+from collections import defaultdict
+
 import yaml
 
 configfile: 'config/config.yml'
@@ -9,13 +12,16 @@ def is_functional(entry):
 def list_valid_runs(resultsdir):
     """list all valid functional runs from every subjects, based on QC status files"""
 
+    subjects = []
+    sessions = []
+    runs = []
+    templates = defaultdict(dict)
+
     qc_file_pattern = (
         f"{resultsdir}/bids/derivatives/mriqc/sub-{{subject}}_ses-{{session}}_qc.yaml"
     )
-    subjects, sessions = glob_wildcards(qc_file_pattern)
 
-    valid_runs = []
-    for subject, session in zip(subjects, sessions):
+    for subject, session in zip(*glob_wildcards(qc_file_pattern)):
         qc_file = Path(qc_file_pattern.format(subject=subject, session=session))
         qc_data = yaml.safe_load(qc_file.read_text())
 
@@ -30,21 +36,22 @@ def list_valid_runs(resultsdir):
             if not qc_data[anat_entry + "_T1w"]:
                 continue
 
+        templates[subject][session] = anat_template
+
         # list all valid functional runs
         for entry in qc_data:
             if not is_functional(entry) or not qc_data[entry]:
                 continue
+
             run, _ = entry.rsplit("_", maxsplit=1)
-            valid_runs.append((subject, session, run, anat_template))
 
-    if not valid_runs:
-        subjects, sessions, runs, templates = [], [], [], []
-    else:
-        subjects, sessions, runs, templates = zip(*valid_runs)
+            subjects.append(subject)
+            sessions.append(session)
+            runs.append(run)
 
-    return subjects, sessions, runs, templates
+    return (subjects, sessions, runs), templates
 
-SUBJECTS, SESSIONS, RUNS, TEMPLATES = list_valid_runs(config["resultsdir"])
+(SUBJECTS, SESSIONS, RUNS), TEMPLATES = list_valid_runs(config["resultsdir"])
 
 NETWORKS = [
     network.replace(' ', '-')
@@ -112,18 +119,14 @@ rule freesurfer_cross_sectional:
 def list_freesurfer_templates(wildcards):
     inputs = [
         f"{wildcards.resultsdir}/bids/derivatives/freesurfer/{template}"
-        for subject, template in zip(SUBJECTS, TEMPLATES)
-        if subject == wildcards.subject
+        for template in set(TEMPLATES[subject].values())
     ]
-    inputs = list(set(inputs))  # remove duplicates
     return inputs
 
 def list_freesurfer_timepoints(wildcards):
-    inputs = [
-        template for subject, template in zip(SUBJECTS, TEMPLATES)
-        if subject == wildcards.subject
-    ]
-    inputs = sorted(set(inputs))  # remove duplicates
+    inputs = sorted(set(TEMPLATES[subject].values()))
+    print(inputs)
+    breakpoint()
     tps = " ".join(f"-tp {template}" for template in inputs)
     return tps
 
@@ -186,9 +189,7 @@ def freesurfer_rename_input(wildcards):
     else:
         suffix = ""
 
-    for subject, session, template in zip(SUBJECTS, SESSIONS, TEMPLATES):
-        if subject == wildcards.subject and session == wildcards.session:
-            anat_template = template
+    anat_template = TEMPLATES[wildcards.subject][wildcards.session]
 
     return f"{{resultsdir}}/bids/derivatives/freesurfer/{anat_template}{suffix}"
 
