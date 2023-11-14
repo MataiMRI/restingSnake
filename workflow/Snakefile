@@ -1,15 +1,59 @@
+import yaml
+
 configfile: 'config/config.yml'
 
-module preprocessing:
-    snakefile:
-        "rules/preprocessing.smk"
-    config: config
+def is_functional(entry):
+    """identify if an entry of the QC file is a functional run"""
+    return entry.endswith("_bold") or entry.endswith("_dwi")
 
-use rule * from preprocessing as preprocessing_*
+def list_valid_runs(resultsdir):
+    """list all valid functional runs from every subjects, based on QC status files"""
+
+    qc_file_pattern = (
+        f"{resultsdir}/bids/derivatives/mriqc/sub-{{subject}}_ses-{{session}}_qc.yaml"
+    )
+    subjects, sessions = glob_wildcards(qc_file_pattern)
+
+    valid_runs = []
+    for subject, session in zip(subjects, sessions):
+        qc_file = Path(qc_file_pattern.format(subject=subject, session=session))
+        qc_data = yaml.safe_load(qc_file.read_text())
+
+        # skip if there is no anatomical template
+        if "anat_template" not in qc_data:
+            continue
+
+        # check that anatomy is valid, if from the same subject/session
+        anat_template = qc_data["anat_template"]
+        if anat_template.startswith(f"sub-{subject}_ses-{session}"):
+            anat_entry = anat_template.removeprefix(f"sub-{subject}_ses-{session}_")
+            if not qc_data[anat_entry + "_T1w"]:
+                continue
+
+        # list all valid functional runs
+        for entry in qc_data:
+            if not is_functional(entry) or not qc_data[entry]:
+                continue
+            run, _ = entry.rsplit("_", maxsplit=1)
+            valid_runs.append((subject, session, run, anat_template))
+
+    if not valid_runs:
+        subjects, sessions, runs = [], [], [], []
+    else:
+        subjects, sessions, runs, templates = zip(*valid_runs)
+
+    return subjects, sessions, runs, templates
+
+SUBJECTS, SESSIONS, RUNS, TEMPLATES = list_valid_runs(config["resultsdir"])
+
+NETWORKS = [
+    network.replace(' ', '-')
+    for network in config["first_level"]["atlas_info"]["networks"]
+]
 
 module tidy_snake:
     snakefile:
-        github("MataiMRI/tidySnake", path="workflow/Snakefile", commit="1726b4d")  # TODO use tag
+        github("MataiMRI/tidySnake", path="workflow/Snakefile", commit="1b0e7ea")  # TODO use tag
     config: config
 
 use rule * from tidy_snake as tidy_snake_*
@@ -19,4 +63,270 @@ rule all:
     default_target: True
     input:
         rules.tidy_snake_all.input,
-        # rules.preprocessing_all.input,
+        expand(
+            expand(
+                "{{resultsdir}}/first_level_results/sub-{subject}/ses-{session}/"
+                "sub-{subject}_ses-{session}_{entity}_network-{{network}}_{{suffix}}",
+                zip,
+                subject=SUBJECTS,
+                session=SESSIONS,
+                entity=RUNS,
+            ),
+            resultsdir=config["resultsdir"],
+            network=NETWORKS,
+            suffix=["unthresholded_fc.nii.gz", "figure.png"],
+        ),
+        expand("{resultsdir}/.fmriprep_completed", resultsdir=config["resultsdir"])
+
+ruleorder: freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional
+
+wildcard_constraints:
+    # Ensure proper matching in patterns containing "ses-{session}_{entity}",
+    # where {entity} can contain multiple BIDS entities. For example, in
+    # "ses-a_task-rest_run-001", session is "a" and entity is "task-rest_run-001"
+    session="[^-]"
+
+rule freesurfer_cross_sectional:
+    input:
+        "{resultsdir}/bids/sub-{subject}/ses-{session}"
+    output:
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}_{entity}")
+    container:
+        "docker://nipreps/fmriprep:21.0.4"
+    resources:
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["freesurfer"]["mem_mb"],
+        runtime=config["freesurfer"]["time_min"]
+    threads: config["freesurfer"]["threads"]
+    shell:
+        "export FS_LICENSE=$(realpath {config[freesurfer][license_path]}) && "
+        "recon-all "
+        "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity}_T1w.nii.gz "
+        "-subjid sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity} "
+        "-all "
+        "-qcache "
+        "-3T "
+        "-openmp {threads}"
+
+def list_freesurfer_templates(wildcards):
+    inputs = [
+        f"{wildcards.resultsdir}/bids/derivatives/freesurfer/{template}"
+        for subject, template in zip(SUBJECTS, TEMPLATES)
+        if subject == wildcards.subject
+    ]
+    inputs = list(set(inputs))  # remove duplicates
+    return inputs
+
+def list_freesurfer_timepoints(wildcards):
+    inputs = [
+        template for subject, template in zip(SUBJECTS, TEMPLATES)
+        if subject == wildcards.subject
+    ]
+    inputs = sorted(set(inputs))  # remove duplicates
+    tps = " ".join(f"-tp {template}" for template in inputs)
+    return tps
+
+rule freesurfer_long_template:
+    input:
+        list_freesurfer_templates
+    output:
+        directory("{resultsdir}/bids/derivatives/freesurfer/{subject}_template")
+    container:
+        "docker://nipreps/fmriprep:21.0.4"
+    params:
+        license_path=config["freesurfer"]["license_path"],
+        timepoints=list_freesurfer_timepoints
+    resources:
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["freesurfer"]["mem_mb"],
+        runtime=config["freesurfer"]["time_min"]
+    threads: config["freesurfer"]["threads"]
+    shell:
+        "export FS_LICENSE=$(realpath {params.license_path}) && "
+        "recon-all "
+        "-base {wildcards.subject}_template "
+        "{params.timepoints} "
+        "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "-all "
+        "-3T "
+        "-openmp {threads}"
+
+rule freesurfer_longitudinal:
+    input:
+        "{resultsdir}/bids/sub-{subject}/ses-{session}",
+        "{resultsdir}/bids/derivatives/freesurfer/{subject}_template"
+    output:
+        directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}_{entity}.long.{subject}_template")
+    container:
+        "docker://nipreps/fmriprep:21.0.4"
+    params:
+        license_path=config["freesurfer"]["license_path"],
+    resources:
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["freesurfer"]["mem_mb"],
+        runtime=config["freesurfer"]["time_min"]
+    threads: config["freesurfer"]["threads"]
+    shell:
+        "export FS_LICENSE=$(realpath {params.license_path}) && "
+        "recon-all "
+        "-long sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity} "
+        "{wildcards.subject}_template "
+        "-sd {wildcards.resultsdir}/bids/derivatives/freesurfer "
+        "-all "
+        "-qcache "
+        "-3T "
+        "-openmp {threads}"
+
+def freesurfer_rename_input(wildcards):
+    """find the required freesurfer output required for a subject/session pair"""
+
+    if config["use_longitudinal"]:
+        suffix = ".long.{subject}_template"
+    else:
+        suffix = ""
+    
+    qc_file = Path(
+        f"{wildcards.resultsdir}/bids/derivatives/mriqc/"
+        f"sub-{wildcards.subject}_ses-{wildcards.session}_qc.yaml"
+    )
+    qc_data = yaml.safe_load(qc_file.read_text())
+
+    return f"{{resultsdir}}/bids/derivatives/freesurfer/{qc_data['anat_template']}{suffix}"
+
+rule freesurfer_rename:
+    localrule: True
+    input:
+        freesurfer_rename_input
+    output:
+        temp(directory("{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"))
+    shell:
+        "mkdir -p {output} && ln -s {input} {output}/sub-{wildcards.subject}"
+
+# TODO filter out bad runs
+rule fmriprep_filter:
+    localrule: True
+    input:
+        workflow.source_path("templates/bids_filter.json")
+    output:
+        temp("{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json")
+    template_engine:
+        "jinja2"
+
+def previous_session(wildcards):
+    """find the previous fmriprep session folder for a given session"""
+
+    last_session = None
+
+    for subject, session in zip(SUBJECTS, SESSIONS):
+        if subject != wildcards.subject:
+            continue
+        if session != wildcards.session:
+            last_session = session
+        else:
+            break
+
+    if last_session is None:
+        dependency = {}
+    else:
+        dependency = {
+            "previous": f"{{resultsdir}}/bids/derivatives/fmriprep/sub-{{subject}}/ses-{last_session}"
+        }
+
+    return dependency
+
+rule fmriprep:
+    input:
+        unpack(previous_session),
+        bids="{resultsdir}/bids/sub-{subject}/ses-{session}",
+        bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
+        freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
+    output:
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}")
+    container:
+        "docker://nipreps/fmriprep:21.0.4"
+    resources:
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["fmriprep"]["mem_mb"],
+        runtime=config["fmriprep"]["time_min"]
+    threads: config["fmriprep"]["threads"]
+    shell:
+        "fmriprep {wildcards.resultsdir}/bids {wildcards.resultsdir}/bids/derivatives/fmriprep "
+        "participant "
+        "--participant-label {wildcards.subject} "
+        "--skip-bids-validation "
+        "--md-only-boilerplate "
+        "--fs-subjects-dir {input.freesurfer} "
+        "--output-spaces MNI152NLin2009cAsym:res-2 "
+        "--stop-on-first-crash "
+        "--low-mem "
+        "--mem-mb {resources.mem_mb} "
+        "--nprocs {threads} "
+        "-w {wildcards.resultsdir}/.fmriprep_tmp "
+        "--fs-license-file {config[freesurfer][license_path]} "
+        "--bids-filter-file {input.bids_filter}"
+
+rule fmriprep_cleanup:
+    localrule: True
+    input:
+        expand(
+            "{{resultsdir}}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
+            zip,
+            subject=SUBJECTS,
+            session=SESSIONS
+        ),
+    output:
+        touch("{resultsdir}/.fmriprep_completed")
+    shell:
+        "rm -rf {wildcards.resultsdir}/.fmriprep_tmp"
+
+def atlas_image(wildcards):
+    a_img = config["first_level"]["atlas_info"].get("atlas_image")
+    if (a_img is not None) and (len(a_img.strip()) > 0):
+        return f"-a_img {a_img}"
+    else:
+        return ""
+
+def atlas_labels(wildcards):
+    a_lab = config["first_level"]["atlas_info"].get("atlas_labels")
+    if (a_lab is not None) and (len(a_lab.strip()) > 0):
+        return f"-a_lab {a_lab}"
+    else:
+        return ""
+
+rule first_level:
+    input:
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}"
+    output:
+        "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{entity}_network-{network}_unthresholded_fc.nii.gz",
+        "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{entity}_network-{network}_figure.png"
+    conda:
+        "envs/mri.yaml"
+    params:
+        a_img=atlas_image,
+        a_lab=atlas_labels
+    resources:
+        cpus=lambda wildcards, threads: threads,
+        mem_mb=config["first_level"]["mem_mb"],
+        runtime=config["first_level"]["time_min"]
+    threads: config["first_level"]["threads"]
+    log:
+        "{resultsdir}/first_level_results/sub-{subject}_ses-{session}_{entity}_{network}.log"
+    shell:
+        "python workflow/scripts/first_level.py "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity}_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity}_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity}_desc-confounds_timeseries.tsv "
+        "{output} "
+        "{params.a_img} "
+        "{params.a_lab} "
+        "-tr {config[first_level][rep_time]} "
+        "-rg {config[first_level][confounds]} "
+        "-ntwk {wildcards.network} "
+        "-hp {config[first_level][preprocessing][high_pass]} "
+        "-lp {config[first_level][preprocessing][low_pass]} "
+        "-fwhm {config[first_level][preprocessing][smooth_fwhm]} "
+        "-fdr {config[first_level][resting_first_level][fdr_alpha]} "
+        "-fc {config[first_level][resting_first_level][func_conn_thresh]} "
+        "-v "
+        "2> {log}"
