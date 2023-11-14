@@ -129,14 +129,12 @@ rule freesurfer_cross_sectional:
 def list_freesurfer_templates(wildcards):
     inputs = [
         f"{wildcards.resultsdir}/bids/derivatives/freesurfer/{template}"
-        for template in set(TEMPLATES[subject].values())
+        for template in set(TEMPLATES[wildcards.subject].values())
     ]
     return inputs
 
 def list_freesurfer_timepoints(wildcards):
-    inputs = sorted(set(TEMPLATES[subject].values()))
-    print(inputs)
-    breakpoint()
+    inputs = sorted(set(TEMPLATES[wildcards.subject].values()))
     tps = " ".join(f"-tp {template}" for template in inputs)
     return tps
 
@@ -195,13 +193,13 @@ def freesurfer_rename_input(wildcards):
     """find the required freesurfer output required for a subject/session pair"""
 
     if config["use_longitudinal"]:
-        suffix = ".long.{subject}_template"
+        suffix = f".long.{wildcards.subject}_template"
     else:
         suffix = ""
 
     anat_template = TEMPLATES[wildcards.subject][wildcards.session]
 
-    return f"{{resultsdir}}/bids/derivatives/freesurfer/{anat_template}{suffix}"
+    return f"{wildcards.resultsdir}/bids/derivatives/freesurfer/{anat_template}{suffix}"
 
 rule freesurfer_rename:
     localrule: True
@@ -236,9 +234,11 @@ def previous_session(wildcards):
     if last_session is None:
         dependency = {}
     else:
-        dependency = {
-            "previous": f"{{resultsdir}}/bids/derivatives/fmriprep/sub-{{subject}}/ses-{last_session}"
-        }
+        previous = (
+            f"{wildcards.resultsdir}/bids/derivatives/fmriprep/"
+            f"sub-{wildcards.subject}/ses-{last_session}"
+        )
+        dependency = {"previous": previous}
 
     return dependency
 
