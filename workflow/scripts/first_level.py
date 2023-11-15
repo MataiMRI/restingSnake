@@ -215,7 +215,7 @@ if __name__ == "__main__":
         logger.info("Loading regions-of-interest from atlas provided")
         atlas_filename = args.atlas_image
         roi_labels = pd.read_csv(args.atlas_labels)
-        networks = roi_labels["net_name"]
+        networks = roi_labels["net name"]
 
     # Generate blank dictionary of n unique networks provided in atlas
     keys = set(networks)
