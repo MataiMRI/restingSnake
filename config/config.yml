@@ -59,8 +59,8 @@ first_level:
 
     # Atlas and list of one or more resting state networks for first level analysis
     atlas_info:
-        atlas_image:
-        atlas_labels:
+        atlas_image: atlas/MSDL_rois/msdl_rois.nii
+        atlas_labels: atlas/MSDL_rois/msdl_rois_labels.csv
         networks:
             - DMN
             - Salience
