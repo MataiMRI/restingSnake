@@ -1,4 +1,4 @@
-x,y,z,name,net_name
+x,y,z,name,net name
 -53.28,-8.88,32.36,L Aud,Aud
 53.47,-6.49,27.52,R Aud,Aud
 1.18,-74.54,10.79,Striate,Striate
@@ -28,13 +28,13 @@ x,y,z,name,net_name
 52.61,-13.65,12.11,R STS,Temporal
 -55.52,-43.77,10.08,L TPJ,Language
 -48.66,25.11,5.7,Broca,Language
--3.39,17.19,63.52,Sup Front S,Language
-54.42,-29.5,-2.72,R TPJ,Language
-52.38,29.39,2.93,R Pars Op,Language
-1.05,-58.49,-23.91,Cereb,Cereb
--1.44,-59.12,55.25,Dors PCC,Dors PCC
--41.33,13.63,2.7,L Ins,Cing-Ins
-1.05,9.2,46.43,Cing,Cing-Ins
-43.01,14.3,2.79,R Ins,Cing-Ins
--47.85,-32.07,41.9,L Ant IPS,Ant IPS
-48.36,-29.04,43.13,R Ant IPS,Ant IPS
+-3.39,17.19,63.52, Sup Front S,    Language
+54.42,-29.5,-2.72, R TPJ,          Language
+52.38,29.39,2.93,  R Pars Op,      Language
+1.05,-58.49,-23.91,Cereb,             Cereb
+-1.44,-59.12,55.25,Dors PCC,       Dors PCC
+-41.33,13.63,2.7,  L Ins,          Cing-Ins
+1.05,9.2,46.43,    Cing,           Cing-Ins
+43.01,14.3,2.79,   R Ins,          Cing-Ins
+-47.85,-32.07,41.9,L Ant IPS,       Ant IPS
+48.36,-29.04,43.13,R Ant IPS,       Ant IPS
