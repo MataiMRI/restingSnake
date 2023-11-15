@@ -266,7 +266,7 @@ rule first_level:
         runtime=config["first_level"]["time_min"]
     threads: config["first_level"]["threads"]
     log:
-        "{resultsdir}/first_level_results/sub-{subject}_ses-{session}_{entity}_{network}.log"
+        "{resultsdir}/first_level_results/logs/sub-{subject}_ses-{session}_{entity}_{network}.log"
     shell:
         "python workflow/scripts/first_level.py "
         "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{params.entity}_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
