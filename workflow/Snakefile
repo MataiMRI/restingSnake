@@ -2,12 +2,12 @@ configfile: 'config/config.yml'
 
 module tidy_snake:
     snakefile:
-        github("MataiMRI/tidySnake", path="workflow/Snakefile", tag="v0.2.0")
+        github("MataiMRI/tidySnake", path="workflow/Snakefile", tag="v0.3.1")
     config: config
 
 use rule * from tidy_snake as tidy_snake_*
 
-RUNS, TEMPLATES = tidy_snake.list_valid_runs(config["resultsdir"])
+RUNS, TEMPLATES = tidy_snake.list_valid_runs(config["resultsdir"], suffix="_bold")
 
 NETWORKS = [
     network.replace(' ', '-')
