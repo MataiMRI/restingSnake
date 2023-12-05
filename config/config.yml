@@ -1,12 +1,14 @@
+# Specify a prefix on filenames to be stripped during processing i.e. ethics approval #
+prefix: Conc_20Ntb14_
+
+# Directories - Define locations where Snakemake should read input data and write outputs.
+datadir: /home/jpmcgeown/data/snakemake/dicom
+resultsdir: /home/jpmcgeown/data/snakemake/processed
+
+# Toggle longitudinal processing steps in Freesurfer and fMRIprep
 use_longitudinal: False
 
-# Data import
-ethics_prefix: Conc_20Ntb14_
-
-# Directories
-datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/dicom
-resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/processed
-
+# Rule resources
 heudiconv:
     heuristic: ./config/heuristic.py
     mem_mb: 4000
@@ -69,5 +71,5 @@ first_level:
     resting_first_level:
         # false detection rate alpha
         fdr_alpha: 0.01
-        # functional connectivity threshold
+        # functional connectivity threshold for plotting subject + session specific resting-state network
         func_conn_thresh: 0.25
