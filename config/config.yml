@@ -1,12 +1,17 @@
 use_longitudinal: False
 
 # Data import
-ethics_prefix: Conc_20Ntb14_
+ethics_prefix: 7
+
+# Fix data entry error typos in original filepaths
+corrections:
+    Rubgy: Rugby
+    Ctrl: Control
 
 # Directories
-datadir: /nesi/nobackup/uoa03264/fMRIpipeline_data/restingSnake_dicom
-resultsdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/restingSnake_processed_fmriprep
-workdir: /nesi/nobackup/uoa03264/fMRIpipeline_data/work
+datadir: /nesi/nobackup/uoa03264/jmcg465/dicom
+resultsdir: /nesi/nobackup/uoa03264/jmcg465/restingSnake_processed
+workdir: /nesi/nobackup/uoa03264/jmcg465/work
 
 heudiconv:
     heuristic: ./config/heuristic.py
@@ -28,7 +33,7 @@ freesurfer:
 fmriprep:
     mem_mb: 25000
     time_min: 180
-    threads: 8
+    threads: 16
 
 first_level:
     mem_mb: 12000
@@ -65,10 +70,9 @@ first_level:
         networks:
             - DMN
             - Salience
-            - R V Att
 
     resting_first_level:
         # false detection rate alpha
-        fdr_alpha: 0.01
+        fdr_alpha: 0.99
         # functional connectivity threshold
         func_conn_thresh: 0.25
