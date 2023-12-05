@@ -1,4 +1,5 @@
-use_longitudinal: False
+# Specify a prefix on filenames to be stripped during processing i.e. ethics approval #
+prefix: Conc_20Ntb14_
 
 # Data import
 ethics_prefix: 7
@@ -13,6 +14,10 @@ datadir: /nesi/nobackup/uoa03264/jmcg465/dicom
 resultsdir: /nesi/nobackup/uoa03264/jmcg465/restingSnake_processed
 workdir: /nesi/nobackup/uoa03264/jmcg465/work
 
+# Toggle longitudinal processing steps in Freesurfer and fMRIprep
+use_longitudinal: False
+
+# Rule resources
 heudiconv:
     heuristic: ./config/heuristic.py
     mem_mb: 4000
