@@ -161,7 +161,7 @@ def create_mask(
 
     # convert t statistics to p values
     p_vals = stats.t.sf(np.abs(t_vals), df=(epi_img.shape[3] - 2)) * 2
-
+    
     logger.info("Performing False Discovery Rate correction")
     # implement mne library fdr_correction
     reject_fdr, pval_fdr = fdr_correction(

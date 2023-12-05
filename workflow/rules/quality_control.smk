@@ -1,5 +1,17 @@
 import pandas as pd
 from pathlib import Path
+import os
+
+def correct_typos(root_folder, corrections):
+    for path in Path(root_folder).iterdir():
+        if path.is_file() or path.is_dir():
+            for typo, correction in corrections.items():
+                if typo in path.name:
+                    print("TYPO FOUND - CORRECTING BASED ON CONFIG -", path.name)
+                    corrected_name = path.name.replace(typo, correction)
+                    corrected_path = path.with_name(corrected_name)
+                    os.rename(path, corrected_path)
+    
 
 def list_scans(root_folder, prefix):
     mapping = {}
@@ -7,8 +19,14 @@ def list_scans(root_folder, prefix):
     for path in Path(root_folder).iterdir():
         if not path.is_dir() and not path.suffix == ".zip":
             continue
-
-        infos = [s.lower() for s in path.stem.replace(prefix, "").split("_")]
+        
+        parts = path.stem.split("_")
+        desired_index = prefix
+        if 0 <= desired_index < len(parts):
+            desired_string = "_".join(parts[desired_index:])
+        infos = [s.lower() for s in desired_string.split("_")]
+        
+#        infos = [s.lower() for s in path.stem.replace(prefix, "").split("_")]
         if len(infos) == 2:
             infos += ["a"]
         cohort, subject, session = infos
@@ -20,7 +38,9 @@ def list_scans(root_folder, prefix):
 
     return mapping
 
+correct_typos(config["datadir"], config.get('corrections', {}))
 MAPPING = list_scans(config["datadir"], config["prefix"])
+
 SUBJECTS, SESSIONS = zip(*MAPPING)
 
 rule all:
@@ -41,6 +61,8 @@ rule unzip:
         expand("{datadir}/{{folder}}.zip", datadir=config['datadir'])
     output:
         directory(expand("{datadir}/{{folder}}", datadir=config['datadir']))
+    resources:
+        runtime=30
     shell:
         "unzip -q -d {output} {input}"
 
@@ -49,6 +71,8 @@ rule tidy_dicoms:
         lambda wildards: MAPPING[(wildards.subject, wildards.session)]
     output:
         directory("{resultsdir}/tidy/sub_{subject}/ses_{session}")
+    resources:
+        runtime=20
     run:
         output_folder = Path(output[0])
         for dicom_file in Path(input[0]).rglob("*.dcm"):
@@ -121,6 +145,7 @@ rule mriqc:
         "--mem-gb {params.mem_gb} "
         "--nprocs {threads} "
         "--no-sub "
+        "-vv "
         "-w {wildcards.resultsdir}/work && "
         "flock {wildcards.resultsdir}/.qc_status.csv.lock "
         "python workflow/scripts/update_qc_list.py {wildcards.resultsdir}/qc_status.csv "

@@ -42,7 +42,7 @@ rule freesurfer_cross_sectional:
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}")
     container:
-        "docker://nipreps/fmriprep:21.0.4"
+        "docker://nipreps/fmriprep:23.1.3"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["freesurfer"]["mem_mb"],
@@ -55,7 +55,6 @@ rule freesurfer_cross_sectional:
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_run-001_T1w.nii.gz "
         "-subjid sub-{wildcards.subject}_ses-{wildcards.session} "
         "-all "
-        "-qcache "
         "-3T "
         "-openmp {threads}"
 
@@ -83,7 +82,7 @@ rule freesurfer_long_template:
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/{subject}_template")
     container:
-        "docker://nipreps/fmriprep:21.0.4"
+        "docker://nipreps/fmriprep:23.1.3"
     params:
         license_path=config["freesurfer"]["license_path"],
         timepoints=sessions_for_template
@@ -109,7 +108,7 @@ rule freesurfer_longitudinal:
     output:
         directory("{resultsdir}/bids/derivatives/freesurfer/sub-{subject}_ses-{session}.long.{subject}_template")
     container:
-        "docker://nipreps/fmriprep:21.0.4"
+        "docker://nipreps/fmriprep:23.1.3"
     params:
         license_path=config["freesurfer"]["license_path"],
     resources:
@@ -184,9 +183,19 @@ rule fmriprep:
         bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
         freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
     output:
-        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}")
+        directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}"),
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_T1w.json",
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_T1w.nii.gz",
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz",
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/anat/sub-{subject}_ses-{session}_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.json",
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-001_desc-confounds_timeseries.tsv",
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz",
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.json",
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz",
+        "{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.json"
+        
     container:
-        "docker://nipreps/fmriprep:21.0.4"
+        "docker://nipreps/fmriprep:23.1.3"
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["fmriprep"]["mem_mb"],
@@ -201,10 +210,10 @@ rule fmriprep:
         "--fs-subjects-dir {input.freesurfer} "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "
-        "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {wildcards.resultsdir}/work "
+        "-vv "
+        "-w {config[workdir]} "
         "--fs-license-file {config[freesurfer][license_path]} "
         "--bids-filter-file {input.bids_filter}"
 
@@ -220,7 +229,7 @@ rule fmriprep_cleanup:
     output:
         touch("{resultsdir}/.work_completed")
     shell:
-        "rm -rf {wildcards.resultsdir}/work"
+        "rm -rf {config[workdir]}"
 
 def atlas_image(wildcards):
     a_img = config["first_level"]["atlas_info"].get("atlas_image")
@@ -256,9 +265,9 @@ rule first_level:
         "{resultsdir}/first_level_results/sub-{subject}_ses-{session}_{network}.log"
     shell:
         "python workflow/scripts/first_level.py "
-        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
-        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
-        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-1_desc-confounds_timeseries.tsv "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_task-rest_run-001_desc-confounds_timeseries.tsv "
         "{output} "
         "{params.a_img} "
         "{params.a_lab} "
