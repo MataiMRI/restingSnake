@@ -1,16 +1,16 @@
-# Specify a prefix on filenames to be stripped during processing i.e. ethics approval #
-ethics_prefix: Conc_20Ntb14_
+# Specify a prefix on filenames to be stripped during processing i.e. ethics approval
+ethics_prefix: "ETHICS_PREFIX_"  # you need to specify yours here
 
-# Directories
-datadir: /nesi/nobackup/uoa03264/jmcg465/dicom
-resultsdir: /nesi/nobackup/uoa03264/jmcg465/restingSnake_processed
+# Input and output directories
+datadir: "DICOM_FOLDER"  # you need to specify yours here
+resultsdir: "RESULTS_FOLDER"  # you need to specify yours here
 
 # Toggle longitudinal processing steps in Freesurfer and fMRIprep
 use_longitudinal: False
 
 # Rule resources
 heudiconv:
-    heuristic: ./config/heuristic.py
+    heuristic: "HEURISTIC_SCRIPT.py"  # you need to specify your script here
     mem_mb: 4000
     time_min: 120
     threads: 2
@@ -21,7 +21,7 @@ mriqc:
     threads: 8
 
 freesurfer:
-    license_path: ./config/license.txt
+    license_path: "LICENCE_FILE"  # you need to specify yours here
     mem_mb: 4000
     time_min: 660
     threads: 8
@@ -30,7 +30,7 @@ fmriprep:
     mem_mb: 25000
     time_min: 180
     threads: 16
-    workdir: /nesi/nobackup/uoa03264/jmcg465/work
+    workdir: "TEMPORARY_FOLDER"  # you need to specify yours here
 
 first_level:
     mem_mb: 12000
@@ -38,7 +38,7 @@ first_level:
     threads: 2
 
     # scan info
-    rep_time: 1.5
+    rep_time: TR  # you need to specify yours here, as an integer
 
     # confounding (nuisance) variables to be regressed out of signal to improve SNR
     confounds:

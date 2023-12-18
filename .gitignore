@@ -4,7 +4,7 @@ __pycache__
 .snakemake
 .ipynb_checkpoints
 logs
-LICENSE
 license.txt
 cross_rulegraph.pdf
 long_rulegraph.pdf
+config/config.yaml
