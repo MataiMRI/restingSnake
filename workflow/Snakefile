@@ -208,7 +208,7 @@ rule fmriprep:
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {wildcards.resultsdir}/.fmriprep_tmp "
+        "-w {config[fmriprep][workdir]} "
         "--fs-license-file {config[freesurfer][license_path]} "
         "--bids-filter-file {input.bids_filter}"
 
@@ -224,7 +224,7 @@ rule fmriprep_cleanup:
     output:
         touch("{resultsdir}/.fmriprep_completed")
     shell:
-        "rm -rf {wildcards.resultsdir}/.fmriprep_tmp"
+        "rm -rf {config[fmriprep][workdir]}"
 
 def atlas_image(wildcards):
     a_img = config["first_level"]["atlas_info"].get("atlas_image")

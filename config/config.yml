@@ -1,18 +1,9 @@
 # Specify a prefix on filenames to be stripped during processing i.e. ethics approval #
-prefix: Conc_20Ntb14_
-
-# Data import
-ethics_prefix: 7
-
-# Fix data entry error typos in original filepaths
-corrections:
-    Rubgy: Rugby
-    Ctrl: Control
+ethics_prefix: Conc_20Ntb14_
 
 # Directories
 datadir: /nesi/nobackup/uoa03264/jmcg465/dicom
 resultsdir: /nesi/nobackup/uoa03264/jmcg465/restingSnake_processed
-workdir: /nesi/nobackup/uoa03264/jmcg465/work
 
 # Toggle longitudinal processing steps in Freesurfer and fMRIprep
 use_longitudinal: False
@@ -39,6 +30,7 @@ fmriprep:
     mem_mb: 25000
     time_min: 180
     threads: 16
+    workdir: /nesi/nobackup/uoa03264/jmcg465/work
 
 first_level:
     mem_mb: 12000
