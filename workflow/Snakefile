@@ -226,20 +226,6 @@ rule fmriprep_cleanup:
     shell:
         "rm -rf {config[fmriprep][workdir]}"
 
-def atlas_image(wildcards):
-    a_img = config["first_level"]["atlas_info"].get("atlas_image")
-    if (a_img is not None) and (len(a_img.strip()) > 0):
-        return f"-a_img {a_img}"
-    else:
-        return ""
-
-def atlas_labels(wildcards):
-    a_lab = config["first_level"]["atlas_info"].get("atlas_labels")
-    if (a_lab is not None) and (len(a_lab.strip()) > 0):
-        return f"-a_lab {a_lab}"
-    else:
-        return ""
-
 def clean_run_entity(wildcards):
     """clean run BIDS entity, ensuring it has no trailing zeros"""
     entities = [entity.split("-") for entity in wildcards.entity.split("_")]
@@ -257,8 +243,6 @@ rule first_level:
     conda:
         "envs/mri.yaml"
     params:
-        a_img=atlas_image,
-        a_lab=atlas_labels,
         entity=clean_run_entity
     resources:
         cpus=lambda wildcards, threads: threads,
@@ -273,8 +257,8 @@ rule first_level:
         "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{params.entity}_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
         "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{params.entity}_desc-confounds_timeseries.tsv "
         "{output} "
-        "{params.a_img} "
-        "{params.a_lab} "
+        "-a_img {config[first_level][atlas_info][image]} "
+        "-a_lab {config[first_level][atlas_info][labels]} "
         "-tr {config[first_level][rep_time]} "
         "-rg {config[first_level][confounds]} "
         "-ntwk {wildcards.network} "
