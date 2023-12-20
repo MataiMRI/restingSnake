@@ -32,7 +32,6 @@ rule all:
             network=NETWORKS,
             suffix=["unthresholded_fc.nii.gz", "figure.png"],
         ),
-        expand("{resultsdir}/.fmriprep_completed", resultsdir=config["resultsdir"])
 
 ruleorder: freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional
 
@@ -183,6 +182,13 @@ rule fmriprep_filter:
     template_engine:
         "jinja2"
 
+rule fmriprep_workdir:
+    localrule: True
+    output:
+        temp(directory("{resultsdir}/.fmriprep_tmp/sub-{subject}_ses-{session}"))
+    shell:
+        "mkdir -p {output}"
+
 def previous_session(wildcards):
     """find the previous fmriprep session folder for a given session"""
 
@@ -210,7 +216,8 @@ rule fmriprep:
         unpack(previous_session),
         bids="{resultsdir}/bids/sub-{subject}/ses-{session}",
         bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
-        freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
+        freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}",
+        workdir="{resultsdir}/.fmriprep_tmp/sub-{subject}_ses-{session}"
     output:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}")
     container:
@@ -232,23 +239,9 @@ rule fmriprep:
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {config[fmriprep][workdir]} "
+        "-w {input.workdir} "
         "--fs-license-file {config[freesurfer][license_path]} "
         "--bids-filter-file {input.bids_filter}"
-
-rule fmriprep_cleanup:
-    localrule: True
-    input:
-        expand(
-            "{{resultsdir}}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
-            zip,
-            subject=RUNS.subjects,
-            session=RUNS.sessions
-        ),
-    output:
-        touch("{resultsdir}/.fmriprep_completed")
-    shell:
-        "rm -rf {config[fmriprep][workdir]}"
 
 rule first_level:
     input:
