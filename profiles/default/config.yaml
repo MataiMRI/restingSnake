@@ -9,7 +9,7 @@ printshellcmds: True
 use-singularity: True
 printshellcmds: True
 use-singularity: True
-singularity-args: " --cleanenv --bind /home/jpmcgeown/data/snakemake/"
+singularity-args: " --cleanenv"
 use-conda: True
 keep-going: True
 rerun-incomplete: True
