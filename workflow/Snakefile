@@ -152,7 +152,14 @@ rule freesurfer_rename:
 def template_entities(wildcards):
     """extract BIDS entities from T1w template name for a given subject/session"""
     anat_template = TEMPLATES[wildcards.subject][wildcards.session]
-    return dict(entity.split("-") for entity in anat_template.split("_"))
+    entities = dict(entity.split("-") for entity in anat_template.split("_"))
+    if wildcards.subject != entities["sub"]:
+        raise ValueError(
+            "Using template from a different subject is not supported "
+            f"(template '{anat_template}' for "
+            f"sub-{wildcards.subject}_ses-{wildcards.session})."
+        )
+    return entities
 
 def list_valid_runs(wildcards):
     """list available runs for a given subject/session pair"""
