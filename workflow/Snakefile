@@ -154,6 +154,16 @@ def template_entities(wildcards):
     anat_template = TEMPLATES[wildcards.subject][wildcards.session]
     return dict(entity.split("-") for entity in anat_template.split("_"))
 
+def list_valid_runs(wildcards):
+    """list available runs for a given subject/session pair"""
+    runs = []
+    for subject, session, entities in RUNS:
+        if subject != wildcards.subject or session != wildcards.session:
+            continue
+        entities = dict(entity.split("-") for entity in entities.split("_"))
+        runs.append(entities["run"])
+    return runs
+
 rule fmriprep_filter:
     localrule: True
     input:
@@ -161,7 +171,8 @@ rule fmriprep_filter:
     output:
         temp("{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json")
     params:
-        template=template_entities
+        template=template_entities,
+        runs=list_valid_runs
     template_engine:
         "jinja2"
 
