@@ -113,19 +113,25 @@ The workflow assumes that input scan data are:
 Within a input folder (or .zip file), only the parent folder of DICOM files will be kept when tidying the data.
 Any other level of nesting will be ignored.
 
-## Configure local profile
-An advantage of `snakemake` is usability on both local machines and HPC platforms. Profiles allow easy implementation across different platforms/machines. You can configure the RAM and CPUs available on your local machine in `profiles/local/config.yml` so `snakemake` can schedule jobs based on available resources.
+## Configure default profile
+An advantage of `snakemake` is usability on both local machines and HPC platforms.
+Profiles allow easy implementation across different platforms/machines (see the [`official documentation`](https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles) for more details).
+
+If you don't specify any, the default profile configured in `profiles/default/config.yml` is used.
+
+You can configure the RAM and CPUs available on your local machine by editing `profiles/default/config.yml` so `snakemake` can schedule jobs based on available resources.
 ```
 resources:
     - mem_mb=<LOCAL_RAM>
     - cpus=<LOCAL_CORES>
 ```
-You also need to provide a `--bind` path in the `singularity-args` entry within `profiles/local/config.yml`. It is easiest to bind to the parent folder of `datadir` configured in `config/config.yml`. If `datadir` were `/PATH/TO/MY/DATA/DICOM` then you would configure as below:
 
+You may also need to provide a `--bind` path in the `singularity-args` entry within `profiles/default/config.yml`.
+It is easiest to bind to the parent folder of `datadir` configured in `config/config.yml`.
+If `datadir` were `/PATH/TO/MY/DATA/DICOM` then you would configure as below:
 ```
 singularity-args: " --cleanenv --bind </PATH/TO/MY/DATA>"
 ```
-You can learn more about `snakemake` profiles and command line options [`here`](https://snakemake.readthedocs.io/en/stable/executing/cli.html).
 
 ## Pull containers and tidy DICOMS
 Once you have set up [`config/config.yml`](config/config.yml) and [`profiles/local/config.yml`](profiles/local/config.yml) you can try a dry-run of the workflow.
