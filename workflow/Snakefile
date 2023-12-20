@@ -32,7 +32,6 @@ rule all:
             network=NETWORKS,
             suffix=["unthresholded_fc.nii.gz", "figure.png"],
         ),
-        expand("{resultsdir}/.fmriprep_completed", resultsdir=config["resultsdir"])
 
 ruleorder: freesurfer_longitudinal > freesurfer_long_template > freesurfer_cross_sectional
 
@@ -149,15 +148,46 @@ rule freesurfer_rename:
     shell:
         "mkdir -p {output} && ln -s {input} {output}/sub-{wildcards.subject}"
 
-# TODO filter out bad runs
+def template_entities(wildcards):
+    """extract BIDS entities from T1w template name for a given subject/session"""
+    anat_template = TEMPLATES[wildcards.subject][wildcards.session]
+    entities = dict(entity.split("-") for entity in anat_template.split("_"))
+    if wildcards.subject != entities["sub"]:
+        raise ValueError(
+            "Using template from a different subject is not supported "
+            f"(template '{anat_template}' for "
+            f"sub-{wildcards.subject}_ses-{wildcards.session})."
+        )
+    return entities
+
+def list_valid_runs(wildcards):
+    """list available runs for a given subject/session pair"""
+    runs = []
+    for subject, session, entities in RUNS:
+        if subject != wildcards.subject or session != wildcards.session:
+            continue
+        entities = dict(entity.split("-") for entity in entities.split("_"))
+        runs.append(entities["run"])
+    return runs
+
 rule fmriprep_filter:
     localrule: True
     input:
         workflow.source_path("templates/bids_filter.json")
     output:
         temp("{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json")
+    params:
+        template=template_entities,
+        runs=list_valid_runs
     template_engine:
         "jinja2"
+
+rule fmriprep_workdir:
+    localrule: True
+    output:
+        temp(directory("{resultsdir}/.fmriprep_tmp/sub-{subject}_ses-{session}"))
+    shell:
+        "mkdir -p {output}"
 
 def previous_session(wildcards):
     """find the previous fmriprep session folder for a given session"""
@@ -186,7 +216,8 @@ rule fmriprep:
         unpack(previous_session),
         bids="{resultsdir}/bids/sub-{subject}/ses-{session}",
         bids_filter="{resultsdir}/bids/derivatives/fmriprep/bids_filter_sub-{subject}_ses-{session}.json",
-        freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}"
+        freesurfer="{resultsdir}/bids/derivatives/freesurfer_sub-{subject}_ses-{session}",
+        workdir="{resultsdir}/.fmriprep_tmp/sub-{subject}_ses-{session}"
     output:
         directory("{resultsdir}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}")
     container:
@@ -208,31 +239,9 @@ rule fmriprep:
         "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {config[fmriprep][workdir]} "
+        "-w {input.workdir} "
         "--fs-license-file {config[freesurfer][license_path]} "
         "--bids-filter-file {input.bids_filter}"
-
-rule fmriprep_cleanup:
-    localrule: True
-    input:
-        expand(
-            "{{resultsdir}}/bids/derivatives/fmriprep/sub-{subject}/ses-{session}",
-            zip,
-            subject=RUNS.subjects,
-            session=RUNS.sessions
-        ),
-    output:
-        touch("{resultsdir}/.fmriprep_completed")
-    shell:
-        "rm -rf {config[fmriprep][workdir]}"
-
-def clean_run_entity(wildcards):
-    """clean run BIDS entity, ensuring it has no trailing zeros"""
-    entities = [entity.split("-") for entity in wildcards.entity.split("_")]
-    entities = [
-        (key, int(value)) if key == "run" else (key, value) for key, value in entities
-    ]
-    return "_".join(f"{key}-{value}" for key, value in entities)
 
 rule first_level:
     input:
@@ -242,8 +251,6 @@ rule first_level:
         "{resultsdir}/first_level_results/sub-{subject}/ses-{session}/sub-{subject}_ses-{session}_{entity}_network-{network}_figure.png"
     conda:
         "envs/mri.yaml"
-    params:
-        entity=clean_run_entity
     resources:
         cpus=lambda wildcards, threads: threads,
         mem_mb=config["first_level"]["mem_mb"],
@@ -253,9 +260,9 @@ rule first_level:
         "{resultsdir}/first_level_results/logs/sub-{subject}_ses-{session}_{entity}_{network}.log"
     shell:
         "python workflow/scripts/first_level.py "
-        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{params.entity}_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
-        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{params.entity}_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
-        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{params.entity}_desc-confounds_timeseries.tsv "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity}_space-MNI152NLin2009cAsym_res-2_desc-brain_mask.nii.gz "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity}_space-MNI152NLin2009cAsym_res-2_desc-preproc_bold.nii.gz "
+        "{input}/func/sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity}_desc-confounds_timeseries.tsv "
         "{output} "
         "-a_img {config[first_level][atlas_info][image]} "
         "-a_lab {config[first_level][atlas_info][labels]} "

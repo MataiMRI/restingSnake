@@ -1,9 +1,19 @@
 {
   "fmap": {"datatype": "fmap", "session": "{{ wildcards.session }}"},
-  "bold": {"datatype": "func", "session": "{{ wildcards.session }}", "suffix": "bold"},
+  "bold": {
+      "datatype": "func",
+      "session": "{{ wildcards.session }}",
+      "run": ["{{ params.runs | join('", "') }}"],
+      "suffix": "bold"
+  },
   "sbref": {"datatype": "func", "session": "{{ wildcards.session }}", "suffix": "sbref"},
   "flair": {"datatype": "anat", "session": "{{ wildcards.session }}", "suffix": "FLAIR"},
   "t2w": {"datatype": "anat", "session": "{{ wildcards.session }}", "suffix": "T2w"},
-  "t1w": {"datatype": "anat", "session": "{{ wildcards.session }}", "suffix": "T1w"},
+  "t1w": {
+      "datatype": "anat",
+      "session": "{{ params.template['ses'] }}",
+      "run": "{{ params.template['run'] }}",
+      "suffix": "T1w"
+  },
   "roi": {"datatype": "anat", "session": "{{ wildcards.session }}", "suffix": "roi"}
 }
