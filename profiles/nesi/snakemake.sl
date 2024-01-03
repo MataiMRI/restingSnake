@@ -13,7 +13,7 @@ set -euo pipefail
 
 # load environment modules
 module purge
-module load Miniconda3/22.11.1-1 Apptainer/1.1.9 snakemake/7.32.0-gimkl-2022a-Python-3.11.3
+module load Miniconda3/22.11.1-1 Apptainer/1.1.9 snakemake/7.32.3-gimkl-2022a-Python-3.11.3
 
 # ensure user's local Python packages are not overriding Python module packages
 export PYTHONNOUSERSITE=1
