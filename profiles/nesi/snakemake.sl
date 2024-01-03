@@ -38,4 +38,8 @@ mkdir -p "$APPTAINER_CACHEDIR" "$APPTAINER_TMPDIR"
 setfacl -b "$APPTAINER_TMPDIR"  # avoid apptainer issues due to ACLs set on this folder
 
 # run snakemake using the NeSI profile
-snakemake --profile profiles/nesi --config account="$SLURM_JOB_ACCOUNT" $@
+snakemake \
+    --profile profiles/nesi \
+    --workflow-profile profiles/nesi \
+    --config account="$SLURM_JOB_ACCOUNT" \
+    "$@"
