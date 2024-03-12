@@ -1,4 +1,4 @@
-configfile: 'config/config.yml'
+configfile: 'config/config.yaml'
 
 module tidy_snake:
     snakefile:
@@ -60,7 +60,6 @@ rule freesurfer_cross_sectional:
         "-i {input}/anat/sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity}_T1w.nii.gz "
         "-subjid sub-{wildcards.subject}_ses-{wildcards.session}_{wildcards.entity} "
         "-all "
-        "-qcache "
         "-3T "
         "-openmp {threads}"
 
@@ -236,10 +235,10 @@ rule fmriprep:
         "--fs-subjects-dir {input.freesurfer} "
         "--output-spaces MNI152NLin2009cAsym:res-2 "
         "--stop-on-first-crash "
-        "--low-mem "
         "--mem-mb {resources.mem_mb} "
         "--nprocs {threads} "
-        "-w {input.workdir} "
+        "-vv "
+        "-w {config[fmriprep][workdir]} "
         "--fs-license-file {config[freesurfer][license_path]} "
         "--bids-filter-file {input.bids_filter}"
 

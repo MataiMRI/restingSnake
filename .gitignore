@@ -4,7 +4,10 @@ __pycache__
 .snakemake
 .ipynb_checkpoints
 logs
-license.txt
+config/license.txt
+config/heuristic.py
 cross_rulegraph.pdf
 long_rulegraph.pdf
 config/config.yaml
+workflow/scripts/correct_typos.py
+workflow/scripts/heudiconv_gen_heuristic_info.sh

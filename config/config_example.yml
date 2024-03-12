@@ -30,6 +30,7 @@ fmriprep:
     mem_mb: 25000
     time_min: 180
     threads: 16
+    workdir: "TEMPORARY_DIRECTORY" # you need to specify yours here
 
 first_level:
     mem_mb: 12000
