@@ -8,6 +8,10 @@ resultsdir: "RESULTS_FOLDER"  # you need to specify yours here
 # Toggle longitudinal processing steps in Freesurfer and fMRIprep
 use_longitudinal: False
 
+qc_status:
+    skip_mriqc: False  # if True, skip MRIQC reports generation, only make QC status files
+    default: False  # default value for entries in QC status files
+
 # Rule resources
 heudiconv:
     heuristic: "HEURISTIC_SCRIPT.py"  # you need to specify your script here
@@ -15,10 +19,17 @@ heudiconv:
     time_min: 120
     threads: 2
 
+# MRIQC options
+# modify cli_args to pass additional arguments to the tool
+# for example, use
+#   cli_args: "-vvv"
+# to increase the verbosity to debugging level
+# see https://mriqc.readthedocs.io/en/stable/running.html#command-line-interface for available arguments
 mriqc:
     mem_mb: 16000
     time_min: 120
     threads: 8
+    cli_args: ""
 
 freesurfer:
     license_path: "LICENCE_FILE"  # you need to specify yours here

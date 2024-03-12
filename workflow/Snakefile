@@ -2,7 +2,7 @@ configfile: 'config/config.yaml'
 
 module tidy_snake:
     snakefile:
-        github("MataiMRI/tidySnake", path="workflow/Snakefile", tag="v0.3.1")
+        github("MataiMRI/tidySnake", path="workflow/Snakefile", tag="v0.5.1")
     config: config
 
 use rule * from tidy_snake as tidy_snake_*
