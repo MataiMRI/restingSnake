@@ -6,8 +6,14 @@ __pycache__
 logs
 config/license.txt
 config/heuristic.py
+config/heuristic-simple.py
 cross_rulegraph.pdf
 long_rulegraph.pdf
 config/config.yaml
 workflow/scripts/correct_typos.py
 workflow/scripts/heudiconv_gen_heuristic_info.sh
+workflow/scripts/run_heudiconv.sh
+workflow/scripts/run_mriqc.sh
+workflow/scripts/run_freesurfer.sh
+workflow/scripts/run_fmriprep.sh
+

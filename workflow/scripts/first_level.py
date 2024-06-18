@@ -83,11 +83,16 @@ def make_parser():
         default=6,
     )
     parser.add_argument(
+        "-fish",
+        help="Fisher-z transform to achieve normal distribution",
+        dest="fisher_transform",
+        action="store_true"
+    )
+    parser.add_argument(
         "-fdr",
         help="False Detection Rate threshold to correct for multiple comparisons",
         dest="fdr_threshold",
-        type=float,
-        default=0.05,
+        type=float
     )
     parser.add_argument(
         "-fc",
@@ -150,33 +155,62 @@ def create_mask(
         % network_to_voxel_correlations.shape
     )
     logger.info(
-        "Network-to-voxel correlation: min = %.3f; max = %.3f"
+        "Raw Network-to-voxel correlation: min = %.3f; max = %.3f"
         % (network_to_voxel_correlations.min(), network_to_voxel_correlations.max())
     )
 
-    # calculate t statistics from network_to_voxel_correlations
-    t_vals = (
-        network_to_voxel_correlations * np.sqrt((epi_img.shape[3] - 2))
-    ) / np.sqrt((1 - network_to_voxel_correlations**2))
-
-    # convert t statistics to p values
-    p_vals = stats.t.sf(np.abs(t_vals), df=(epi_img.shape[3] - 2)) * 2
-
-    logger.info("Performing False Discovery Rate correction")
-    # implement mne library fdr_correction
-    reject_fdr, pval_fdr = fdr_correction(
-        p_vals, alpha=args.fdr_threshold, method="indep"
-    )
-    reject_fdr = reject_fdr * 1  # convert boolean series to binary
-
-    network_to_voxel_correlations_corrected = network_to_voxel_correlations * reject_fdr
-    # network_to_voxel_correlations_corrected = p_vals * reject_fdr
-
-    network_to_voxel_correlations_corrected_img = brain_masker.inverse_transform(
-        network_to_voxel_correlations_corrected.T
+    raw_plotting_img = brain_masker.inverse_transform(
+        network_to_voxel_correlations.T
     )
 
-    return network_to_voxel_correlations_corrected_img
+    if args.fisher_transform:
+        logger.info("Returning Fisher-z transformed image")
+
+        network_to_voxel_correlations_fisher_z = np.arctanh(network_to_voxel_correlations)
+        logger.info(
+            "Seed-to-voxel correlation Fisher-z transformed: min = %.3f; max = %.3f"
+            % (network_to_voxel_correlations_fisher_z.min(), network_to_voxel_correlations_fisher_z.max())
+        )
+
+        network_to_voxel_correlations_img = brain_masker.inverse_transform(
+            network_to_voxel_correlations_fisher_z.T
+        )
+
+    if args.fdr_threshold is not None and not args.fisher_transform:
+        logger.info("Performing False Discovery Rate correction")
+
+        # calculate t statistics from network_to_voxel_correlations
+        t_vals = (
+            network_to_voxel_correlations * np.sqrt((epi_img.shape[3] - 2))
+        ) / np.sqrt((1 - network_to_voxel_correlations**2))
+
+        # convert t statistics to p values
+        p_vals = stats.t.sf(np.abs(t_vals), df=(epi_img.shape[3] - 2)) * 2
+
+        # implement mne library fdr_correction
+        reject_fdr, pval_fdr = fdr_correction(
+            p_vals, alpha=args.fdr_threshold, method="indep"
+        )
+        reject_fdr = reject_fdr * 1  # convert boolean series to binary
+
+        network_to_voxel_correlations_corrected = network_to_voxel_correlations * reject_fdr
+        # network_to_voxel_correlations_corrected = p_vals * reject_fdr
+        logger.info(
+            "FDR corrected network-to-voxel correlation: min = %.3f; max = %.3f"
+            % (network_to_voxel_correlations_corrected.min(), network_to_voxel_correlations_corrected.max())
+        )
+
+        network_to_voxel_correlations_img = brain_masker.inverse_transform(
+            network_to_voxel_correlations_corrected.T
+        )
+
+    if args.fdr_threshold is None and not args.fisher_transform:
+        logger.info("Returning uncorrected raw correlation values")
+        network_to_voxel_correlations_img = brain_masker.inverse_transform(
+            network_to_voxel_correlations.T
+        )
+
+    return network_to_voxel_correlations_img, raw_plotting_img
 
 
 if __name__ == "__main__":
@@ -211,6 +245,7 @@ if __name__ == "__main__":
         atlas = datasets.fetch_atlas_msdl()
         atlas_filename = atlas["maps"]
         networks = atlas["networks"]
+
     else:
         logger.info("Loading regions-of-interest from atlas provided")
         atlas_filename = args.atlas_image
@@ -218,6 +253,7 @@ if __name__ == "__main__":
         networks = roi_labels["net name"]
 
     # Generate blank dictionary of n unique networks provided in atlas
+    networks = [n.strip() for n in networks]
     keys = set(networks)
     keys_txt = "\n".join(keys)
     logger.info(f"Functional networks available in atlas:\n{keys_txt}")
@@ -231,7 +267,9 @@ if __name__ == "__main__":
     # logger.info("\nDetails about seed(s) within selected network")
     # for coord in msdl_networks[args.functional_network]:
     #    logger.info('\n', roi_labels.iloc[coord])
-    functional_network = args.functional_network.replace("-", " ")
+    functional_network = args.functional_network
+    if functional_network != "Cing-Ins":
+        functional_network = functional_network.replace("-", " ")
     logger.info(f"Selected network: {functional_network}")
     # Define single network
     network_nodes = image.index_img(
@@ -279,7 +317,7 @@ if __name__ == "__main__":
     elif args.loglevel <= logging.INFO:
         nifti_verbose = 1
 
-    network_to_voxel_correlations_corrected_img = create_mask(
+    network_to_voxel_correlations_img, raw_plotting_img = create_mask(
         network_time_series,
         args.func,
         fwhm=args.fwhm,
@@ -290,11 +328,11 @@ if __name__ == "__main__":
     )
 
     logger.info(f"Saving UNTHRESHOLDED image to {args.nifti_output}")
-    nib.save(network_to_voxel_correlations_corrected_img, args.nifti_output)
+    nib.save(network_to_voxel_correlations_img, args.nifti_output)
 
     # Plot probabilistic map from atlas and subject bold signal together
     logger.info(
-        f"Saving plot of {functional_network} connectivity THRESHOLDED at "
+        f"Saving plot of raw {functional_network} connectivity THRESHOLDED at "
         f"{args.connectivity_threshold} to {args.plotting_output}"
     )
 
@@ -308,13 +346,15 @@ if __name__ == "__main__":
         axes=axes[0],
     )
 
+    mean_plotting_img = image.mean_img(raw_plotting_img)
+    
     plotting.plot_stat_map(
-        image.index_img(network_to_voxel_correlations_corrected_img, 0),
+        mean_plotting_img,
         threshold=args.connectivity_threshold,
         cut_coords=[-16, 0, 16, 30, 44, 58],
         title=(
-            f"{functional_network} functional connectivity thresholded at "
-            f"{args.connectivity_threshold}"
+            f"Raw {functional_network} functional connectivity thresholded at "
+            f"r = {args.connectivity_threshold}"
         ),
         display_mode="z",
         vmax=1,
@@ -323,8 +363,3 @@ if __name__ == "__main__":
     )
 
     fig.savefig(args.plotting_output, bbox_inches="tight")
-
-    # Add overlays for additional nodes if network has >1 node
-    # for i in range (1, network_time_series.shape[1]):
-    #     display.add_overlay(image.index_img(network_to_voxel_correlations_corrected_img, i),
-    #                     threshold=args.fc_thresh, cmap = 'cold_hot' )
