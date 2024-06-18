@@ -2,12 +2,12 @@
 
 
 
-apptainer run --bind /home/jpmcgeown/data/snakemake/processed:/mnt \
-/home/jpmcgeown/github/restingSnake/.snakemake/singularity/10b2306ed15c5efc917232958423bfe6.simg \
+apptainer run --bind RESULTSDIR:/mnt \
+PATH_TO_CONTAINER \
 -d /mnt/tidy/sub_{subject}/ses_{session}/*/* \
 -o /mnt/bids \
 -f convertall \
--s rugby1 \
--ss a \
+-s SUBJECT \
+-ss SESSION \
 -c none \
 --overwrite
